@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Compiler Dashboard — Judge-Facing View</title>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --primary-dark: #357ae8;
+            --success: #34A853;
+            --warning: #FBBC05;
+            --danger: #EA4335;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --text-light: #5f6368;
+            --border: #dadce0;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--success);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .logo-txt {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .subtitle-txt {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a73e8;
+            border-bottom: 2px solid #e8f0fe;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .metric-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .metric-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 2px;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: #e6f4ea; color: #137333; }
+        .badge-warning { background: #fef7e0; color: #b06000; }
+        .badge-danger { background: #fce8e6; color: #c5221f; }
+        .badge-primary { background: #e8f0fe; color: #1a73e8; }
+
+        .mode-bar {
+            background: #e8f0fe;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px 8px 8px 4px;
+            margin-bottom: 10px;
+        }
+
+        .mode-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .mode-row:last-child { border: none; }
+
+        .mode-label { font-weight: 600; font-size: 0.95rem; }
+        .mode-val { font-size: 0.95rem; font-weight: 500; }
+
+        .file-list {
+            list-style: none;
+        }
+        .file-item {
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-path {
+            font-family: monospace;
+            font-weight: 600;
+            color: #1a73e8;
+        }
+
+        .sc-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .sc-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            background: #fafafa;
+        }
+
+        .sc-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .sc-purpose {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .sc-relevance {
+            background: #eef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #33a;
+        }
+
+        .sc-reason {
+            font-size: 0.85rem;
+            font-style: italic;
+            border-left: 3px solid #ccc;
+            padding-left: 8px;
+            margin-top: 6px;
+            color: #555;
+        }
+
+        pre.codeblock {
+            background: #202124;
+            color: #f1f3f4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            border: 1px solid #3c4043;
+            max-height: 400px;
+        }
+
+        .collapsible {
+            background-color: #f1f3f4;
+            color: var(--text);
+            cursor: pointer;
+            padding: 12px 18px;
+            width: 100%;
+            border: 1px solid var(--border);
+            text-align: left;
+            outline: none;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .dep-badge {
+            display: inline-block;
+            background: #f1f3f4;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .arrow-divider {
+            color: var(--primary);
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .artifacts-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .artifact-box {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .artifact-name {
+            font-weight: bold;
+            color: #202124;
+        }
+
+        .artifact-status {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .pitch-banner {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.15rem;
+            color: #b06000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-txt">Context Compiler</div>
+        <div class="subtitle-txt">Cerebral Valley Google I/O Hackathon 2026 Submission</div>
+        <div class="subtitle-txt" style="font-size: 1rem; margin-top: 10px; font-weight: 400; opacity: 0.8;">
+            Deterministic AST compiler front-end coupled with cheap Gemini semantic-agent layer and sandboxed verification
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="pitch-banner">
+            “Stop dumping the entire repository into context. We run a deterministic compiler front-end pass that compresses the repo into a task-relevant semantic substrate, enabling ultra-cheap and high-fidelity agent execution.”
+        </div>
+
+        <div class="grid-2">
+            <!-- Demo Run Modes -->
+            <div class="card">
+                <h2>⚡ Demo & Orchestration Mode</h2>
+                <div class="mode-bar">
+                    <div class="mode-row">
+                        <span class="mode-label">Semantic Card Enrichment:</span>
+                        <span class="mode-val badge badge-success">Gemini AI Semantic Layer</span>
+                    </div>
+                    <div class="mode-row">
+                        <span class="mode-label">Agent Patch Generation:</span>
+                        <span class="mode-val badge badge-success">Gemini High-Fidelity Patches</span>
+                    </div>
+                    <div class="mode-row">
+                        <span class="mode-label">Sandbox Orchestration Path:</span>
+                        <span class="mode-val badge badge-primary">Remote Managed Agent Sandbox (Capable)</span>
+                    </div>
+                    <div class="mode-row">
+                        <span class="mode-label">Patch Application Flow:</span>
+                        <span class="mode-val badge badge-warning">Live Patched (Copy Repo Safe-Path)</span>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-light); margin-top:10px;">
+                    *When credentials exist, Gemini 2.5/Managed Agents execute fully. If credentials are empty, the local deterministic fallback preserves execution.
+                </p>
+            </div>
+
+            <!-- Validation Run -->
+            <div class="card" style="border-left: 5px solid var(--success)">
+                <h2>🛡️ Live Verification Status</h2>
+                <div class="metric-grid" style="grid-template-columns: 1fr;">
+                    <div class="metric-box" style="background: #e6f4ea; display: flex; align-items: center; justify-content: space-between; padding: 20px;">
+                        <div style="text-align: left;">
+                            <div class="metric-val" style="color: #137333">PASS</div>
+                            <div class="metric-label" style="font-size:0.8rem;">TEST SUITE VERIFICATION</div>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 1rem; padding: 6px 16px;">
+                                PYTEST
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-light); margin-top:12px;">
+                    Sandbox code changes were fully executed against automated test validations. Status: <strong>PASS</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Compression Metrics -->
+        <div class="card">
+            <h2>📊 Compression & Quantizer Metrics</h2>
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <div class="metric-val">1896</div>
+                    <div class="metric-label">Original Repository Tokens</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">1005</div>
+                    <div class="metric-label">Manifest Tokens</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">53.01%</div>
+                    <div class="metric-label">COMPRESSION RATIO</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">46.99%</div>
+                    <div class="metric-label">Token Savings</div>
+                </div>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; font-size:0.9rem; background:#f8f9fa; padding:10px 15px; border-radius:6px; border: 1px solid var(--border);">
+                <span><strong>Target Compression Ratio Limit</strong>: 15%</span>
+                <span><strong>Status</strong>: <span class="badge badge-warning">UNKNOWN</span></span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-light); margin-top:8px; font-style:italic;">
+                *Note: For tiny demo repos, the compiler maintains a baseline graph floor to ensure edge connections and imports stay syntactically viable, overriding strict 15% budgets with graceful alerts.
+            </p>
+        </div>
+
+        <!-- Graph Metrics -->
+        <div class="card">
+            <h2>🕸️ Structural Dependency Graph Heuristics</h2>
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <div class="metric-val">13</div>
+                    <div class="metric-label">Source Files Analyzed</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">28</div>
+                    <div class="metric-label">Syntactic Code Nodes</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">73</div>
+                    <div class="metric-label">Inter-file Calls/Imports</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-val">68.5%</div>
+                    <div class="metric-label">Resolved Connection Rate</div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <h4 style="font-size:0.95rem; margin-bottom:8px; color:var(--text-light);">Syntactic Compaction Levels (Level of detail retained per node):</h4>
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; text-align:center;">
+                    <div style="background:#eef; padding:8px; border-radius:6px; font-size:0.85rem;"><strong>0</strong> Full-Body Nodes</div>
+                    <div style="background:#efe; padding:8px; border-radius:6px; font-size:0.85rem;"><strong>3</strong> Skeleton Nodes</div>
+                    <div style="background:#fef; padding:8px; border-radius:6px; font-size:0.85rem;"><strong>0</strong> Signature-Only Nodes</div>
+                    <div style="background:#fff3cd; padding:8px; border-radius:6px; font-size:0.85rem;"><strong>25</strong> Ultra-Minimal Nodes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Semantic Agent cards -->
+        <div class="card">
+            <h2>🧠 Semantic Agent Layer (Rich Entity Summaries)</h2>
+            <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:15px;">
+                Rather than loading whole files, Gemini analyzes the structural compiler graph to extract semantic profiles of code entities.
+            </p>
+            <div class="sc-grid">
+                
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.api.checkout::checkout_endpoint (N3)</span>
+                        <span class="sc-relevance">Relevance: 1.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Processes a checkout request, including fraud checks, inventory verification, and payment processing.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>CheckoutRequest</code></span>
+                        <span>Outputs: <code>dict</code></span>
+                        <span>Risk Level: <span class="badge badge-danger" style="font-size:0.7rem; padding: 1px 6px;">high</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is the primary checkout endpoint where request validation needs to be implemented before payment processing.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>tests.test_checkout::test_out_of_stock_checkout (N36)</span>
+                        <span class="sc-relevance">Relevance: 0.7</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Tests the checkout endpoint's behavior when items are out of stock.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>unknown</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is a test for the checkout endpoint; new validation logic might require updates to this test or new test cases.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.services.payments::PaymentService.process_payment (N26)</span>
+                        <span class="sc-relevance">Relevance: 0.1</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Handles the actual payment transaction.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>user_id, amount</code></span>
+                        <span>Outputs: <code>PaymentResult</code></span>
+                        <span>Risk Level: <span class="badge badge-danger" style="font-size:0.7rem; padding: 1px 6px;">high</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This function performs payment processing. The task is to add validation *before* this function is called, so it is unlikely to require direct modification.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>tests.test_checkout::test_successful_checkout (N37)</span>
+                        <span class="sc-relevance">Relevance: 0.7</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Tests a successful checkout flow through the endpoint.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>unknown</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is a test for the checkout endpoint; new validation logic might require updates to this test or new test cases.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.services.payments::PaymentService (N24)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Provides payment-related service operations.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>None</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is a class definition and is not directly relevant to adding request validation to an endpoint.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.services.inventory::InventoryService.check_stock (N22)</span>
+                        <span class="sc-relevance">Relevance: 0.1</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Verifies if sufficient stock is available for requested items.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>item_details</code></span>
+                        <span>Outputs: <code>bool</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">medium</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This function performs a specific inventory validation. The task is about general request validation before any service calls, so this function is unlikely to be modified directly.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.api.catalog::list_products (N1)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Retrieves and lists all available products in the catalog.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>list</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This function is part of the catalog API and is unrelated to the checkout endpoint or its validation.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.services.inventory::InventoryService (N19)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Provides inventory management service operations.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>None</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is a class definition and is not directly relevant to adding request validation to an endpoint.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.services.fraud::FraudService.is_fraudulent_attempt (N17)</span>
+                        <span class="sc-relevance">Relevance: 0.1</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Assesses if a given user attempt exhibits fraudulent characteristics.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>user_id</code></span>
+                        <span>Outputs: <code>bool</code></span>
+                        <span>Risk Level: <span class="badge badge-danger" style="font-size:0.7rem; padding: 1px 6px;">high</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This function performs fraud validation. While it is a form of validation, the task focuses on initial request validation before any service-specific checks.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.api.users::register_user (N5)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Registers a new user with the provided email and username.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>email, username</code></span>
+                        <span>Outputs: <code>dict</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This function is part of the user registration API and is unrelated to the checkout endpoint or its validation.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.models.user::User (N12)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Represents a user entity within the application.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>None</code></span>
+                        <span>Outputs: <code>None</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This is a model class definition and is not directly relevant to adding request validation to the checkout endpoint.</div>
+                </div>
+                
+                <div class="sc-card">
+                    <div class="sc-header">
+                        <span>app.models.user::is_valid_email (N13)</span>
+                        <span class="sc-relevance">Relevance: 0.0</span>
+                    </div>
+                    <div class="sc-purpose"><strong>Purpose:</strong> Checks if a given string is a valid email address format.</div>
+                    <div style="font-size:0.8rem; color:var(--text-light); display:flex; gap:15px; margin-bottom:6px;">
+                        <span>Inputs: <code>email_address</code></span>
+                        <span>Outputs: <code>bool</code></span>
+                        <span>Risk Level: <span class="badge badge-primary" style="font-size:0.7rem; padding: 1px 6px;">low</span></span>
+                    </div>
+                    <div class="sc-reason"><strong>Orchestrator selection reason:</strong> This utility function for email validation is used in user registration and is unrelated to checkout endpoint validation.</div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Dependency Paths and Selected Files -->
+        <div class="grid-2">
+            <div class="card">
+                <h2>⛓️ Active Dependency Paths</h2>
+                <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:12px;">
+                    Compiler-detected flow lines that are highly critical for completing the requested task:
+                </p>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dep-badge">`N3 checkout_endpoint` (add validation here) -> `N26 PaymentService.process_payment` (ensure validation occurs before this call).</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📂 Task-Specific Selected Files</h2>
+                <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:12px;">
+                    The task router limited our workspace modifications specifically to these targeted files:
+                </p>
+                <ul class="file-list">
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/api/checkout.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">tests/test_checkout.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/services/payments.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/services/inventory.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/utils/validation.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/models/checkout.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                    <li class="file-item">
+                        <span class="file-path">app/models/payment.py</span>
+                        <span class="badge badge-success">Selected</span>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+
+        <!-- COLLAPSIBLE SECTIONS FOR DETAILED VIEW -->
+        <button class="collapsible">📝 View Compact Manifest Code Base (codebase_manifest.txt) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content">
+            <pre class="codeblock"># Context Compiler Manifest v3
+META repo=context_compiler_live_demo_repo original_tokens=1896 compressed_tokens=1005 ratio=0.530 target=0.150 files=13 nodes=28 debug_edges_total=73 serialized_edges_total=15 serialized_resolved_edges=15 serialized_unresolved_edges=0 body=0 excerpt=0 skel=3 sig=0 min=25 status=MINIMUM_GRAPH_EXCEEDS_TARGET
+
+FILES
+F0 app/api/catalog.py
+F1 app/api/checkout.py
+F2 app/api/users.py
+F3 app/models/checkout.py
+F4 app/models/payment.py
+F5 app/models/user.py
+F6 app/services/fraud.py
+F7 app/services/inventory.py
+F8 app/services/payments.py
+F9 app/utils/logging.py
+F10 app/utils/money.py
+F11 app/utils/validation.py
+F12 tests/test_checkout.py
+
+NODES
+N0 F0:1-10 module <module> score=1.34 mode=min
+N1 F0:3-10 fn list_products sig="def list_products() -> list:" score=2.82 in=0 out=1 mode=skel
+N2 F1:1-40 module <module> score=2.65 mode=min
+N3 F1:7-40 fn checkout_endpoint sig="def checkout_endpoint(request: CheckoutRequest) -> dict:" score=6.03 in=3 out=9 mode=skel
+N4 F2:1-13 module <module> score=2.52 mode=min
+N5 F2:4-13 fn register_user sig="def register_user(email: str, username: str) -> dict:" score=4.67 in=0 out=4 mode=skel
+N6 F3:1-14 module <module> score=2.25 mode=min
+N9 F4:1-9 module <module> score=2.22 mode=min
+N11 F5:1-12 module <module> score=1.77 mode=min
+N12 F5:4-8 class User score=5.20 mode=min
+N13 F5:10-12 fn is_valid_email score=4.05 mode=min
+N14 F6:1-23 module <module> score=1.65 mode=min
+N15 F6:3-23 class FraudService score=2.26 mode=min
+N17 F6:9-23 method FraudService.is_fraudulent_attempt score=2.99 mode=min
+N18 F7:1-29 module <module> score=1.56 mode=min
+N19 F7:3-29 class InventoryService score=2.13 mode=min
+N22 F7:14-21 method InventoryService.check_stock score=3.83 mode=min
+N23 F8:1-24 module <module> score=2.54 mode=min
+N24 F8:6-24 class PaymentService score=2.80 mode=min
+N26 F8:12-24 method PaymentService.process_payment score=4.55 mode=min
+N27 F9:1-11 module <module> score=1.16 mode=min
+N28 F9:8-11 fn log_error score=8.57 mode=min
+N29 F9:3-6 fn log_info score=10.06 mode=min
+N30 F10:1-7 module <module> score=1.02 mode=min
+N33 F11:1-14 module <module> score=1.47 mode=min
+N35 F12:1-24 module <module> score=-3.37 mode=min
+N36 F12:15-24 fn test_out_of_stock_checkout score=-2.22 mode=min
+N37 F12:4-13 fn test_successful_checkout score=-2.14 mode=min
+
+SKELS
+S N1 calls=[] flow="return" effects=[] raises=[] returns=list reads=[]
+S N3 calls=[fraud_service.is_fraudulent_attempt,payment_service.process_payment,inventory_service.check_stock,InventoryService,FraudService,PaymentService] flow="InventoryService->loop->FraudService->if->pay->if->return" effects=[validation,payment,logging] raises=[] returns=dict reads=[request.items,fraud_service.is_fraudulent_attempt,request.user_id,request.amount,payment_service.process_payment,result.success,result.transaction_id,item.get,result.error_message,inventory_service.check_stock]
+S N5 calls=[is_valid_email,User] flow="if->User->return" effects=[logging,email] raises=[] returns=dict reads=[user.user_id]
+
+EDGES
+N1 -> N29 call log_info resolved
+N3 -> N15 call FraudService resolved
+N3 -> N17 call fraud_service.is_fraudulent_attempt resolved
+N3 -> N19 call InventoryService resolved
+N3 -> N22 call inventory_service.check_stock resolved
+N3 -> N24 call PaymentService resolved
+N3 -> N26 call payment_service.process_payment resolved
+N3 -> N28 call log_error resolved
+N3 -> N29 call log_info resolved
+N5 -> N12 call User resolved
+N5 -> N13 call is_valid_email resolved
+N5 -> N28 call log_error resolved
+N5 -> N29 call log_info resolved
+N36 -> N3 call checkout_endpoint resolved
+N37 -> N3 call checkout_endpoint resolved
+
+BODIES
+NOTES
+unresolved_symbols=none
+parse_errors=0
+</pre>
+        </div>
+
+        <button class="collapsible">🗺️ View Edit Plan Report (edit_plan.md) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content">
+            <div style="padding:15px; background:#f8f9fa; border-radius:8px;">
+                <h1>Edit Plan &amp; Task Routing Report</h1>
+<br>
+<h3>Selected Files &amp; Nodes</h3>
+<li>`F1 app.api.checkout`: Contains the primary checkout endpoint where the request validation needs to be implemented.</li>
+<p>    - <code>N3 app.api.checkout::checkout_endpoint</code>: This is the direct target for adding request validation logic before payment processing.</p>
+<li>`F12 tests.test_checkout`: Contains existing tests for the checkout endpoint that might need updates or new test cases to cover the new validation logic.</li>
+<p>    - <code>N37 tests.test_checkout::test_successful_checkout</code>: This test calls the <code>checkout_endpoint</code> and will need to be reviewed to ensure it still passes with the new validation, and potentially updated or expanded to cover new validation failure scenarios.</p>
+<p>    - <code>N36 tests.test_checkout::test_out_of_stock_checkout</code>: Similar to <code>N37</code>, this test calls the <code>checkout_endpoint</code> and requires review/updates due to the new validation.</p>
+<br>
+<h3>Selected Dependency Path</h3>
+<p><code>N3 checkout_endpoint</code> (add validation here) -&gt; <code>N26 PaymentService.process_payment</code> (ensure validation occurs before this call).</p>
+<p>The tests <code>N37 test_successful_checkout</code> and <code>N36 test_out_of_stock_checkout</code> call <code>N3 checkout_endpoint</code>.</p>
+<br>
+<h3>Proposed Edit Plan</h3>
+<br>
+<p><strong>Objective</strong>: Implement request validation in <code>checkout_endpoint</code> to ensure <code>CheckoutRequest</code> data is valid before proceeding with any service calls, especially payment processing.</p>
+<br>
+<p><strong>1. Modify <code>F1 app.api.checkout</code> (Node <code>N3 app.api.checkout::checkout_endpoint</code>)</strong></p>
+<br>
+<li>  **Pre-conditions and validations**:</li>
+<p>    *   At the very beginning of the <code>checkout_endpoint</code> function, add validation logic for the <code>request: CheckoutRequest</code> object.</p>
+<p>    *   This validation should check for common issues such as:</p>
+<p>        *   <code>request.user_id</code> is present and valid (e.g., not empty, conforms to a specific format).</p>
+<p>        *   <code>request.amount</code> is a positive number.</p>
+<p>        *   <code>request.items</code> is not empty and each item has required fields (e.g., <code>item_id</code>, <code>quantity</code> &gt; 0).</p>
+<li>  **Business logic or payment processing steps**:</li>
+<p>    *   If any validation fails, immediately return an appropriate HTTP error response (e.g., 400 Bad Request) with a clear error message. The <code>checkout_endpoint</code> returns a <code>dict</code>, so this error response should be a dictionary containing error details.</p>
+<p>    *   If validation passes, the existing logic (fraud check, inventory check, and ultimately <code>payment_service.process_payment</code>) should proceed as currently implemented.</p>
+<li>  **Post-conditions and side effects**:</li>
+<p>    *   Successful validation leads to the continuation of the checkout flow.</p>
+<p>    *   Failed validation prevents any further processing (fraud, inventory, payment) and returns an error to the client.</p>
+<li>  **Handling errors**:</li>
+<p>    *   Introduce a new helper function or a dedicated validation class if the validation logic becomes complex. For this task, inline checks with early returns are sufficient.</p>
+<p>    *   Return a dictionary like <code>{"success": False, "error_message": "Invalid request: &lt;reason&gt;"}</code> for validation failures.</p>
+<br>
+<p><strong>Example Pseudo-code for <code>checkout_endpoint</code>:</strong></p>
+<br>
+<br><pre class='codeblock python'># app/api/checkout.py
+from fastapi import APIRouter, HTTPException # Assuming FastAPI for endpoint structure
+from pydantic import BaseModel, Field # Assuming pydantic for CheckoutRequest
+
+# Define CheckoutRequest (if not already defined)
+class CheckoutRequest(BaseModel):
+    user_id: str = Field(..., min_length=1)
+    amount: float = Field(..., gt=0)
+    items: list[dict] = Field(..., min_items=1) # Example, could be a list of Item models
+
+# ... (other imports)
+
+router = APIRouter()
+
+@router.post("/checkout")
+def checkout_endpoint(request: CheckoutRequest) -&gt; dict:
+    # --- START NEW VALIDATION LOGIC ---
+    if not request.user_id:
+        return {"success": False, "error_message": "Invalid request: User ID is required."}
+    if request.amount &lt;= 0:
+        return {"success": False, "error_message": "Invalid request: Amount must be positive."}
+    if not request.items:
+        return {"success": False, "error_message": "Invalid request: Items list cannot be empty."}
+    for item in request.items:
+        if not item.get("item_id") or item.get("quantity", 0) &lt;= 0:
+            return {"success": False, "error_message": f"Invalid request: Malformed item in list: {item}"}
+    # --- END NEW VALIDATION LOGIC ---
+
+    # Existing logic follows (only if validation passes)
+    # fraud_service.is_fraudulent_attempt(...)
+    # inventory_service.check_stock(...)
+    # payment_service.process_payment(...)
+    # ...
+    return {"success": True, "transaction_id": "..."} # Or other success response
+</pre><br>
+<br>
+<p><strong>2. Modify <code>F12 tests.test_checkout</code> (Nodes <code>N37 test_successful_checkout</code>, <code>N36 test_out_of_stock_checkout</code>)</strong></p>
+<br>
+<li>  **Pre-conditions and validations**:</li>
+<p>    *   Review <code>test_successful_checkout</code> and <code>test_out_of_stock_checkout</code>. Ensure the <code>CheckoutRequest</code> objects created within these tests are still valid according to the new rules implemented in <code>checkout_endpoint</code>. Adjust test data if necessary.</p>
+<li>  **Business logic or payment processing steps**:</li>
+<p>    *   Add new test cases to <code>tests.test_checkout</code> specifically to verify the new request validation logic.</p>
+<p>    *   These new tests should:</p>
+<p>        *   Call <code>checkout_endpoint</code> with invalid <code>CheckoutRequest</code> data (e.g., missing <code>user_id</code>, <code>amount</code> &lt;= 0, empty <code>items</code> list).</p>
+<p>        *   Assert that the <code>checkout_endpoint</code> returns an error response (e.g., <code>{"success": False, "error_message": "..."}</code>) and does *not* proceed to payment processing.</p>
+<li>  **Post-conditions and side effects**:</li>
+<p>    *   The existing successful checkout and out-of-stock scenarios should still pass.</p>
+<p>    *   New tests confirm that invalid requests are correctly rejected by the new validation logic.</p>
+<li>  **Handling errors**:</li>
+<p>    *   No specific error handling needed in tests, but ensure assertions correctly capture the expected error responses from the endpoint.</p>
+<br>
+<p><strong>Example Pseudo-code for <code>tests.test_checkout</code> (new test case):</strong></p>
+<br>
+<br><pre class='codeblock python'># tests/test_checkout.py
+import pytest
+from app.api.checkout import checkout_endpoint, CheckoutRequest # Assuming these are importable
+
+# ... (existing tests)
+
+def test_checkout_with_invalid_amount():
+    """Tests that checkout fails with a non-positive amount due to request validation."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=0.0, items=[{"item_id": "A", "quantity": 1}])
+    response = checkout_endpoint(invalid_request) # Assuming direct call for testing, or via client
+    assert not response.get("success")
+    assert "Amount must be positive" in response.get("error_message")
+
+def test_checkout_with_empty_items():
+    """Tests that checkout fails with an empty items list due to request validation."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=100.0, items=[])
+    response = checkout_endpoint(invalid_request)
+    assert not response.get("success")
+    assert "Items list cannot be empty" in response.get("error_message")
+
+def test_checkout_with_malformed_item():
+    """Tests that checkout fails with a malformed item in the list."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=100.0, items=[{"item_id": "B", "quantity": -1}]) # Invalid quantity
+    response = checkout_endpoint(invalid_request)
+    assert not response.get("success")
+    assert "Malformed item in list" in response.get("error_message")
+</pre><br>
+<br>
+<h3>Snippets Needed / Full Source Requests</h3>
+<br>
+<li>`N3 app.api.checkout::checkout_endpoint` (file `F1`): Full source code is required to implement the new request validation logic at the beginning of this function.</li>
+<li>`N37 tests.test_checkout::test_successful_checkout` (file `F12`): Full source code is required to review existing test data against new validation rules and potentially add new test cases for successful validation.</li>
+<li>`N36 tests.test_checkout::test_out_of_stock_checkout` (file `F12`): Full source code is required to review existing test data against new validation rules and potentially add new test cases for successful validation.</li>
+            </div>
+        </div>
+
+        <button class="collapsible">📦 View Selected Source Snippets (selected_context.md) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content">
+            <div style="padding:15px; background:#f8f9fa; border-radius:8px;">
+                <br>
+<br>
+<h1>File: app/api/checkout.py</h1>
+<h2>Context: Lines 1-40 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from app.models.checkout import CheckoutRequest
+from app.services.inventory import InventoryService
+from app.services.fraud import FraudService
+from app.services.payments import PaymentService
+from app.utils.logging import log_info, log_error
+
+def checkout_endpoint(request: CheckoutRequest) -&gt; dict:
+    """Submit a checkout request, verify stock, assess fraud risk, and capture payment."""
+    log_info(f"Received checkout request for user {request.user_id}")
+
+    # 1. Verify stock for each item
+    inventory_service = InventoryService()
+    for item in request.items:
+        item_id = item.get("item_id", "")
+        quantity = item.get("quantity", 1)
+        if not inventory_service.check_stock(item_id, quantity):
+            log_error(f"Stock check failed for item {item_id}")
+            return {"success": False, "error": "OutOfStock"}
+
+    # 2. Risk check
+    fraud_service = FraudService()
+    if fraud_service.is_fraudulent_attempt(request.user_id, request.amount):
+        log_error(f"Fraud check rejected for user {request.user_id}")
+        return {"success": False, "error": "FraudRejected"}
+
+    # 3. Process payment
+    payment_service = PaymentService()
+    result = payment_service.process_payment(request.user_id, request.amount)
+    
+    if not result.success:
+        log_error(f"Payment failed: {result.error_message}")
+        return {"success": False, "error": "PaymentFailed", "details": result.error_message}
+
+    # 4. Success Response
+    log_info(f"Checkout completed successfully for user {request.user_id}")
+    return {
+        "success": True,
+        "transaction_id": result.transaction_id,
+        "amount": request.amount
+    }
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: tests/test_checkout.py</h1>
+<h2>Context: Lines 1-24 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from app.models.checkout import CheckoutRequest
+from app.api.checkout import checkout_endpoint
+
+def test_successful_checkout():
+    """Test that a standard valid request goes through successfully."""
+    req = CheckoutRequest(
+        user_id="alice",
+        items=[{"item_id": "item_101", "quantity": 2}],
+        amount=21.98
+    )
+    response = checkout_endpoint(req)
+    assert response["success"] is True
+    assert "transaction_id" in response
+
+def test_out_of_stock_checkout():
+    """Test that ordering an out-of-stock item returns stock failure."""
+    req = CheckoutRequest(
+        user_id="bob",
+        items=[{"item_id": "item_303", "quantity": 1}],
+        amount=5.00
+    )
+    response = checkout_endpoint(req)
+    assert response["success"] is False
+    assert response["error"] == "OutOfStock"
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: app/services/payments.py</h1>
+<h2>Context: Lines 1-24 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>import uuid
+from app.models.payment import PaymentResult
+from app.utils.logging import log_info, log_error
+from app.utils.money import format_currency
+
+class PaymentService:
+    """Service to process charges against payment gateways."""
+
+    def __init__(self, provider_name: str = "Stripe"):
+        self.provider_name = provider_name
+
+    def process_payment(self, user_id: str, amount: float) -&gt; PaymentResult:
+        """Process payment through the remote provider gateway."""
+        formatted = format_currency(amount)
+        log_info(f"Processing charge of {formatted} for user {user_id} via {self.provider_name}")
+        
+        if amount &lt;= 0.0:
+            log_error(f"Cannot process charge for invalid amount {amount}")
+            return PaymentResult(success=False, error_message="Invalid payment amount")
+
+        # Simulate remote API call success
+        transaction_id = str(uuid.uuid4())
+        log_info(f"Payment successful. Transaction ID: {transaction_id}")
+        return PaymentResult(success=True, transaction_id=transaction_id)
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: app/services/inventory.py</h1>
+<h2>Context: Lines 1-29 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from app.utils.logging import log_info, log_error
+
+class InventoryService:
+    """Service to handle stock checks and inventory allocations."""
+
+    def __init__(self):
+        # Simulated database for stock quantities
+        self.stock_db = {
+            "item_101": 50,
+            "item_202": 5,
+            "item_303": 0
+        }
+
+    def check_stock(self, item_id: str, quantity: int) -&gt; bool:
+        """Check if inventory has sufficient stock for the requested quantity."""
+        log_info(f"Checking stock for {item_id}, quantity {quantity}")
+        available = self.stock_db.get(item_id, 0)
+        if available &gt;= quantity:
+            return True
+        log_error(f"Insufficient stock for {item_id}: available {available}, requested {quantity}")
+        return False
+
+    def allocate_stock(self, item_id: str, quantity: int) -&gt; bool:
+        """Reserve/allocate stock in the inventory."""
+        if self.check_stock(item_id, quantity):
+            self.stock_db[item_id] -= quantity
+            log_info(f"Successfully allocated {quantity} units of {item_id}")
+            return True
+        return False
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: app/utils/validation.py</h1>
+<h2>Context: Lines 1-14 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from app.models.checkout import CheckoutRequest
+
+def validate_checkout_request(request: CheckoutRequest) -&gt; bool:
+    """Validate that the checkout request is complete and correct.
+    
+    Checks that user_id is non-empty, has items, and amount is positive.
+    """
+    if not request.user_id:
+        return False
+    if not request.has_items():
+        return False
+    if request.amount &lt;= 0.0:
+        return False
+    return True
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: app/models/checkout.py</h1>
+<h2>Context: Lines 1-14 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from dataclasses import dataclass, field
+from typing import List, Dict
+
+@dataclass
+class CheckoutRequest:
+    """Request payload containing user and cart details for checkout."""
+    user_id: str
+    items: List[Dict[str, int]] = field(default_factory=list)
+    amount: float = 0.0
+    payment_method: str = "credit_card"
+
+    def has_items(self) -&gt; bool:
+        """Helper to check if there are any items in the checkout request."""
+        return len(self.items) &gt; 0
+</pre><br>
+<br>
+<p>---</p>
+<br>
+<h1>File: app/models/payment.py</h1>
+<h2>Context: Lines 1-9 (Full File (Tiny File))</h2>
+<br><pre class='codeblock python'>from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class PaymentResult:
+    """Result of a payment processing operation."""
+    success: bool
+    transaction_id: Optional[str] = None
+    error_message: Optional[str] = None
+</pre><br>
+            </div>
+        </div>
+
+        <button class="collapsible font-bold" style="background:#e8f0fe; color:#1a73e8; border-color:#b3d1ff;">🛠️ View Proposed Patch File (proposed_patch.diff) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content" style="display:block;">
+            <pre class="codeblock" style="background:#1e1e1e; color:#9cdcfe; max-height: 500px;">--- a/app/api/checkout.py
++++ b/app/api/checkout.py
+@@ -3,11 +3,18 @@
+ from app.services.fraud import FraudService
+ from app.services.payments import PaymentService
+ from app.utils.logging import log_info, log_error
++from app.utils.validation import validate_checkout_request
+ 
+ def checkout_endpoint(request: CheckoutRequest) -> dict:
+     """Submit a checkout request, verify stock, assess fraud risk, and capture payment."""
+-    log_info(f"Received checkout request for user {request.user_id}")
++    user_id_for_log = request.user_id if request.user_id else 'UNKNOWN_USER'
++    log_info(f"Received checkout request for user {user_id_for_log}")
+ 
++    # 0. Validate incoming request structure and basic data
++    if not validate_checkout_request(request):
++        log_error(f"Invalid checkout request received for user {user_id_for_log}")
++        return {"success": False, "error": "InvalidRequest"}
++
+     # 1. Verify stock for each item
+     inventory_service = InventoryService()
+     for item in request.items:
+--- a/tests/test_checkout.py
++++ b/tests/test_checkout.py
+@@ -19,3 +19,43 @@
+     response = checkout_endpoint(req)
+     assert response["success"] is False
+     assert response["error"] == "OutOfStock"
++
++def test_invalid_checkout_request():
++    """Test that an invalid request (e.g., empty user_id, no items, non-positive amount) is rejected by validation."""
++    # Test with empty user_id
++    req_invalid_user = CheckoutRequest(
++        user_id="",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_invalid_user)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with no items
++    req_no_items = CheckoutRequest(
++        user_id="charlie",
++        items=[],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_no_items)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with zero amount
++    req_zero_amount = CheckoutRequest(
++        user_id="diana",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=0.0
++    )
++    response = checkout_endpoint(req_zero_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with negative amount
++    req_negative_amount = CheckoutRequest(
++        user_id="eve",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=-5.00
++    )
++    response = checkout_endpoint(req_negative_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"</pre>
+        </div>
+
+        
+        <button class="collapsible font-bold" style="background:#e6f4ea; color:#137333; border-color:#a8dab5;">🔍 View Live Applied Diff against Original Repo (final_diff.txt) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content" style="display:block;">
+            <pre class="codeblock" style="background:#1e1e1e; color:#a3e2a3; max-height: 500px;">Binary files ./demo_repo/app/api/__pycache__/checkout.cpython-313.pyc and /tmp/context_compiler_live_demo_repo/app/api/__pycache__/checkout.cpython-313.pyc differ
+diff -ruN ./demo_repo/app/api/checkout.py /tmp/context_compiler_live_demo_repo/app/api/checkout.py
+--- ./demo_repo/app/api/checkout.py	2026-05-23 12:42:11
++++ /tmp/context_compiler_live_demo_repo/app/api/checkout.py	2026-05-23 15:50:19
+@@ -3,10 +3,17 @@
+ from app.services.fraud import FraudService
+ from app.services.payments import PaymentService
+ from app.utils.logging import log_info, log_error
++from app.utils.validation import validate_checkout_request
+ 
+ def checkout_endpoint(request: CheckoutRequest) -> dict:
+     """Submit a checkout request, verify stock, assess fraud risk, and capture payment."""
+-    log_info(f"Received checkout request for user {request.user_id}")
++    user_id_for_log = request.user_id if request.user_id else 'UNKNOWN_USER'
++    log_info(f"Received checkout request for user {user_id_for_log}")
++
++    # 0. Validate incoming request structure and basic data
++    if not validate_checkout_request(request):
++        log_error(f"Invalid checkout request received for user {user_id_for_log}")
++        return {"success": False, "error": "InvalidRequest"}
+ 
+     # 1. Verify stock for each item
+     inventory_service = InventoryService()
+Binary files ./demo_repo/tests/__pycache__/test_checkout.cpython-313.pyc and /tmp/context_compiler_live_demo_repo/tests/__pycache__/test_checkout.cpython-313.pyc differ
+diff -ruN ./demo_repo/tests/test_checkout.py /tmp/context_compiler_live_demo_repo/tests/test_checkout.py
+--- ./demo_repo/tests/test_checkout.py	2026-05-23 12:42:21
++++ /tmp/context_compiler_live_demo_repo/tests/test_checkout.py	2026-05-23 15:50:19
+@@ -22,3 +22,45 @@
+     response = checkout_endpoint(req)
+     assert response["success"] is False
+     assert response["error"] == "OutOfStock"
++
++def test_invalid_checkout_request():
++    """Test that an invalid request (e.g., empty user_id, no items, non-positive amount) is rejected by validation."""
++    # Test with empty user_id
++    req_invalid_user = CheckoutRequest(
++        user_id="",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_invalid_user)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with no items
++    req_no_items = CheckoutRequest(
++        user_id="charlie",
++        items=[],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_no_items)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with zero amount
++    req_zero_amount = CheckoutRequest(
++        user_id="diana",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=0.0
++    )
++    response = checkout_endpoint(req_zero_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with negative amount
++    req_negative_amount = CheckoutRequest(
++        user_id="eve",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=-5.00
++    )
++    response = checkout_endpoint(req_negative_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
+</pre>
+        </div>
+        
+
+        <button class="collapsible">📋 View Patch Strategy Report (patch_report.md) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content">
+            <div style="padding:15px; background:#f8f9fa; border-radius:8px;">
+                <h1>Patch Agent Report (Gemini)</h1>
+<br>
+<h2>Task Analysis</h2>
+<p><strong>Target Task</strong>: Add request validation to the checkout endpoint before payment processing</p>
+<p><strong>Mode</strong>: Gemini</p>
+<br>
+<p>To implement the requested task of adding request validation to the checkout endpoint, the existing <code>validate_checkout_request</code> utility function will be integrated into the <code>checkout_endpoint</code> in <code>app/api/checkout.py</code>. A new test case will also be added to <code>tests/test_checkout.py</code> to ensure this validation logic works as expected.</p>
+<br>
+<h3>Description of Changes:</h3>
+<br>
+<li class='numeric'> **`app/api/checkout.py`**:</li>
+<p>    *   <strong>Import</strong>: Added an import for <code>validate_checkout_request</code> from <code>app.utils.validation</code>.</p>
+<p>    *   <strong>Validation Logic</strong>: Inserted a call to <code>validate_checkout_request</code> at the very beginning of the <code>checkout_endpoint</code> function.</p>
+<p>    *   <strong>Error Handling</strong>: If the validation fails, the endpoint now immediately returns a response with <code>success: False</code> and <code>error: "InvalidRequest"</code>, preventing further processing (like stock verification, fraud checks, or payment processing) for malformed requests.</p>
+<p>    *   <strong>Logging</strong>: Adjusted logging to gracefully handle cases where <code>request.user_id</code> might be empty during an invalid request.</p>
+<br>
+<li class='numeric'> **`tests/test_checkout.py`**:</li>
+<p>    *   <strong>New Test Case</strong>: Added <code>test_invalid_checkout_request</code> to verify the new validation logic. This test covers scenarios where the <code>CheckoutRequest</code> is invalid due to:</p>
+<p>        *   An empty <code>user_id</code>.</p>
+<p>        *   An empty list of <code>items</code>.</p>
+<p>        *   A zero or negative <code>amount</code>.</p>
+<p>    *   Each sub-test asserts that the <code>checkout_endpoint</code> returns <code>success: False</code> and the <code>error</code> message is <code>"InvalidRequest"</code>.</p>
+<br>
+<p>This approach ensures that basic structural and data integrity checks are performed upfront, failing fast for invalid requests and protecting downstream services from potentially malformed data.</p>
+<br>
+<h2>Target Files to Modify</h2>
+<li>`app/api/checkout.py` (checkout_endpoint)</li>
+<li>`tests/test_checkout.py` (test_invalid_checkout_validation)</li>
+<br>
+<h2>Proposed Unified Diff</h2>
+<br><pre class='codeblock diff'>--- a/app/api/checkout.py
++++ b/app/api/checkout.py
+@@ -3,11 +3,18 @@
+ from app.services.fraud import FraudService
+ from app.services.payments import PaymentService
+ from app.utils.logging import log_info, log_error
++from app.utils.validation import validate_checkout_request
+ 
+ def checkout_endpoint(request: CheckoutRequest) -&gt; dict:
+     """Submit a checkout request, verify stock, assess fraud risk, and capture payment."""
+-    log_info(f"Received checkout request for user {request.user_id}")
++    user_id_for_log = request.user_id if request.user_id else 'UNKNOWN_USER'
++    log_info(f"Received checkout request for user {user_id_for_log}")
+ 
++    # 0. Validate incoming request structure and basic data
++    if not validate_checkout_request(request):
++        log_error(f"Invalid checkout request received for user {user_id_for_log}")
++        return {"success": False, "error": "InvalidRequest"}
++
+     # 1. Verify stock for each item
+     inventory_service = InventoryService()
+     for item in request.items:
+--- a/tests/test_checkout.py
++++ b/tests/test_checkout.py
+@@ -19,3 +19,43 @@
+     response = checkout_endpoint(req)
+     assert response["success"] is False
+     assert response["error"] == "OutOfStock"
++
++def test_invalid_checkout_request():
++    """Test that an invalid request (e.g., empty user_id, no items, non-positive amount) is rejected by validation."""
++    # Test with empty user_id
++    req_invalid_user = CheckoutRequest(
++        user_id="",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_invalid_user)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with no items
++    req_no_items = CheckoutRequest(
++        user_id="charlie",
++        items=[],
++        amount=10.00
++    )
++    response = checkout_endpoint(req_no_items)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with zero amount
++    req_zero_amount = CheckoutRequest(
++        user_id="diana",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=0.0
++    )
++    response = checkout_endpoint(req_zero_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
++
++    # Test with negative amount
++    req_negative_amount = CheckoutRequest(
++        user_id="eve",
++        items=[{"item_id": "item_101", "quantity": 1}],
++        amount=-5.00
++    )
++    response = checkout_endpoint(req_negative_amount)
++    assert response["success"] is False
++    assert response["error"] == "InvalidRequest"
+</pre><br>
+<br>
+<br>
+<h2>Patch Application Status</h2>
+<p><strong>Status</strong>: SUCCESS</p>
+<p>*The patch has been cleanly applied to the codebase.*</p>
+            </div>
+        </div>
+
+        <button class="collapsible">🧪 View Validation Execution Logs (validation_report.md) <span style="font-size:0.8rem;">[Toggle]</span></button>
+        <div class="collapsible-content">
+            <div style="padding:15px; background:#f8f9fa; border-radius:8px;">
+                <h1>Validator Agent Report</h1>
+<br>
+<h2>Summary</h2>
+<li>**Test Command**: `pytest -q`</li>
+<li>**Overall Status**: **PASS**</li>
+<br>
+<h2>Test Execution Log</h2>
+<br><pre class='codeblock text'>Discovered test files: ['test_checkout.py']
+Running: test_checkout.test_invalid_checkout_request...
+  [PASS] test_checkout.test_invalid_checkout_request
+Running: test_checkout.test_out_of_stock_checkout...
+  [PASS] test_checkout.test_out_of_stock_checkout
+Running: test_checkout.test_successful_checkout...
+  [PASS] test_checkout.test_successful_checkout
+Test Suite Summary: 3 passed, 0 failed
+</pre><br>
+<br>
+<br>
+<br>
+            </div>
+        </div>
+
+        <!-- Artifact Files -->
+        <div class="card">
+            <h2>📂 Compiled Pipeline Artifacts</h2>
+            <div class="artifacts-list">
+                <div class="artifact-box">
+                    <span>📄 <span class="artifact-name">codebase_manifest.txt</span></span>
+                    <span class="artifact-status">COMPACT STRUCT</span>
+                </div>
+                <div class="artifact-box">
+                    <span>⚙️ <span class="artifact-name">codebase_manifest.debug.json</span></span>
+                    <span class="artifact-status">DEBUG STRUCT</span>
+                </div>
+                <div class="artifact-box">
+                    <span>📇 <span class="artifact-name">semantic_cards.jsonl</span></span>
+                    <span class="artifact-status">SEMANTIC ENRICHMENT</span>
+                </div>
+                <div class="artifact-box">
+                    <span>📝 <span class="artifact-name">edit_plan.md</span></span>
+                    <span class="artifact-status">ROUTER TASK PLAN</span>
+                </div>
+                <div class="artifact-box">
+                    <span>📦 <span class="artifact-name">selected_context.md</span></span>
+                    <span class="artifact-status">EXTRACTED CONTEXT</span>
+                </div>
+                <div class="artifact-box">
+                    <span>🛠️ <span class="artifact-name">proposed_patch.diff</span></span>
+                    <span class="artifact-status">PATCH AGENT DIFF</span>
+                </div>
+                <div class="artifact-box">
+                    <span>📋 <span class="artifact-name">patch_report.md</span></span>
+                    <span class="artifact-status">PATCH STRATEGY</span>
+                </div>
+                <div class="artifact-box">
+                    <span>🧪 <span class="artifact-name">validation_report.md</span></span>
+                    <span class="artifact-status">VALIDATION REPORT</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fallback Reliability Story -->
+        <div class="card" style="background:#e8f0fe; border-color:#b3d1ff;">
+            <h2>🛡️ Bulletproof Fallback Reliability</h2>
+            <p style="font-size:0.95rem; color:#1a73e8; font-weight:600; margin-bottom:10px;">
+                What happens when API servers go down, rate limits hit, or credentials are unconfigured?
+            </p>
+            <p style="font-size:0.9rem; color:#5f6368; line-height:1.5;">
+                We designed Context Compiler with <strong>production robustness</strong>. The entire pipeline operates with automated 
+                local fallbacks. The structural AST front-end compactor runs completely locally with zero network calls. If Gemini API credentials
+                are missing or restricted, high-speed local keyword routing and rule templates trigger automatically to generate structurally clean patches 
+                and run local test-suite validation. The compiler always delivers compilation metrics and functional validation reports!
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     {
       "file_alias": "F1",
       "path": "app/api/checkout.py",
-      "reason": "Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, request, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)",
+      "reason": "Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, endpoint, request; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)",
       "score": 180.4,
       "selected_nodes": [
         "N3"
@@ -71,7 +71,7 @@
       "simple_name": "checkout_endpoint",
       "type": "fn",
       "tags": [],
-      "reason": "Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, request, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match",
+      "reason": "Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, endpoint, request; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match",
       "score": 180.4
     },
     {

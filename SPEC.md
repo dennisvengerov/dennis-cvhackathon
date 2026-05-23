@@ -1,565 +1,559 @@
-# Context Compiler: Graph-Driven Codebase Distillation for Managed Agents
+# Context Compiler: Agentic Codebase Compression for Managed Coding Agents
 
 ## 0. One-Sentence Summary
 
-Context Compiler is a Managed-Agent-powered static analysis system that converts a large codebase into a compact, graph-structured execution manifest, allowing Gemini agents to reason over the repository, identify relevant files/functions, and produce targeted code changes without loading the entire raw codebase into context.
+Context Compiler turns a raw code repository into a compact, graph-structured, semantically enriched execution manifest that Google Managed Agents and Gemini agents can use to localize tasks, generate targeted patches, and validate changes without loading the entire repository into context.
 
 ---
 
 ## 1. Core Hackathon Claim
 
-Modern coding agents struggle with large repositories because raw source code is expensive, noisy, redundant, and often too large to fit into a single useful reasoning context.
+Large coding agents do not need the whole repository in raw form.
 
-Context Compiler solves this by inserting a compiler layer between the repository and the coding agent.
+They need:
 
-Instead of passing the entire codebase to the model, we:
+1. exact file/function/class boundaries,
+2. dependency-aware structure,
+3. compact semantic summaries,
+4. task-relevant source snippets,
+5. a safe patch-and-validation loop.
 
-1. Mount or clone a repository into a Google Managed Agent remote Linux sandbox.
-2. Parse the repository into an Abstract Syntax Tree dependency graph.
-3. Score each code node by structural importance per token.
-4. Preserve high-value implementation bodies.
-5. Collapse low-value code into typed signatures.
-6. Emit a compressed `codebase_manifest.json`.
-7. Use the compressed manifest to guide an agent toward the correct files, functions, and edit locations.
-8. Produce an edit plan or patch mapped back to the original source tree.
+Context Compiler provides this missing compiler layer.
 
-This is not a basic RAG app.  
-This is a static-analysis compiler pass for agent context.
+The system transforms:
 
----
+```text
+Raw Repository
+→ AST Dependency Graph
+→ Structural Quantization
+→ Compact Manifest
+→ Gemini Semantic Cards
+→ Task Router
+→ Patch Agent
+→ Validator Agent
+→ Original Source Diff
 
-## 2. Why This Matters
+This is not a repo chatbot.
 
-Large-context models still face three practical bottlenecks:
+This is a compiler and agent orchestration layer for coding agents.
 
-1. **Token Waste:** Raw repositories contain boilerplate, repeated utilities, generated files, comments, tests, and irrelevant code paths.
-2. **Reasoning Noise:** More context does not automatically mean better reasoning. Agents can become distracted by unrelated implementation details.
-3. **Patch Localization:** Coding agents need file paths, line ranges, dependency relationships, and API boundaries more than they need every single implementation body.
+2. Why This Matters
 
-Context Compiler creates a dense structural representation of the codebase that keeps the information most useful for agentic code modification.
+Modern coding agents face three bottlenecks:
 
----
+2.1 Token Waste
 
-## 3. Mathematical Model
+Raw repositories include boilerplate, tests, generated files, comments, repeated utilities, framework setup, and irrelevant modules.
 
-### 3.1 Codebase as a Directed Multi-Graph
+2.2 Reasoning Noise
 
-We represent a codebase as a directed multi-graph:
+More context does not automatically produce better code edits. Irrelevant code distracts the model and weakens task localization.
 
-\[
+2.3 Patch Localization
+
+For code modification, an agent usually needs:
+
+file paths,
+line ranges,
+function/class signatures,
+dependency paths,
+selected implementation bodies,
+test/validation feedback.
+
+It usually does not need every raw source file.
+
+Context Compiler converts a repository into the representation coding agents actually need.
+
+3. Final Product Definition
+
+The final product is a complete master orchestrator `main.py` and pipeline supporting:
+
+1. `--smoke-test`: System check that prints environment details, Gemini API keys, and active modes.
+2. `--repo ./demo_repo`: Full local pipeline compilation on a specified local workspace folder.
+3. `--judge-demo`: Copy repo safely, run live compilation, apply the patch, run tests inside sandbox, emit final diffs, and generate `demo.html` dashboard.
+4. `--repo-url`: Clones remote git URLs, attempts Genuine Managed Agent Sandbox orchestration, and falls back locally.
+
+The demo proves that a coding agent can reason over a compressed repository representation, select relevant files/functions, propose a targeted patch, and validate the result.
+
+4. Design Principle
+
+Context Compiler uses a hybrid, highly-resilient design:
+
+Deterministic compiler front-end
+
+Used for exact, non-negotiable structure:
+- file discovery,
+- Python AST parsing,
+- function/class/method extraction,
+- line ranges,
+- imports,
+- calls,
+- inheritance,
+- route decorators,
+- source snippets,
+- token accounting,
+- graph construction,
+- compression budgeting.
+
+This layer is deterministic because source boundaries and dependency metadata should not hallucinate.
+
+Gemini / Managed-Agent semantic back-end
+
+Used for semantic reasoning:
+- compact semantic cards,
+- task-specific relevance scoring,
+- edit plan generation,
+- patch generation,
+- validation repair suggestions,
+- remote sandbox orchestration.
+
+This layer is agentic because semantic intent, task relevance, and patch planning benefit from language-model reasoning.
+
+Raw structural compaction is deterministic. Semantic enrichment, task-specific routing, and patch generation use Gemini/Managed Agents when available. Deterministic fallback keeps the demo completely reliable when credentials/API are missing.
+
+5. Codebase as a Directed Multi-Graph
+
+We represent a codebase as:
+
 G = (V, E)
-\]
 
-where:
+where V contains code nodes such as:
 
-\[
-V = \{v_1, v_2, \ldots, v_n\}
-\]
+modules,
+classes,
+methods,
+functions,
+async functions,
+route handlers,
+schemas,
+public APIs.
 
-is the set of code nodes, including:
+E contains typed directed edges:
 
-- modules
-- classes
-- methods
-- functions
-- endpoints
-- schemas
-- public APIs
+(source_node, target_node, relation_type)
 
-and:
+Supported relation types include:
 
-\[
-E \subseteq V \times V \times \mathcal{R}
-\]
-
-is the set of typed directed edges, where each edge:
-
-\[
-e = (u, v, r)
-\]
-
-means that code node \(u\) depends on code node \(v\) through relation type \(r\).
-
-Supported relation types:
-
-\[
-\mathcal{R} =
-\{
-\text{call},
-\text{import},
-\text{inheritance},
-\text{reference}
-\}
-\]
+call,
+import,
+inherit,
+reference,
+route.
 
 Examples:
 
-- If `checkout_endpoint()` calls `process_payment()`, then:
+checkout_endpoint -> validate_checkout call
+checkout_endpoint -> process_payment call
+CheckoutRequest -> BaseModel inherit
+checkout_endpoint -> APIRouter.post route
+
+Edges may be resolved or unresolved.
+
+Unresolved edges are classified as:
+
+builtin,
+stdlib,
+third_party,
+framework,
+unknown.
+6. Structural Quantization
+
+Each node has two possible representations:
+
+Full-body mode
 
-\[
-(\texttt{checkout\_endpoint}, \texttt{process\_payment}, \text{call}) \in E
-\]
+Includes:
 
-- If `PaymentService` inherits from `BaseService`, then:
+file path,
+line range,
+type,
+signature,
+metadata,
+selected dependency edges,
+exact source body.
+Signature-only mode
 
-\[
-(\texttt{PaymentService}, \texttt{BaseService}, \text{inheritance}) \in E
-\]
+Includes:
 
----
+file path alias,
+line range,
+type,
+qualified name,
+signature,
+tags,
+score,
+compact edge metadata.
+Ultra-minimal mode
 
-## 4. Node Cost Model
+Used only when the signature baseline exceeds the token budget.
 
-Each code node \(v \in V\) has a raw token cost:
+Includes:
 
-\[
-\tau_{\text{full}}(v)
-\]
+node alias,
+file alias,
+line range,
+type,
+short name,
+tags.
+7. Token Budget
 
-representing the approximate number of tokens needed to include the full implementation body of \(v\).
+The target compression ratio is:
 
-Each node also has a compressed signature cost:
+compressed_manifest_tokens / raw_repository_tokens <= target_ratio
 
-\[
-\tau_{\text{sig}}(v)
-\]
+For the demo, the target is usually:
 
-representing the approximate number of tokens needed to include only:
+target_ratio = 0.15
 
-- file path
-- line range
-- node type
-- qualified name
-- signature
-- docstring
-- import/call metadata
+The system must report the real serialized output size. It must not estimate success from the internal graph alone.
 
-Usually:
+Budgeting order:
 
-\[
-\tau_{\text{sig}}(v) \ll \tau_{\text{full}}(v)
-\]
+Count raw repository tokens.
+Build full debug graph.
+Serialize minimal compact baseline.
+If baseline is below budget, greedily promote valuable nodes to full-body mode.
+If baseline exceeds budget, enable aggressive compaction:
+trim low-value docstrings,
+prune noisy unresolved edges,
+cap edge count per node,
+collapse low-score nodes,
+preserve file/line mapping.
+Serialize final compact manifest.
+Re-count final manifest tokens.
+Report true compression ratio.
+8. Structural Scoring
 
-The original codebase token count is:
+Each node receives a structural score based on:
 
-\[
-T(G) = \sum_{v \in V} \tau_{\text{full}}(v)
-\]
+inbound dependency count,
+outbound dependency count,
+public/API exposure,
+route/endpoint status,
+schema/model status,
+docstrings/type annotations,
+task-relevant naming patterns,
+resolved edge participation,
+estimated token cost.
 
-The compressed manifest token count is:
+A practical score can include:
 
-\[
-T(G') =
-\sum_{v \in V}
-\left[
-x_v \tau_{\text{full}}(v)
-+
-(1 - x_v)\tau_{\text{sig}}(v)
-\right]
-+
-T(E)
-\]
+score =
+  2.0 * inbound_degree
++ 1.0 * outbound_degree
++ 3.0 * public_api_bonus
++ 4.0 * route_or_endpoint_bonus
++ 2.0 * schema_or_model_bonus
++ 1.5 * service_or_utility_bonus
++ 1.0 * annotation_or_doc_bonus
++ task_keyword_bonus
 
-where:
+The value density for retaining a full body is:
 
-\[
-x_v =
-\begin{cases}
-1, & \text{if full body is retained} \\
-0, & \text{if only signature is retained}
-\end{cases}
-\]
+value_density = score / max(full_body_tokens - signature_tokens, 1)
 
-and \(T(E)\) is the token cost of serializing graph edges.
+Nodes are promoted to full-body mode in descending value density until the token budget is reached.
 
----
+9. Compact Manifest Format
 
-## 5. Structural Importance Score
+The primary artifact for agents is:
 
-The goal is not to keep the shortest nodes or the longest nodes.
+codebase_manifest.txt
 
-The goal is to keep the nodes that provide the most useful structural information per token.
+This is a compact, line-oriented text representation optimized for LLM context.
 
-For each node \(v\), define:
+It uses aliases:
 
-\[
-d_{\text{in}}(v) =
-|\{u : (u, v, r) \in E\}|
-\]
+F0 = app/api/checkout.py
+N0 = app/api/checkout.py::checkout_endpoint
 
-\[
-d_{\text{out}}(v) =
-|\{w : (v, w, r) \in E\}|
-\]
+Example:
 
-where:
+# Context Compiler Manifest v2
+META repo=demo_repo original_tokens=482193 compressed_tokens=61842 ratio=0.128 target=0.150 files=48 nodes=312 edges=1021 resolved=820 unresolved=201 full=22 sig=290
 
-- \(d_{\text{in}}(v)\) measures how many other nodes depend on \(v\)
-- \(d_{\text{out}}(v)\) measures how many other nodes \(v\) depends on
+FILES
+F0 app/api/checkout.py
+F1 app/services/payments.py
+F2 app/utils/validation.py
 
-We also define binary metadata features:
+NODES
+N0 F0:12-68 function checkout_endpoint sig="def checkout_endpoint(request: CheckoutRequest):" score=9.84 in=3 out=5 mode=body tags=route,endpoint,public
+N1 F2:7-22 function validate_checkout sig="def validate_checkout(payload):" score=7.31 in=4 out=1 mode=sig tags=utility,public
+N2 F1:14-44 function process_payment sig="def process_payment(order):" score=8.02 in=2 out=2 mode=body tags=service,public
 
-\[
-p(v) =
-\begin{cases}
-1, & \text{if } v \text{ appears to be public or exported} \\
-0, & \text{otherwise}
-\end{cases}
-\]
+EDGES
+N0 -> N1 call validate_checkout resolved
+N0 -> N2 call process_payment resolved
+N0 -> EXT:fastapi.APIRouter.post route framework
 
-\[
-q(v) =
-\begin{cases}
-1, & \text{if } v \text{ has a docstring or type annotations} \\
-0, & \text{otherwise}
-\end{cases}
-\]
+BODIES
+### N0 app/api/checkout.py::checkout_endpoint
+<retained exact source body>
 
-The primary structural importance score is:
+A verbose debug artifact may also be emitted:
 
-\[
-S(v) =
-\frac{
-2d_{\text{in}}(v)
-+
-d_{\text{out}}(v)
-+
-3p(v)
-+
-q(v)
-}{
-\log(1 + \tau_{\text{full}}(v))
-}
-\]
+codebase_manifest.debug.json
 
-### Intuition
+The debug JSON is for dashboard/debugging, not for main LLM context.
 
-This score rewards nodes that are:
+10. Semantic Cards
 
-- depended on by many other nodes
-- connected to important implementation paths
-- public-facing or API-like
-- documented or typed
-- compact enough to include efficiently
+The second artifact is:
 
-The denominator penalizes large implementation bodies, but only logarithmically, so large important nodes are not automatically discarded.
+semantic_cards.jsonl
 
----
+Semantic cards are generated by cheap Gemini agents when available, or by deterministic fallback when no API is configured.
 
-## 6. Optional Edge-Type Entropy
+Each card summarizes one important node in a tiny, task-aware format.
 
-For additional graph structure, each node can also be assigned a dependency entropy score.
+Example:
 
-Let:
-
-\[
-c_r(v)
-\]
-
-be the number of incident edges of relation type \(r\) connected to node \(v\), and:
-
-\[
-C(v) = \sum_{r \in \mathcal{R}} c_r(v)
-\]
-
-Define:
-
-\[
-P_r(v) = \frac{c_r(v)}{C(v)}
-\]
-
-Then the edge-type entropy of node \(v\) is:
-
-\[
-H(v) =
--
-\sum_{r \in \mathcal{R}}
-P_r(v)\log_2 P_r(v)
-\]
-
-A higher \(H(v)\) means the node participates in multiple kinds of relationships, such as calls, imports, inheritance, and references.
-
-The hackathon implementation may use this as an optional bonus term:
-
-\[
-S_{\text{final}}(v) =
-S(v) + \lambda_H H(v)
-\]
-
-where \(\lambda_H\) is a small weighting constant.
-
-For the live demo, the base structural score \(S(v)\) is sufficient and deterministic.
-
----
-
-## 7. Compression Objective
-
-The compression problem is formulated as a budgeted value maximization problem.
-
-We want to choose which nodes retain full implementations:
-
-\[
-x_v \in \{0, 1\}
-\]
-
-so that the retained structural value is maximized under a strict token budget:
-
-\[
-\max_{x_v}
-\sum_{v \in V}
-S(v)x_v
-\]
-
-subject to:
-
-\[
-T(G') \le \alpha T(G)
-\]
-
-where:
-
-\[
-\alpha \in (0, 0.15]
-\]
-
-is the target compression ratio.
-
-For the hackathon demo, the target is:
-
-\[
-\alpha = 0.15
-\]
-
-meaning the compressed manifest should be at most 15% of the original codebase token volume.
-
----
-
-## 8. Practical Greedy Approximation
-
-The exact optimization resembles a 0/1 knapsack problem.
-
-For demo reliability, Context Compiler uses a greedy approximation.
-
-For each node, define its marginal value density:
-
-\[
-D(v) =
-\frac{
-S(v)
-}{
-\tau_{\text{full}}(v) - \tau_{\text{sig}}(v) + 1
-}
-\]
-
-Nodes are sorted by \(D(v)\), and full bodies are retained until the token budget is reached.
-
-All remaining nodes are converted to signature-only form.
-
-This gives a fast, deterministic algorithm that works well for live demos.
-
----
-
-## 9. Quantization Operator
-
-The structural quantization operator is:
-
-\[
-Q(v) =
-\begin{cases}
-\text{FullBody}(v), & x_v = 1 \\
-\text{SignatureOnly}(v), & x_v = 0
-\end{cases}
-\]
-
-The compressed graph is:
-
-\[
-G' = (V', E)
-\]
-
-where:
-
-- \(V'\) contains quantized representations of the original nodes
-- \(E\) preserves the dependency topology
-- file paths and line numbers are preserved for every node
-
-The important point:
-
-\[
-E \text{ is preserved even when implementation bodies are compressed.}
-\]
-
-This allows the agent to reason over the structure of the repository even when most code bodies have been removed.
-
----
-
-## 10. Manifest Format
-
-The compiler emits a single JSON artifact:
-
-```json
 {
-  "metadata": {
-    "repo_path": "./target_repo",
-    "original_tokens": 482193,
-    "compressed_tokens": 61842,
-    "compression_ratio": 0.128,
-    "target_ratio": 0.15,
-    "node_count": 1248,
-    "edge_count": 3912,
-    "graph_density": 0.0025,
-    "full_body_nodes": 84,
-    "signature_only_nodes": 1164
-  },
-  "nodes": [
-    {
-      "id": "src/checkout.py::checkout_endpoint",
-      "type": "function",
-      "name": "checkout_endpoint",
-      "qualified_name": "checkout_endpoint",
-      "file": "src/checkout.py",
-      "start_line": 12,
-      "end_line": 68,
-      "signature": "def checkout_endpoint(request: CheckoutRequest) -> CheckoutResponse:",
-      "docstring": "Handles checkout submission and payment execution.",
-      "token_count": 421,
-      "in_degree": 8,
-      "out_degree": 5,
-      "score": 3.82,
-      "mode": "full_body",
-      "body": "def checkout_endpoint(...): ..."
-    }
-  ],
-  "edges": [
-    {
-      "source": "src/checkout.py::checkout_endpoint",
-      "target": "src/payments.py::process_payment",
-      "type": "call"
-    }
-  ]
+  "node_id": "N0",
+  "qualified_name": "app.api.checkout::checkout_endpoint",
+  "purpose": "Handles checkout requests and calls payment processing.",
+  "side_effects": ["charges payment", "updates order"],
+  "inputs": ["CheckoutRequest"],
+  "outputs": ["CheckoutResponse"],
+  "risk_level": "high",
+  "edit_relevance": 0.94,
+  "task_reason": "The task asks to add validation before payment processing.",
+  "needs_full_source": true
 }
 
-11. System Architecture
-11.1 main.py
+Semantic cards are not raw repo summaries. They are compact, graph-grounded, task-aware annotations over the deterministic manifest.
 
-Responsible for Google Managed Agent orchestration.
+11. Agent Roles
+
+Context Compiler uses a small multi-agent workflow.
+
+11.1 Compiler Agent
+
+Runs deterministic analysis:
+
+repo → AST graph → compact manifest
+
+Usually implemented by quantizer.py.
+
+11.2 Semantic Card Agent
+
+Reads compact manifest excerpts and retained source bodies.
+
+Outputs tiny semantic cards:
+
+compact manifest → semantic_cards.jsonl
+11.3 Task Router Agent
+
+Combines:
+
+task keywords,
+graph structure,
+node tags,
+semantic cards,
+dependency neighbors.
+
+Outputs:
+
+selected files,
+selected nodes,
+dependency path,
+source snippets needed.
+11.4 Patch Agent
+
+Reads only the selected source snippets and task context.
+
+Outputs:
+
+proposed unified diff,
+patch report,
+explanation of edit.
+11.5 Validator Agent
+
+Runs tests or syntax checks.
+
+Outputs:
+
+validation report,
+failure summary,
+optional repair suggestion.
+11.6 Managed Sandbox Agent
+
+Runs the workflow inside a Google Managed Agent remote Linux environment when credentials are available.
+
+Fallback local mode is required for demo reliability.
+
+12. Main Components
+12.1 quantizer.py
+
+Responsible for deterministic structural compilation.
+
+Command:
+
+python quantizer.py \
+  --repo ./demo_repo \
+  --out codebase_manifest.txt \
+  --target-ratio 0.15 \
+  --format compact \
+  --debug-out codebase_manifest.debug.json
 
 Responsibilities:
 
-initialize the Google GenAI client
-create or reuse a remote sandbox environment
-mount or clone the target repository
-transfer or generate quantizer.py inside the sandbox
-execute the compiler inside the remote Linux environment
-persist:
-environment_id
-previous_interaction_id
-print clean demo logs
+recursively scan Python files,
+ignore virtualenv/cache/generated files,
+parse AST,
+extract modules/classes/functions/methods,
+resolve imports/calls/inheritance/routes,
+classify unresolved symbols,
+compute node scores,
+enforce token budget,
+emit compact manifest,
+emit debug JSON,
+print compression and graph metrics.
+12.2 semantic_cards.py
 
-Expected command:
+Responsible for semantic compression.
 
+Command:
+
+python semantic_cards.py \
+  --manifest codebase_manifest.txt \
+  --debug-json codebase_manifest.debug.json \
+  --out semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing"
+
+Responsibilities:
+
+select important nodes,
+call Gemini if configured,
+fall back to deterministic card generation,
+emit JSONL semantic cards,
+keep cards compact and grounded.
+12.3 agent_harness.py
+
+Responsible for task routing and edit planning.
+
+Command:
+
+python agent_harness.py \
+  --manifest codebase_manifest.txt \
+  --semantic-cards semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing" \
+  --out edit_plan.md
+
+Responsibilities:
+
+select relevant files,
+select relevant nodes,
+compute dependency path,
+explain why each node matters,
+identify source snippets needed,
+optionally ask Gemini for an edit plan,
+provide deterministic fallback.
+12.4 source_loader.py
+
+Responsible for loading only selected original snippets.
+
+Command:
+
+python source_loader.py \
+  --repo ./demo_repo \
+  --debug-json codebase_manifest.debug.json \
+  --selected edit_plan.json \
+  --out selected_context.md
+
+Responsibilities:
+
+map node aliases to file paths,
+extract exact line ranges,
+include minimal surrounding context,
+avoid dumping unrelated files.
+12.5 patch_agent.py
+
+Responsible for producing a patch.
+
+Command:
+
+python patch_agent.py \
+  --repo ./demo_repo \
+  --manifest codebase_manifest.txt \
+  --semantic-cards semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing" \
+  --out proposed_patch.diff
+
+Responsibilities:
+
+load selected context,
+call Gemini if configured,
+produce unified diff,
+write patch report,
+optionally apply patch only with --apply.
+12.6 validator_agent.py
+
+Responsible for validation.
+
+Command:
+
+python validator_agent.py \
+  --repo ./demo_repo \
+  --test-command "pytest -q" \
+  --out validation_report.md
+
+Responsibilities:
+
+run tests,
+fall back to python -m compileall,
+capture stdout/stderr,
+summarize pass/fail,
+optionally suggest repair.
+12.7 main.py
+
+Responsible for Managed Agent orchestration.
+
+Commands:
+
+python main.py --smoke-test
 python main.py \
   --repo-url https://github.com/example/example_repo \
   --target-ratio 0.15 \
-  --task "Add request validation to the checkout endpoint"
-11.2 quantizer.py
-
-Responsible for static analysis and graph compression.
-
-Expected command:
-
-python quantizer.py \
-  --repo ./target_repo \
-  --out codebase_manifest.json \
-  --target-ratio 0.15
+  --task "Add request validation to the checkout endpoint before payment processing"
 
 Responsibilities:
 
-recursively scan Python files
-parse files with Python ast
-extract:
-modules
-classes
-methods
-functions
-async functions
-imports
-calls
-inheritance relationships
-compute:
-token counts
-in-degrees
-out-degrees
-structural scores
-graph density
-compression ratio
-quantize each node into:
-full body
-signature only
-emit codebase_manifest.json
-11.3 agent_harness.py
+initialize Google Managed Agent client when configured,
+create or reuse remote sandbox,
+clone/mount repo,
+run pipeline remotely,
+retrieve artifacts,
+fall back to local execution if remote mode is unavailable.
+12.8 viewer.py
 
-Responsible for proving that the compressed manifest is useful.
+Responsible for static dashboard generation.
 
-Expected command:
-
-python agent_harness.py \
-  --manifest codebase_manifest.json \
-  --task "Add request validation to the checkout endpoint"
-
-Responsibilities:
-
-load the compressed manifest
-select relevant nodes based on:
-task keywords
-file paths
-function names
-signatures
-docstrings
-dependency neighbors
-package the relevant compressed context
-ask Gemini or the Managed Agent for an edit plan
-output:
-likely files to edit
-relevant functions/classes
-dependency path
-proposed patch or implementation plan
-
-The fallback deterministic mode should work even if the API call fails.
-
-11.4 viewer.py
-
-Responsible for visual proof during the live demo.
-
-Expected command:
+Command:
 
 python viewer.py \
-  --manifest codebase_manifest.json \
+  --manifest codebase_manifest.txt \
+  --debug-json codebase_manifest.debug.json \
+  --semantic-cards semantic_cards.jsonl \
+  --edit-plan edit_plan.md \
+  --patch-report patch_report.md \
+  --validation-report validation_report.md \
   --out demo.html
 
-The generated dashboard should show:
+Responsibilities:
 
-original token count
-compressed token count
-compression ratio
-target ratio
-number of nodes
-number of edges
-graph density
-full-body retained nodes
-signature-only nodes
-top retained nodes by score
-top depended-on nodes
-manifest preview
-relevant edit path for the demo task
+show compression metrics,
+show graph metrics,
+show selected files/nodes,
+show semantic cards,
+show dependency path,
+show proposed patch,
+show validation status,
+remain fully static HTML.
+13. Canonical Demo Task
 
-The viewer must be a static HTML page.
-
-Do not use Streamlit.
-
-12. Demo Repository
-
-The project should include a controlled demo_repo/ with a realistic Python service layout:
+The controlled demo repository should contain a realistic Python service:
 
 demo_repo/
   app/
@@ -582,221 +576,246 @@ demo_repo/
   tests/
     test_checkout.py
 
-The demo repo should contain enough structure to show meaningful graph compression, but it should remain small enough for reliable live execution.
-
-The canonical demo task:
+Canonical task:
 
 Add request validation to the checkout endpoint before payment processing.
 
-Expected behavior:
+Expected system behavior:
 
-The manifest should identify checkout.py, validation.py, and payments.py as relevant.
-The agent should propose editing the checkout endpoint.
-The patch should add validation before calling payment execution.
-13. Live Demo Flow
-
-The three-minute live demo should follow this sequence:
-
-Step 1: Remote Sandbox Proof
-
-Run:
-
+Quantizer identifies:
+checkout endpoint,
+validation helper,
+payment processor,
+checkout request schema,
+relevant tests.
+Semantic cards mark checkout as high edit relevance.
+Task router selects:
+app/api/checkout.py,
+app/utils/validation.py,
+app/services/payments.py,
+related test file.
+Patch agent proposes adding validation before payment execution.
+Validator runs tests or syntax checks.
+Dashboard shows compressed context → selected files → patch → validation.
+14. Live Demo Flow
+Step 1 — Managed Agent smoke test
 python main.py --smoke-test
-
-Show that a Google Managed Agent remote Linux sandbox is created and returns:
-
-environment ID
-OS info
-Python version
-Step 2: Compile Repo Context
-
-Run:
-
-python quantizer.py \
-  --repo ./demo_repo \
-  --out codebase_manifest.json \
-  --target-ratio 0.15
-
-Show metrics:
-
-Original tokens: 482193
-Compressed tokens: 61842
-Compression ratio: 12.8%
-Nodes found: 1248
-Edges found: 3912
-Full-body nodes retained: 84
-Signature-only nodes: 1164
-Graph density: 0.0025
-Step 3: Visualize Manifest
-
-Run:
-
-python viewer.py \
-  --manifest codebase_manifest.json \
-  --out demo.html
-
-Open the dashboard and show:
-
-compression bar
-retained high-value nodes
-dependency graph summary
-manifest preview
-Step 4: Agent Uses Compressed Context
-
-Run:
-
-python agent_harness.py \
-  --manifest codebase_manifest.json \
-  --task "Add request validation to the checkout endpoint"
 
 Show:
 
-selected relevant files
-dependency path
-proposed patch
-original file mapping
-Step 5: Closing Claim
+environment ID if remote mode works,
+OS info,
+Python version,
+fallback local mode if credentials unavailable.
+Step 2 — Compile repository context
+python quantizer.py \
+  --repo ./demo_repo \
+  --out codebase_manifest.txt \
+  --target-ratio 0.15 \
+  --format compact \
+  --debug-out codebase_manifest.debug.json
 
-End with:
+Show:
 
-We did not build a repo chatbot. We built a compiler pass that transforms codebases into agent-optimized execution manifests.
-14. Implementation Priorities
-Must Have
-Working Managed Agent smoke test
-Working AST parser
-Working manifest generation
-Working compression ratio calculation
-Working static HTML dashboard
-Working task-to-file relevance search
-Clear demo task
-Public GitHub repository
-Should Have
-Remote sandbox execution of the quantizer
-Persistent environment ID reuse
-Dependency graph visualization
-Gemini-generated edit plan
-Patch-like output
-Nice to Have
-PageRank centrality
-Edge-type entropy term
-Multi-repo benchmark
-Actual patch application
-Git diff rendering
-Support for JavaScript/TypeScript
-Do Not Build During Hackathon
-Neural compression
-Full semantic code understanding
-Multi-language AST system
-IDE extension
-Production-grade dependency resolution
-Large-scale benchmark suite
-Streamlit app
-15. Hackathon Rule Compliance
+original tokens,
+compressed tokens,
+compression ratio,
+token savings,
+nodes,
+edges,
+resolved edge rate,
+retained body nodes.
+Step 3 — Generate semantic cards
+python semantic_cards.py \
+  --manifest codebase_manifest.txt \
+  --debug-json codebase_manifest.debug.json \
+  --out semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing"
 
-This repository must be public.
+Show:
 
-The demo must clearly distinguish:
+Gemini mode or fallback mode,
+cards generated,
+high-relevance checkout card.
+Step 4 — Route task and generate edit plan
+python agent_harness.py \
+  --manifest codebase_manifest.txt \
+  --semantic-cards semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing" \
+  --out edit_plan.md
 
-Code written during the hackathon.
-Third-party repositories used only as input data.
-Generated artifacts such as codebase_manifest.json and demo.html.
+Show:
 
-The team must not claim ownership over any third-party repository used for testing.
+selected files,
+dependency path,
+reason for each selected node.
+Step 5 — Generate patch and validate
+python patch_agent.py \
+  --repo ./demo_repo \
+  --manifest codebase_manifest.txt \
+  --semantic-cards semantic_cards.jsonl \
+  --task "Add request validation to the checkout endpoint before payment processing" \
+  --out proposed_patch.diff
 
-The demo must highlight only the features built during the hackathon:
+Optional:
 
-Managed Agent orchestration
-AST graph extraction
-structural scoring
-quantization
-manifest generation
-dashboard
-compressed-context edit planning
-16. Evaluation Metrics
+python patch_agent.py ... --apply
+python validator_agent.py --repo ./demo_repo --test-command "pytest -q" --out validation_report.md
 
-The project should report the following metrics in stdout and in the dashboard:
+Show:
 
-Compression Ratio=
-T(G)
-T(G
-′
-)
-	​
+proposed diff,
+validation status.
+Step 6 — Open dashboard
+python viewer.py \
+  --manifest codebase_manifest.txt \
+  --debug-json codebase_manifest.debug.json \
+  --semantic-cards semantic_cards.jsonl \
+  --edit-plan edit_plan.md \
+  --patch-report patch_report.md \
+  --validation-report validation_report.md \
+  --out demo.html
 
-Token Savings=1−
-T(G)
-T(G
-′
-)
-	​
+Closing line:
 
-Graph Density=
-∣V∣(∣V∣−1)
-∣E∣
-	​
+We did not build a repo chatbot. We built a compiler layer and managed-agent workflow that turns codebases into compressed execution manifests for targeted code edits.
+15. Metrics
 
-Full Body Retention Rate=
-∣V∣
-∣{v:x
-v
-	​
+The system reports:
 
-=1}∣
-	​
-
-Signature Compression Rate=
-∣V∣
-∣{v:x
-v
-	​
-
-=0}∣
-	​
-
+Compression Ratio = compressed_manifest_tokens / raw_repository_tokens
+Token Savings = 1 - Compression Ratio
+Resolved Edge Rate = resolved_edges / total_edges
+Full Body Retention Rate = full_body_nodes / total_nodes
+Signature Retention Rate = signature_nodes / total_nodes
+Semantic Card Coverage = semantic_cards / selected_important_nodes
+Patch Context Ratio = selected_source_tokens / raw_repository_tokens
+Validation Status = pass / fail / not run
 
 Example stdout:
 
-Context Compiler Summary
-------------------------
+Context Compiler Quantizer Summary
+----------------------------------
+Repository: demo_repo
 Original tokens: 482193
 Compressed tokens: 61842
 Compression ratio: 0.128
 Token savings: 87.2%
 Target ratio: 0.150
+Budget status: HIT
 
 Graph Summary
 -------------
-Nodes: 1248
-Edges: 3912
-Graph density: 0.0025
-Full-body nodes: 84
-Signature-only nodes: 1164
+Files: 48
+Nodes: 312
+Edges: 1021
+Resolved edges: 820
+Unresolved edges: 201
+Resolved edge rate: 80.3%
+Full-body nodes: 22
+Signature-only nodes: 290
 
-Top retained nodes
-------------------
-1. app/api/checkout.py::checkout_endpoint
-2. app/services/payments.py::process_payment
-3. app/models/checkout.py::CheckoutRequest
-17. Reliability Requirements
+Semantic Agent Layer
+--------------------
+Mode: Gemini
+Cards generated: 24
+Task: Add request validation to the checkout endpoint before payment processing
 
-The system should be robust enough for a live hackathon demo.
+Task Router
+-----------
+Selected files:
+1. app/api/checkout.py
+2. app/utils/validation.py
+3. app/services/payments.py
 
-Requirements:
+Patch Agent
+-----------
+Patch generated: yes
+Patch applied: dry-run
 
-If a file cannot be parsed, log the error and continue.
-If a node has no body, still keep its signature.
-If the Managed Agent API fails, use local fallback mode.
-If Gemini patch generation fails, use deterministic relevance ranking.
-If graph edges cannot be fully resolved, preserve unresolved symbolic calls.
-Never crash the demo because of one malformed file.
-18. Final Product Definition
+Validator
+---------
+Validation: not run
+16. Reliability Requirements
 
-The final hackathon product is not merely a script.
+The demo must not crash because of one fragile component.
 
-The final product is a complete pipeline:
+Required fallbacks:
 
-Repository→Managed Agent Sandbox→AST Graph→Structural Quantization→Compressed Manifest→Agent Edit Plan→Original Source Patch
+If a file cannot be parsed, log and continue.
+If a node has no body, keep signature metadata.
+If target ratio cannot be reached because metadata baseline is too large, enable aggressive compaction and report honestly.
+If Gemini fails, use deterministic semantic cards.
+If Managed Agent remote mode fails, use local fallback.
+If patch generation fails, still output selected files and edit plan.
+If tests are missing, run syntax checks.
+If patch application fails, write failure report and preserve repo state.
+17. Hackathon Rule Compliance
 
-Context Compiler wins by showing that coding agents do not need raw repositories.
+The repository must be public.
 
-They need structured, compressed, dependency-aware execution manifests.
+The demo must distinguish:
+
+code written during the hackathon,
+third-party repositories used only as input data,
+generated artifacts such as manifests, semantic cards, dashboards, and patches.
+
+The project must not claim ownership of third-party repositories.
+
+The demo should highlight the features built during the hackathon:
+
+Managed Agent orchestration,
+AST graph extraction,
+structural quantization,
+compact manifest generation,
+Gemini semantic-card agents,
+task routing,
+patch generation,
+validation,
+static dashboard.
+18. Implementation Priorities
+Must Have
+Working compact manifest generation.
+True compression metrics.
+Improved graph resolution.
+Deterministic fallback for all agentic steps.
+Semantic cards from Gemini or fallback.
+Task-to-file routing.
+Patch-like output.
+Static dashboard.
+Public GitHub repository.
+Clean 3-minute demo.
+Should Have
+Managed Agent smoke test.
+Remote sandbox execution.
+Persistent environment reuse.
+Test or compile validation.
+Git diff rendering.
+Demo script.
+Nice to Have
+PageRank centrality.
+Edge-type entropy.
+Multi-repo benchmark.
+JavaScript/TypeScript support.
+One-step remote demo.
+Do Not Build During Hackathon
+IDE extension.
+Production-grade dependency resolution.
+Full multi-language compiler.
+Neural compression over raw code.
+Large benchmark suite.
+Database-backed service.
+Streamlit app.
+Heavy frontend framework.
+19. Winning Positioning
+
+Context Compiler wins by showing that agentic code editing should not start by dumping an entire repository into context.
+
+Instead:
+
+Compile first.
+Compress structurally.
+Enrich semantically.
+Route task-specific context.
+Patch safely.
+Validate in sandbox.

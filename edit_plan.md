@@ -1,53 +1,125 @@
 # Edit Plan & Task Routing Report
 
 ### Selected Files & Nodes
-- `F1 app.api.checkout`: This file contains the primary `checkout_endpoint` function, which is the core target for adding request validation.
-- `N3 app.api.checkout::checkout_endpoint`: This is the main entry point for checkout requests. The user task explicitly states that validation must be added here *before* any payment processing or other service calls. It has an `edit_relevance` of 1.0 and `needs_full_source` set to `true`.
-- `F12 tests.test_checkout`: This file contains tests related to the `checkout_endpoint`, which will need to be reviewed and potentially updated or extended to cover the new validation logic.
-- `N36 tests.test_checkout::test_out_of_stock_checkout`: This test calls the `checkout_endpoint` and will need to be reviewed to ensure it still passes after the validation is implemented, and potentially new tests for validation failures might be needed.
-- `N37 tests.test_checkout::test_successful_checkout`: This test also calls the `checkout_endpoint` and similarly needs review to confirm successful paths are not broken and to consider adding tests for validation failure scenarios.
+- `F1 app.api.checkout`: Contains the primary checkout endpoint where the request validation needs to be implemented.
+    - `N3 app.api.checkout::checkout_endpoint`: This is the direct target for adding request validation logic before payment processing.
+- `F12 tests.test_checkout`: Contains existing tests for the checkout endpoint that might need updates or new test cases to cover the new validation logic.
+    - `N37 tests.test_checkout::test_successful_checkout`: This test calls the `checkout_endpoint` and will need to be reviewed to ensure it still passes with the new validation, and potentially updated or expanded to cover new validation failure scenarios.
+    - `N36 tests.test_checkout::test_out_of_stock_checkout`: Similar to `N37`, this test calls the `checkout_endpoint` and requires review/updates due to the new validation.
 
 ### Selected Dependency Path
-`N3 app.api.checkout::checkout_endpoint` (add initial request validation)
-  -> `N22 app.services.inventory::InventoryService.check_stock` (if initial validation passes)
-  -> `N26 app.services.payments::PaymentService.process_payment` (if all preceding checks pass)
+`N3 checkout_endpoint` (add validation here) -> `N26 PaymentService.process_payment` (ensure validation occurs before this call).
+The tests `N37 test_successful_checkout` and `N36 test_out_of_stock_checkout` call `N3 checkout_endpoint`.
 
 ### Proposed Edit Plan
 
-**Target Node: `N3 app.api.checkout::checkout_endpoint` (File: `F1 app.api.checkout`)**
+**Objective**: Implement request validation in `checkout_endpoint` to ensure `CheckoutRequest` data is valid before proceeding with any service calls, especially payment processing.
 
-1.  **Pre-conditions and Validations:**
-    *   **Action:** At the very beginning of the `checkout_endpoint` function, add validation logic for the incoming `request: CheckoutRequest` object.
-    *   **Details:**
-        *   **Check `request.amount`:** Ensure the `amount` is a positive number (e.g., `amount > 0`).
-        *   **Check `request.user_id`:** Ensure `user_id` is present and valid (e.g., not empty, potentially a UUID or numeric ID check).
-        *   **Check `request.items`:** Ensure the `items` list is not empty and each item within the list has required fields (e.g., `item_id`, `quantity`) and valid values (e.g., `quantity > 0`).
-    *   **Why:** To ensure that only well-formed and logically valid requests proceed to resource-intensive or state-changing operations like fraud checks, inventory checks, or payment processing, as per the USER TASK. This prevents unnecessary processing and potential errors downstream.
+**1. Modify `F1 app.api.checkout` (Node `N3 app.api.checkout::checkout_endpoint`)**
 
-2.  **Error Handling (within `N3`):**
-    *   **Action:** If any validation check fails, immediately return an appropriate error response.
-    *   **Details:** The response should include an HTTP status code indicating a bad request (e.g., 400 Bad Request) and a clear, descriptive error message (e.g., "Invalid amount", "Missing user ID", "Items list cannot be empty").
-    *   **Why:** To provide immediate feedback to the client about invalid input and to prevent the execution of subsequent business logic with corrupt data.
+*   **Pre-conditions and validations**:
+    *   At the very beginning of the `checkout_endpoint` function, add validation logic for the `request: CheckoutRequest` object.
+    *   This validation should check for common issues such as:
+        *   `request.user_id` is present and valid (e.g., not empty, conforms to a specific format).
+        *   `request.amount` is a positive number.
+        *   `request.items` is not empty and each item has required fields (e.g., `item_id`, `quantity` > 0).
+*   **Business logic or payment processing steps**:
+    *   If any validation fails, immediately return an appropriate HTTP error response (e.g., 400 Bad Request) with a clear error message. The `checkout_endpoint` returns a `dict`, so this error response should be a dictionary containing error details.
+    *   If validation passes, the existing logic (fraud check, inventory check, and ultimately `payment_service.process_payment`) should proceed as currently implemented.
+*   **Post-conditions and side effects**:
+    *   Successful validation leads to the continuation of the checkout flow.
+    *   Failed validation prevents any further processing (fraud, inventory, payment) and returns an error to the client.
+*   **Handling errors**:
+    *   Introduce a new helper function or a dedicated validation class if the validation logic becomes complex. For this task, inline checks with early returns are sufficient.
+    *   Return a dictionary like `{"success": False, "error_message": "Invalid request: <reason>"}` for validation failures.
 
-3.  **Business Logic (after validation in `N3`):**
-    *   **Action:** The existing business logic (e.g., calls to `fraud_service.is_fraudulent_attempt`, `inventory_service.check_stock`, `payment_service.process_payment`) should only execute if all initial request validations pass successfully.
-    *   **Why:** This ensures that payment processing and other critical services are only invoked with valid request data, reducing the risk of errors and improving system robustness.
+**Example Pseudo-code for `checkout_endpoint`:**
 
-**Target Nodes: `N36 tests.test_checkout::test_out_of_stock_checkout` and `N37 tests.test_checkout::test_successful_checkout` (File: `F12 tests.test_checkout`)**
+```python
+# app/api/checkout.py
+from fastapi import APIRouter, HTTPException # Assuming FastAPI for endpoint structure
+from pydantic import BaseModel, Field # Assuming pydantic for CheckoutRequest
 
-1.  **Review Existing Tests:**
-    *   **Action:** Review both `test_out_of_stock_checkout` and `test_successful_checkout` to ensure they continue to pass with valid test data.
-    *   **Why:** To confirm that the new validation logic does not inadvertently block legitimate requests.
+# Define CheckoutRequest (if not already defined)
+class CheckoutRequest(BaseModel):
+    user_id: str = Field(..., min_length=1)
+    amount: float = Field(..., gt=0)
+    items: list[dict] = Field(..., min_items=1) # Example, could be a list of Item models
 
-2.  **Add New Tests for Validation Failures:**
-    *   **Action:** Introduce new test cases specifically designed to trigger the new request validation failures.
-    *   **Details:**
-        *   A test for `checkout_endpoint` with a negative or zero `amount`.
-        *   A test for `checkout_endpoint` with an empty `items` list.
-        *   A test for `checkout_endpoint` with missing or invalid `user_id`.
-        *   These tests should assert that the endpoint returns the expected error status code (e.g., 400) and error message.
-    *   **Why:** To thoroughly verify that the new request validation logic correctly identifies and rejects invalid requests, ensuring the endpoint behaves as expected.
+# ... (other imports)
+
+router = APIRouter()
+
+@router.post("/checkout")
+def checkout_endpoint(request: CheckoutRequest) -> dict:
+    # --- START NEW VALIDATION LOGIC ---
+    if not request.user_id:
+        return {"success": False, "error_message": "Invalid request: User ID is required."}
+    if request.amount <= 0:
+        return {"success": False, "error_message": "Invalid request: Amount must be positive."}
+    if not request.items:
+        return {"success": False, "error_message": "Invalid request: Items list cannot be empty."}
+    for item in request.items:
+        if not item.get("item_id") or item.get("quantity", 0) <= 0:
+            return {"success": False, "error_message": f"Invalid request: Malformed item in list: {item}"}
+    # --- END NEW VALIDATION LOGIC ---
+
+    # Existing logic follows (only if validation passes)
+    # fraud_service.is_fraudulent_attempt(...)
+    # inventory_service.check_stock(...)
+    # payment_service.process_payment(...)
+    # ...
+    return {"success": True, "transaction_id": "..."} # Or other success response
+```
+
+**2. Modify `F12 tests.test_checkout` (Nodes `N37 test_successful_checkout`, `N36 test_out_of_stock_checkout`)**
+
+*   **Pre-conditions and validations**:
+    *   Review `test_successful_checkout` and `test_out_of_stock_checkout`. Ensure the `CheckoutRequest` objects created within these tests are still valid according to the new rules implemented in `checkout_endpoint`. Adjust test data if necessary.
+*   **Business logic or payment processing steps**:
+    *   Add new test cases to `tests.test_checkout` specifically to verify the new request validation logic.
+    *   These new tests should:
+        *   Call `checkout_endpoint` with invalid `CheckoutRequest` data (e.g., missing `user_id`, `amount` <= 0, empty `items` list).
+        *   Assert that the `checkout_endpoint` returns an error response (e.g., `{"success": False, "error_message": "..."}`) and does *not* proceed to payment processing.
+*   **Post-conditions and side effects**:
+    *   The existing successful checkout and out-of-stock scenarios should still pass.
+    *   New tests confirm that invalid requests are correctly rejected by the new validation logic.
+*   **Handling errors**:
+    *   No specific error handling needed in tests, but ensure assertions correctly capture the expected error responses from the endpoint.
+
+**Example Pseudo-code for `tests.test_checkout` (new test case):**
+
+```python
+# tests/test_checkout.py
+import pytest
+from app.api.checkout import checkout_endpoint, CheckoutRequest # Assuming these are importable
+
+# ... (existing tests)
+
+def test_checkout_with_invalid_amount():
+    """Tests that checkout fails with a non-positive amount due to request validation."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=0.0, items=[{"item_id": "A", "quantity": 1}])
+    response = checkout_endpoint(invalid_request) # Assuming direct call for testing, or via client
+    assert not response.get("success")
+    assert "Amount must be positive" in response.get("error_message")
+
+def test_checkout_with_empty_items():
+    """Tests that checkout fails with an empty items list due to request validation."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=100.0, items=[])
+    response = checkout_endpoint(invalid_request)
+    assert not response.get("success")
+    assert "Items list cannot be empty" in response.get("error_message")
+
+def test_checkout_with_malformed_item():
+    """Tests that checkout fails with a malformed item in the list."""
+    invalid_request = CheckoutRequest(user_id="user123", amount=100.0, items=[{"item_id": "B", "quantity": -1}]) # Invalid quantity
+    response = checkout_endpoint(invalid_request)
+    assert not response.get("success")
+    assert "Malformed item in list" in response.get("error_message")
+```
 
 ### Snippets Needed / Full Source Requests
-- **`N3 app.api.checkout::checkout_endpoint`**: The full source code for this function is required.
-    *   **Reason:** The USER TASK explicitly requires adding new request validation logic *inside* this function, which necessitates access to its complete implementation to correctly insert code at the beginning of its execution flow. The semantic card for N3 also explicitly states `needs_full_source: true`.
+
+- `N3 app.api.checkout::checkout_endpoint` (file `F1`): Full source code is required to implement the new request validation logic at the beginning of this function.
+- `N37 tests.test_checkout::test_successful_checkout` (file `F12`): Full source code is required to review existing test data against new validation rules and potentially add new test cases for successful validation.
+- `N36 tests.test_checkout::test_out_of_stock_checkout` (file `F12`): Full source code is required to review existing test data against new validation rules and potentially add new test cases for successful validation.
