@@ -1,21 +1,21 @@
 {
   "metadata": {
     "repo_path": "ecommerce-fastapi-stripe",
-    "target_ratio": 0.85,
+    "target_ratio": 0.25,
     "original_tokens": 3960,
-    "compressed_tokens": 3541,
-    "compression_ratio": 0.8942,
-    "token_savings": 0.1058,
-    "node_count": 53,
+    "compressed_tokens": 2116,
+    "compression_ratio": 0.5343,
+    "token_savings": 0.4657,
+    "node_count": 47,
     "edge_count": 188,
     "resolved_edge_count": 20,
     "unresolved_edge_count": 168,
-    "graph_density": 0.06821,
-    "full_body_nodes": 3,
+    "graph_density": 0.08696,
+    "full_body_nodes": 0,
     "excerpt_nodes": 0,
     "skeleton_nodes": 5,
-    "signature_only_nodes": 45,
-    "minimal_nodes": 0,
+    "signature_only_nodes": 33,
+    "minimal_nodes": 9,
     "parse_error_count": 0,
     "skipped_file_count": 0
   },
@@ -42,7 +42,7 @@
       "calls": [],
       "imports": [],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "private"
       ],
@@ -119,7 +119,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -157,148 +157,12 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
-    },
-    {
-      "id": "src/config.py::Settings",
-      "type": "class",
-      "name": "Settings",
-      "qualified_name": "Settings",
-      "file": "src/config.py",
-      "start_line": 8,
-      "end_line": 29,
-      "signature": "class Settings(BaseSettings):",
-      "docstring": "",
-      "token_count": 108,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 1,
-      "score": 2.4513,
-      "value_density": 0.023799,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [],
-      "imports": [],
-      "base_classes": [
-        "BaseSettings"
-      ],
-      "mode": "signature_only",
-      "tags": [
-        "class",
-        "model",
-        "public"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": ""
-    },
-    {
-      "id": "src/config.py::Settings.__init__",
-      "type": "method",
-      "name": "__init__",
-      "qualified_name": "Settings.__init__",
-      "file": "src/config.py",
-      "start_line": 19,
-      "end_line": 21,
-      "signature": "def __init__(self):",
-      "docstring": "",
-      "token_count": 18,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 3,
-      "score": 2.3774,
-      "value_density": 0.182877,
-      "is_public": false,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "__init__",
-        "super",
-        "self.check_stripe"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "method",
-        "private"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "__init__"
-        ],
-        "resolved_calls": [
-          "Settings.__init__"
-        ],
-        "flow": "__init__",
-        "effects": [],
-        "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": []
-      },
-      "excerpt_body": "    def __init__(self):\n        super().__init__()\n        ...\n"
-    },
-    {
-      "id": "src/config.py::Settings.check_stripe",
-      "type": "method",
-      "name": "check_stripe",
-      "qualified_name": "Settings.check_stripe",
-      "file": "src/config.py",
-      "start_line": 23,
-      "end_line": 25,
-      "signature": "def check_stripe(self):",
-      "docstring": "",
-      "token_count": 20,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 0,
-      "score": 2.4634,
-      "value_density": 0.164227,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "external_api",
-        "method",
-        "payment",
-        "public",
-        "validation"
-      ],
-      "behavior_skeleton": {
-        "calls": [],
-        "resolved_calls": [],
-        "flow": "if",
-        "effects": [
-          "validation",
-          "payment",
-          "external_api"
-        ],
-        "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [
-          "if"
-        ],
-        "assigned": [],
-        "writes": [
-          "self.stripe_is_active"
-        ],
-        "literals": []
-      },
-      "excerpt_body": "    def check_stripe(self):\n        ...\n"
     },
     {
       "id": "src/helpers/utils.py::<module>",
@@ -353,64 +217,13 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public",
         "utility"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
-    },
-    {
-      "id": "src/helpers/utils.py::create_slug",
-      "type": "function",
-      "name": "create_slug",
-      "qualified_name": "create_slug",
-      "file": "src/helpers/utils.py",
-      "start_line": 7,
-      "end_line": 9,
-      "signature": "def create_slug(json_file_name):",
-      "docstring": "",
-      "token_count": 21,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 1,
-      "score": 3.7204,
-      "value_density": 0.232525,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "json_file_name.split"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "database",
-        "public",
-        "serialization",
-        "utility"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "json_file_name.split"
-        ],
-        "resolved_calls": [],
-        "flow": "split->return",
-        "effects": [
-          "db_write",
-          "serialization"
-        ],
-        "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": []
-      },
-      "excerpt_body": "def create_slug(json_file_name):\n    filename, _blank = json_file_name.split('.json')\n    return filename\n"
     },
     {
       "id": "src/helpers/utils.py::get_local_products",
@@ -445,7 +258,7 @@
       ],
       "imports": [],
       "base_classes": [],
-      "mode": "body",
+      "mode": "minimal",
       "tags": [
         "database",
         "public",
@@ -487,8 +300,7 @@
         "writes": [],
         "literals": []
       },
-      "excerpt_body": "def get_local_products():\n    products_path = path.expanduser('./src/templates/products')\n    products = listdir(products_path)\n\n...\n    for product in products:\n        absolute_path = path.join(products_path, product)\n\n...\n    return product_dicts\n",
-      "body": "def get_local_products():\n    products_path = path.expanduser('./src/templates/products')\n    products = listdir(products_path)\n\n    product_dicts = []\n    for product in products:\n        absolute_path = path.join(products_path, product)\n\n        with open(absolute_path, 'r') as product_json:\n            data = json.load(product_json)\n            try:\n                product_slug = create_slug(product)\n                data['slug'] = product_slug\n                verify_product = schemas.ProductBase(**data)\n                product_dicts.append(data)\n            \n            except Exception as e:\n                print( 'Err: ' + str(e) )\n                continue\n\n    return product_dicts\n"
+      "excerpt_body": "def get_local_products():\n    products_path = path.expanduser('./src/templates/products')\n    products = listdir(products_path)\n\n...\n    for product in products:\n        absolute_path = path.join(products_path, product)\n\n...\n    return product_dicts\n"
     },
     {
       "id": "src/routers/auth.py::<module>",
@@ -563,7 +375,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -876,7 +688,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -1126,7 +938,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -3038,83 +2850,13 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public",
         "schema"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
-    },
-    {
-      "id": "src/schemas.py::Product",
-      "type": "class",
-      "name": "Product",
-      "qualified_name": "Product",
-      "file": "src/schemas.py",
-      "start_line": 17,
-      "end_line": 20,
-      "signature": "class Product(ProductBase):",
-      "docstring": "",
-      "token_count": 15,
-      "signature_token_count": 6,
-      "in_degree": 0,
-      "out_degree": 1,
-      "score": 3.4264,
-      "value_density": 0.34264,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [],
-      "imports": [],
-      "base_classes": [
-        "ProductBase"
-      ],
-      "mode": "body",
-      "tags": [
-        "class",
-        "model",
-        "public",
-        "schema"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": "",
-      "body": "class Product(ProductBase):\n    slug: str\n    class Config:\n        orm_mode = True\n"
-    },
-    {
-      "id": "src/schemas.py::ProductBase",
-      "type": "class",
-      "name": "ProductBase",
-      "qualified_name": "ProductBase",
-      "file": "src/schemas.py",
-      "start_line": 8,
-      "end_line": 14,
-      "signature": "class ProductBase(BaseModel):",
-      "docstring": "",
-      "token_count": 24,
-      "signature_token_count": 6,
-      "in_degree": 2,
-      "out_degree": 1,
-      "score": 4.5047,
-      "value_density": 0.237089,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [],
-      "imports": [],
-      "base_classes": [
-        "BaseModel"
-      ],
-      "mode": "body",
-      "tags": [
-        "class",
-        "model",
-        "public",
-        "schema"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": "",
-      "body": "class ProductBase(BaseModel):\n    name: str\n    price: int\n    currency: str\n    info: str\n    short_description: str\n    full_description: str\n"
     }
   ],
   "edges": [
@@ -4623,5 +4365,7 @@
       "classification": "unknown"
     }
   ],
-  "warnings": []
+  "warnings": [
+    "signature baseline exceeded budget; aggressive compaction enabled"
+  ]
 }

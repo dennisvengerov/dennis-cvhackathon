@@ -1,0 +1,86 @@
+# Context Compiler Manifest v3
+META repo=ecommerce-fastapi-stripe original_tokens=3960 compressed_tokens=2116 ratio=0.534 target=0.350 files=8 nodes=47 debug_edges_total=188 serialized_edges_total=11 serialized_resolved_edges=11 serialized_unresolved_edges=0 body=0 excerpt=0 skel=5 sig=33 min=9 status=MINIMUM_GRAPH_EXCEEDS_TARGET
+
+FILES
+F0 src/__init__.py
+F1 src/app.py
+F2 src/config.py
+F3 src/helpers/utils.py
+F4 src/routers/auth.py
+F5 src/routers/products.py
+F6 src/routers/ui_routes.py
+F7 src/schemas.py
+
+NODES
+N0 F0:1-5 module <module> score=0.30 mode=min
+N1 F1:1-24 module <module> score=5.06 mode=min
+N2 F2:1-32 module <module> score=3.51 mode=min
+N6 F3:1-32 module <module> score=2.08 mode=min
+N8 F3:11-31 fn get_local_products score=5.34 mode=min
+N9 F4:1-79 module <module> score=2.95 mode=min
+N10 F4:32-52 fn authorize_stripe sig="def authorize_stripe(request: Request):" score=4.34 in=0 out=8 mode=skel
+N11 F4:55-79 fn deauthorize_stripe sig="def deauthorize_stripe(request: Request):" score=4.14 in=0 out=8 mode=skel
+N12 F4:22-29 fn stripe_login sig="def stripe_login(request: Request):" score=2.97 in=0 out=3 mode=sig
+N13 F5:1-41 module <module> score=3.25 mode=min
+N14 F5:29-40 async_fn get_product_by_slug sig="async def get_product_by_slug(slug: str):" score=3.38 in=0 out=3 mode=sig
+N15 F5:18-25 async_fn get_products sig="async def get_products():" score=3.77 in=0 out=3 mode=sig
+N16 F6:1-372 module <module> score=3.87 mode=min
+N17 F6:297-301 fn attention_catchers_alerts sig="def attention_catchers_alerts(request: Request):" score=3.39 in=0 out=2 mode=sig
+N18 F6:304-308 fn attention_catchers_modals sig="def attention_catchers_modals(request: Request):" score=3.39 in=0 out=2 mode=sig
+N19 F6:311-315 fn attention_catchers_tooltips_popovers sig="def attention_catchers_tooltips_popovers(request: Request):" score=3.34 in=0 out=2 mode=sig
+N20 F6:137-141 fn cancelled sig="def cancelled(request: Request):" score=3.44 in=0 out=2 mode=sig
+N21 F6:145-186 async_fn create_checkout_session sig="async def create_checkout_session(path, request: Request):" score=3.88 in=0 out=9 mode=sig
+N22 F6:325-329 fn elements_avatars sig="def elements_avatars(request: Request):" score=3.44 in=0 out=2 mode=sig
+N23 F6:353-357 fn elements_badges sig="def elements_badges(request: Request):" score=3.44 in=0 out=2 mode=sig
+N24 F6:346-350 fn elements_breadcrumbs sig="def elements_breadcrumbs(request: Request):" score=3.44 in=0 out=2 mode=sig
+N25 F6:318-322 fn elements_buttons sig="def elements_buttons(request: Request):" score=3.44 in=0 out=2 mode=sig
+N26 F6:332-336 fn elements_dropdowns sig="def elements_dropdowns(request: Request):" score=3.44 in=0 out=2 mode=sig
+N27 F6:367-371 fn elements_progress_bars sig="def elements_progress_bars(request: Request):" score=3.39 in=0 out=2 mode=sig
+N28 F6:339-343 fn elements_toggles sig="def elements_toggles(request: Request):" score=3.44 in=0 out=2 mode=sig
+N29 F6:360-364 fn elements_typography sig="def elements_typography(request: Request):" score=3.44 in=0 out=2 mode=sig
+N30 F6:125-127 fn get_publishable_key sig="def get_publishable_key():" score=3.40 in=0 out=1 mode=sig
+N31 F6:35-36 async_fn index sig="async def index(request: Request, response_model=HTMLResponse):" score=3.52 in=0 out=2 mode=sig
+N32 F6:290-294 fn input_areas_forms sig="def input_areas_forms(request: Request):" score=3.39 in=0 out=2 mode=sig
+N33 F6:283-287 fn input_areas_inputs sig="def input_areas_inputs(request: Request):" score=3.39 in=0 out=2 mode=sig
+N34 F6:269-273 fn navigation_nav_tabs sig="def navigation_nav_tabs(request: Request):" score=3.39 in=0 out=2 mode=sig
+N35 F6:262-266 fn navigation_navbars sig="def navigation_navbars(request: Request):" score=3.44 in=0 out=2 mode=sig
+N36 F6:276-280 fn navigation_pagination sig="def navigation_pagination(request: Request):" score=3.44 in=0 out=2 mode=sig
+N37 F6:241-245 fn page_404 sig="def page_404(request: Request):" score=3.44 in=0 out=2 mode=sig
+N38 F6:205-209 fn page_about_us sig="def page_about_us(request: Request):" score=3.39 in=0 out=2 mode=sig
+N39 F6:220-224 fn page_author sig="def page_author(request: Request):" score=4.26 in=0 out=2 mode=skel
+N40 F6:213-217 fn page_contact_us sig="def page_contact_us(request: Request):" score=3.39 in=0 out=2 mode=sig
+N41 F6:255-259 fn page_sections_features sig="def page_sections_features(request: Request):" score=3.39 in=0 out=2 mode=sig
+N42 F6:248-252 fn page_sections_hero_sections sig="def page_sections_hero_sections(request: Request):" score=3.34 in=0 out=2 mode=sig
+N43 F6:227-231 fn page_sign_in sig="def page_sign_in(request: Request):" score=3.39 in=0 out=2 mode=sig
+N44 F6:234-238 fn page_sign_up sig="def page_sign_up(request: Request):" score=3.39 in=0 out=2 mode=sig
+N45 F6:197-201 fn presentation sig="def presentation(request: Request):" score=3.49 in=0 out=2 mode=sig
+N46 F6:104-122 async_fn product_info sig="async def product_info(product_slug: str, request: Request, response_model=HTMLResponse):" score=4.15 in=0 out=10 mode=skel
+N47 F6:39-101 async_fn products_index sig="async def products_index(request: Request, response_model=HTMLResponse):" score=4.27 in=0 out=16 mode=skel
+N49 F6:130-134 fn success sig="def success(request: Request):" score=2.89 in=0 out=0 mode=sig
+N49 F6:190-194 fn success sig="def success(request: Request):" score=3.44 in=0 out=2 mode=sig
+N50 F7:1-20 module <module> score=4.09 mode=min
+
+SKELS
+S N10 calls=[stripe.OAuth.token,redirect.set_cookie,app.ui_router.url_path_for,RedirectResponse] flow="try->return" effects=[auth,payment,logging,external_api] raises=[HTTPException] returns=unknown reads=[router.get,request.query_params.get,redirect.status_code,request.query_params,redirect.set_cookie]
+S N11 calls=[stripe.OAuth.deauthorize,redirect.set_cookie,app.ui_router.url_path_for,RedirectResponse] flow="try->return" effects=[auth,payment,logging,external_api] raises=[HTTPException] returns=unknown reads=[router.get,redirect.status_code,request.cookies.get,redirect.set_cookie,request.cookies]
+S N39 calls=[TEMPLATES.TemplateResponse] flow="return" effects=[auth] raises=[] returns=call:TEMPLATES.TemplateResponse reads=[router.get,TEMPLATES.TemplateResponse]
+S N46 calls=[app.product_router.url_path_for,response.json,base_url.__str__,product_url.__str__,http3.AsyncClient,TEMPLATES.TemplateResponse,RedirectResponse] flow="url_path_for->__str__->AsyncClient->if->json->return" effects=[logging,serialization] raises=[] returns=unknown reads=[request.base_url,router.get,TEMPLATES.TemplateResponse,http3client.get,product_url.__str__,router.url_path_for]
+S N47 calls=[app.product_router.url_path_for,response.json,base_url.__str__,product_url.__str__,products_url.__str__,http3.AsyncClient,TEMPLATES.TemplateResponse] flow="url_path_for->__str__->AsyncClient->json->url_path_for->__str__->AsyncClient->json->loop->if->return" effects=[serialization] raises=[] returns=call:TEMPLATES.TemplateResponse reads=[request.base_url,router.get,request.cookies.get,TEMPLATES.TemplateResponse,http3client.get,request.cookies,product_url.__str__,products_url.__str__]
+
+EDGES
+N1 -> N2 import src.config resolved
+N1 -> N9 import src.routers.auth resolved
+N1 -> N13 import src.routers.products resolved
+N1 -> N16 import src.routers.ui_routes resolved
+N13 -> N8 import src.helpers.utils.get_local_products resolved
+N13 -> N50 import src.schemas resolved
+N14 -> N8 call get_local_products resolved
+N15 -> N8 call get_local_products resolved
+N16 -> N1 import src.app resolved
+N16 -> N2 import src.config resolved
+N16 -> N50 import src.schemas resolved
+
+BODIES
+NOTES
+unresolved_symbols=none
+parse_errors=0

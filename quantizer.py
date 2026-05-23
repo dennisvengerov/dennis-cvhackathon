@@ -173,6 +173,355 @@ def is_noisy_symbol(symbol: str) -> bool:
     return False
 
 
+# --- DETERMINISTIC SKELETONS & EXCERPTS HELPERS ---
+
+def is_call_important(call_node: ast.AST) -> bool:
+    if isinstance(call_node, ast.Call):
+        name = get_call_name(call_node.func)
+        if name and not is_noisy_symbol(name):
+            return True
+    return False
+
+
+def contains_important_call(node: ast.AST) -> bool:
+    for child in ast.walk(node):
+        if isinstance(child, ast.Call):
+            if is_call_important(child):
+                return True
+    return False
+
+
+def get_important_lines(node: ast.AST) -> Set[int]:
+    """Recursively identify which line numbers in the AST node body should be kept."""
+    lines_to_keep = set()
+    
+    def process_body(body_list: List[ast.stmt]):
+        for stmt in body_list:
+            if isinstance(stmt, (ast.Return, ast.Raise, ast.Yield, ast.YieldFrom)):
+                for l in range(stmt.lineno, (getattr(stmt, "end_lineno", None) or stmt.lineno) + 1):
+                    lines_to_keep.add(l)
+            elif isinstance(stmt, (ast.Assign, ast.AnnAssign, ast.Expr)):
+                if contains_important_call(stmt):
+                    for l in range(stmt.lineno, (getattr(stmt, "end_lineno", None) or stmt.lineno) + 1):
+                        lines_to_keep.add(l)
+            elif isinstance(stmt, (ast.If, ast.For, ast.While, ast.Try)):
+                sub_lines = get_important_lines(stmt)
+                if sub_lines:
+                    lines_to_keep.add(stmt.lineno)
+                    if isinstance(stmt, ast.Try):
+                        for handler in stmt.handlers:
+                            lines_to_keep.add(handler.lineno)
+                    lines_to_keep.update(sub_lines)
+            elif isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                pass
+                
+    if hasattr(node, "body"):
+        process_body(node.body)
+        if hasattr(node, "orelse") and node.orelse:
+            process_body(node.orelse)
+        if hasattr(node, "finalbody") and node.finalbody:
+            process_body(node.finalbody)
+                
+    return lines_to_keep
+
+
+def get_indent(line: str) -> str:
+    return line[:len(line) - len(line.lstrip())]
+
+
+def generate_excerpt(node: ast.AST, file_lines: List[str]) -> str:
+    """Generate a deterministic excerpt of a function/method body."""
+    if not hasattr(node, "body") or not node.body:
+        return ""
+        
+    body_start_line = node.body[0].lineno
+    sig_lines = file_lines[node.lineno - 1 : body_start_line - 1]
+    
+    lines_to_keep = get_important_lines(node)
+    
+    excerpt_body_lines = []
+    in_gap = False
+    gap_indent = ""
+    
+    end_line = getattr(node, "end_lineno", None) or node.body[-1].lineno
+    
+    for l in range(body_start_line, end_line + 1):
+        if l - 1 < len(file_lines):
+            line_content = file_lines[l - 1]
+            if l in lines_to_keep:
+                if in_gap:
+                    excerpt_body_lines.append(f"{gap_indent}...\n")
+                    in_gap = False
+                excerpt_body_lines.append(line_content)
+            else:
+                if not in_gap:
+                    gap_indent = get_indent(line_content)
+                    in_gap = True
+                
+    if in_gap:
+        excerpt_body_lines.append(f"{gap_indent}...\n")
+        
+    return "".join(sig_lines) + "".join(excerpt_body_lines)
+
+
+def extract_behavior_skeleton(
+    node: ast.AST,
+    local_types: Dict[str, str],
+    file_path: str,
+    resolve_symbol_fn: Any,
+    source_node: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Extract a dictionary of deterministic behavior skeleton facts from a function/method AST."""
+    direct_calls = []
+    resolved_calls = []
+    constructors = []
+    raises = []
+    assigned = []
+    writes = []
+    reads = []
+    literals = []
+    control_flow = []
+    
+    for child in ast.walk(node):
+        if isinstance(child, ast.Call):
+            call_name = get_call_name(child.func)
+            if call_name and not is_noisy_symbol(call_name):
+                is_const = False
+                last_part = call_name.split(".")[-1]
+                if last_part and last_part[0].isupper():
+                    is_const = True
+                elif call_name in local_types:
+                    is_const = True
+                
+                if is_const:
+                    if call_name not in constructors:
+                        constructors.append(call_name)
+                else:
+                    if call_name not in direct_calls:
+                        direct_calls.append(call_name)
+                        
+                target_id, resolved = resolve_symbol_fn(call_name, file_path, source_node)
+                if resolved and target_id:
+                    short_name = target_id.split("::")[-1]
+                    if short_name not in resolved_calls:
+                        resolved_calls.append(short_name)
+        
+        elif isinstance(child, ast.Raise):
+            if child.exc:
+                exc_name = None
+                if isinstance(child.exc, ast.Call):
+                    exc_name = get_call_name(child.exc.func)
+                elif isinstance(child.exc, ast.Name):
+                    exc_name = child.exc.id
+                if exc_name and exc_name not in raises:
+                    raises.append(exc_name)
+                    
+        elif isinstance(child, (ast.Assign, ast.AnnAssign)):
+            targets = [child.target] if isinstance(child, ast.AnnAssign) else child.targets
+            for tgt in targets:
+                flat_targets = []
+                def flatten_tgt(t):
+                    if isinstance(t, (ast.Tuple, ast.List)):
+                        for el in t.elts:
+                            flatten_tgt(el)
+                    else:
+                        flat_targets.append(t)
+                flatten_tgt(tgt)
+                
+                for ftgt in flat_targets:
+                    if isinstance(ftgt, ast.Name):
+                        var_name = ftgt.id
+                        var_lower = var_name.lower()
+                        important_vars = {"payment", "order", "user", "result", "status", "response", "client", "db", "items", "data", "payload", "config", "token", "auth"}
+                        if any(iv in var_lower for iv in important_vars) and len(var_name) > 1:
+                            if var_name not in assigned:
+                                assigned.append(var_name)
+                    elif isinstance(ftgt, ast.Attribute):
+                        attr_str = get_call_name(ftgt)
+                        if attr_str and (attr_str.startswith("self.") or any(part in attr_str for part in ("status", "payment", "order", "user"))):
+                            if attr_str not in writes:
+                                writes.append(attr_str)
+                                
+        elif isinstance(child, ast.Attribute):
+            attr_str = get_call_name(child)
+            if attr_str:
+                parts = attr_str.split(".")
+                obj_name = parts[0]
+                if obj_name in ("request", "payload", "data", "user", "order", "item") or obj_name in local_types:
+                    if attr_str not in reads:
+                        reads.append(attr_str)
+                        
+        elif isinstance(child, ast.Constant):
+            val = child.value
+            if isinstance(val, str):
+                val_lower = val.lower()
+                if val.startswith("/"):
+                    if val not in literals:
+                        literals.append(val)
+                elif val in ("GET", "POST", "PUT", "DELETE", "PATCH"):
+                    if val not in literals:
+                        literals.append(val)
+                elif re.match(r"^[A-Z][A-Z0-9_]{3,}$", val):
+                    if val not in literals:
+                        literals.append(val)
+                elif any(kw in val_lower for kw in ("success", "failed", "error", "invalid", "not found", "payment", "order", "user", "auth")):
+                    if len(val) < 40:
+                        if val not in literals:
+                            literals.append(val)
+            elif isinstance(val, int) and not isinstance(val, bool):
+                if val in (200, 201, 400, 401, 403, 404, 500):
+                    if str(val) not in literals:
+                        literals.append(str(val))
+                        
+        elif isinstance(child, ast.If):
+            if "if" not in control_flow:
+                control_flow.append("if")
+        elif isinstance(child, (ast.For, ast.While)):
+            if "loop" not in control_flow:
+                control_flow.append("loop")
+        elif isinstance(child, ast.Try):
+            if "try" not in control_flow and "except" not in control_flow:
+                control_flow.extend(["try", "except"])
+
+    return_count = 0
+    has_nested_return = False
+    for child in ast.walk(node):
+        if isinstance(child, ast.Return):
+            return_count += 1
+            
+    def check_nested_return(body_list):
+        nonlocal has_nested_return
+        for stmt in body_list:
+            if isinstance(stmt, (ast.If, ast.For, ast.While, ast.Try)):
+                for sub in ast.walk(stmt):
+                    if isinstance(sub, ast.Return):
+                        has_nested_return = True
+                        return
+                        
+    if hasattr(node, "body"):
+        check_nested_return(node.body)
+        
+    if return_count > 1 or has_nested_return:
+        if "early_return" not in control_flow:
+            control_flow.append("early_return")
+
+    returns_val = "unknown"
+    return_nodes = [n for n in ast.walk(node) if isinstance(n, ast.Return)]
+    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.returns:
+        ret_ann = get_call_name(node.returns)
+        if ret_ann:
+            returns_val = ret_ann
+    elif return_nodes:
+        last_ret = return_nodes[-1]
+        if last_ret.value is None:
+            returns_val = "None"
+        elif isinstance(last_ret.value, (ast.Dict, ast.DictComp)):
+            returns_val = "dict"
+        elif isinstance(last_ret.value, (ast.List, ast.ListComp)):
+            returns_val = "list"
+        elif isinstance(last_ret.value, (ast.Tuple)):
+            returns_val = "tuple"
+        elif isinstance(last_ret.value, ast.Call):
+            func_name = get_call_name(last_ret.value.func)
+            if func_name:
+                returns_val = f"call:{func_name}"
+        elif isinstance(last_ret.value, ast.Constant):
+            val = last_ret.value.value
+            returns_val = type(val).__name__ if val is not None else "None"
+            
+    flow_steps = []
+    if hasattr(node, "body"):
+        for stmt in node.body:
+            if isinstance(stmt, (ast.If)):
+                flow_steps.append("if")
+            elif isinstance(stmt, (ast.For, ast.While)):
+                flow_steps.append("loop")
+            elif isinstance(stmt, ast.Try):
+                flow_steps.append("try")
+            elif isinstance(stmt, (ast.Assign, ast.AnnAssign, ast.Expr)):
+                stmt_calls = find_calls_in_node(stmt)
+                for sc in stmt_calls:
+                    if not is_noisy_symbol(sc):
+                        short_sc = sc.split(".")[-1]
+                        verb = short_sc.lower()
+                        if "validate" in verb or "check" in verb:
+                            flow_steps.append("validate")
+                        elif "payment" in verb or "charge" in verb or "pay" in verb:
+                            flow_steps.append("pay")
+                        elif "create" in verb or "insert" in verb or "write" in verb or "save" in verb or "add" in verb or "persist" in verb:
+                            flow_steps.append("persist")
+                        elif "get" in verb or "find" in verb or "read" in verb or "query" in verb or "fetch" in verb:
+                            flow_steps.append("fetch")
+                        else:
+                            flow_steps.append(short_sc)
+            elif isinstance(stmt, ast.Return):
+                flow_steps.append("return")
+                
+    clean_flow = []
+    for step in flow_steps:
+        if not clean_flow or clean_flow[-1] != step:
+            clean_flow.append(step)
+            
+    if return_nodes and "return" not in clean_flow:
+        clean_flow.append("return")
+        
+    flow_str = "->".join(clean_flow) if clean_flow else "unknown"
+
+    effects = []
+    all_names = [node.name.lower()] + [c.lower() for c in direct_calls] + [c.lower() for c in constructors]
+    all_literals = [str(l).lower() for l in literals]
+    
+    if hasattr(node, "decorator_list"):
+        for dec in node.decorator_list:
+            dec_name = get_call_name(dec)
+            if dec_name:
+                all_names.append(dec_name.lower())
+                
+    def check_keywords(kws):
+        return any(any(kw in name for kw in kws) for name in all_names) or any(any(kw in lit for kw in kws) for lit in all_literals)
+
+    if check_keywords(["validate", "check", "verify", "schema", "pydantic"]):
+        effects.append("validation")
+    if check_keywords(["auth", "login", "jwt", "token", "password", "security", "permission"]):
+        effects.append("auth")
+    if check_keywords(["payment", "charge", "stripe", "pay", "transaction", "invoice", "checkout"]):
+        effects.append("payment")
+    if check_keywords(["get", "find", "read", "query", "fetch", "select", "db"]):
+        effects.append("db_read")
+    if check_keywords(["create", "update", "delete", "insert", "save", "write", "persist", "commit", "db"]):
+        effects.append("db_write")
+    if check_keywords(["open", "read", "write", "filepath", "os.path"]):
+        effects.append("file_io")
+    if check_keywords(["requests", "httpx", "aiohttp", "urllib", "socket"]):
+        effects.append("network")
+    if check_keywords(["redis", "cache", "memcached"]):
+        effects.append("cache")
+    if check_keywords(["print", "log", "logger", "logging", "info", "error", "warning", "debug"]):
+        effects.append("logging")
+    if check_keywords(["stripe", "sendgrid", "google", "api"]):
+        effects.append("external_api")
+    if check_keywords(["email", "mail", "sendgrid", "smtp"]):
+        effects.append("email")
+    if check_keywords(["json", "dump", "load", "serialize", "deserialize"]):
+        effects.append("serialization")
+
+    all_calls_combined = direct_calls + constructors
+
+    return {
+        "calls": all_calls_combined,
+        "resolved_calls": resolved_calls,
+        "flow": flow_str,
+        "effects": effects,
+        "raises": raises,
+        "returns": returns_val,
+        "reads": reads,
+        "control_flow": control_flow,
+        "assigned": assigned,
+        "writes": writes,
+        "literals": literals
+    }
+
+
 # --- AST TRAVERSAL & EXTRACTION HELPERS ---
 
 def resolve_relative_module(current_module: str, import_from_module: str, level: int) -> str:
@@ -587,7 +936,8 @@ def parse_file(filepath: str, repo_dir: str, warnings: List[str]) -> List[Dict[s
         "mode": "signature_only",
         "decorators": [],
         "local_types": module_local_types,
-        "tags": []
+        "tags": [],
+        "ast_node": tree
     }
     nodes.append(module_node)
 
@@ -630,7 +980,8 @@ def parse_file(filepath: str, repo_dir: str, warnings: List[str]) -> List[Dict[s
                 "mode": "signature_only",
                 "decorators": class_decorators,
                 "local_types": module_local_types.copy(),
-                "tags": []
+                "tags": [],
+                "ast_node": child
             }
             nodes.append(class_node)
 
@@ -679,7 +1030,8 @@ def parse_file(filepath: str, repo_dir: str, warnings: List[str]) -> List[Dict[s
                         "mode": "signature_only",
                         "decorators": method_decorators,
                         "local_types": {**module_local_types, **extract_local_types_from_func(subchild)},
-                        "tags": []
+                        "tags": [],
+                        "ast_node": subchild
                     }
                     nodes.append(method_node)
 
@@ -727,7 +1079,8 @@ def parse_file(filepath: str, repo_dir: str, warnings: List[str]) -> List[Dict[s
                 "mode": "signature_only",
                 "decorators": func_decorators,
                 "local_types": {**module_local_types, **extract_local_types_from_func(child)},
-                "tags": []
+                "tags": [],
+                "ast_node": child
             }
             nodes.append(func_node)
 
@@ -800,10 +1153,15 @@ def serialize_node_compact(
     max_docstring_tokens: int,
     use_docstrings: bool = True,
     use_tags: bool = True,
-    is_minimal: bool = False
+    current_mode: str = None
 ) -> str:
     """Serialize a single node in a space-efficient line-oriented format."""
     node_type = node["type"]
+    if node_type == "function":
+        node_type = "fn"
+    elif node_type == "async_function":
+        node_type = "async_fn"
+        
     start = node["start_line"]
     end = node["end_line"]
     qualified_name = node["qualified_name"]
@@ -811,12 +1169,19 @@ def serialize_node_compact(
     in_deg = node["in_degree"]
     out_deg = node["out_degree"]
     
-    if is_minimal:
+    if current_mode is None:
+        current_mode = node.get("mode", "sig")
+        
+    if current_mode in ("minimal", "min", "ultra_min"):
         mode_abbr = "min"
         return f"{node_alias} {file_alias}:{start}-{end} {node_type} {qualified_name} score={score:.2f} mode={mode_abbr}"
         
-    mode_abbr = "body" if node["mode"] == "full_body" else "sig"
-    
+    mode_abbr = current_mode
+    if current_mode == "full_body" or current_mode == "body":
+        mode_abbr = "body"
+    elif current_mode == "signature_only":
+        mode_abbr = "sig"
+        
     # Prepare clean signature
     sig_raw = node["signature"] or ""
     sig_clean = " ".join(sig_raw.split())
@@ -858,6 +1223,10 @@ def serialize_edge_compact(edge: Dict[str, Any], node_to_alias: Dict[str, str]) 
         
     resolved = edge["resolved"]
     edge_type = edge["type"]
+    if edge_type == "inheritance":
+        edge_type = "inherit"
+    elif edge_type == "reference":
+        edge_type = "ref"
     raw_symbol = edge["raw_symbol"]
     
     if resolved:
@@ -866,10 +1235,11 @@ def serialize_edge_compact(edge: Dict[str, Any], node_to_alias: Dict[str, str]) 
             return f"{src_alias} -> {target_alias} {edge_type} {raw_symbol} resolved"
             
     # For unresolved edges:
-    return f"{src_alias} -> EXT:{edge['target']} {edge_type} unresolved"
+    classification = edge.get("classification", "unknown")
+    return f"{src_alias} -> EXT:{edge['target']} {edge_type} {classification}"
 
 
-def serialize_compact_manifest(
+def get_exact_compact_manifest_string_with_modes(
     repo_name: str,
     target_ratio: float,
     original_tokens: int,
@@ -882,81 +1252,127 @@ def serialize_compact_manifest(
     max_docstring_tokens: int,
     use_docstrings: bool = True,
     use_tags: bool = True,
-    minimal_nodes_set: Set[str] = None,
+    node_modes: Dict[str, str] = None,
     parse_error_count: int = 0,
-    compressed_tokens_placeholder: int = 0,
-    compression_ratio_placeholder: float = 0.0
-) -> str:
-    """Assemble all manifest elements into the final line-oriented text artifact."""
-    if minimal_nodes_set is None:
-        minimal_nodes_set = set()
+    debug_edges_total: int = 0,
+    status_str: str = "HIT"
+) -> Tuple[str, int]:
+    """Assemble all manifest elements into the final line-oriented text artifact with precise modes."""
+    if node_modes is None:
+        node_modes = {n["id"]: n.get("mode", "sig") for n in nodes}
         
-    lines = []
-    lines.append("# Context Compiler Manifest v2")
+    def build_with_tokens(tok_val: int, rat_val: float) -> str:
+        lines = []
+        lines.append("# Context Compiler Manifest v3")
+        
+        full_body_count = sum(1 for n in nodes if node_modes.get(n["id"]) in ("full_body", "body"))
+        excerpt_count = sum(1 for n in nodes if node_modes.get(n["id"]) == "excerpt")
+        skeleton_count = sum(1 for n in nodes if node_modes.get(n["id"]) == "skel")
+        sig_count = sum(1 for n in nodes if node_modes.get(n["id"]) in ("sig", "signature_only"))
+        min_count = sum(1 for n in nodes if node_modes.get(n["id"]) in ("min", "minimal", "ultra_min"))
+        
+        meta_line = (
+            f"META repo={repo_name} original_tokens={original_tokens} "
+            f"compressed_tokens={tok_val} "
+            f"ratio={rat_val:.3f} target={target_ratio:.3f} "
+            f"files={len(file_to_alias)} nodes={len(nodes)} "
+            f"debug_edges_total={debug_edges_total} "
+            f"serialized_edges_total={len(emitted_edges)} "
+            f"serialized_resolved_edges={resolved_edges_count} "
+            f"serialized_unresolved_edges={unresolved_edges_count} "
+            f"body={full_body_count} excerpt={excerpt_count} skel={skeleton_count} "
+            f"sig={sig_count} min={min_count} status={status_str}"
+        )
+        lines.append(meta_line)
+        lines.append("")
+        
+        # Files Section
+        lines.append("FILES")
+        for f_path in sorted(file_to_alias.keys()):
+            lines.append(f"{file_to_alias[f_path]} {f_path}")
+        lines.append("")
+        
+        # Nodes Section
+        lines.append("NODES")
+        for node in sorted(nodes, key=lambda x: x["id"]):
+            node_id = node["id"]
+            node_alias = node_to_alias[node_id]
+            file_alias = file_to_alias[node["file"]]
+            node_line = serialize_node_compact(
+                node, node_alias, file_alias, max_docstring_tokens,
+                use_docstrings=use_docstrings, use_tags=use_tags,
+                current_mode=node_modes.get(node_id, "sig")
+            )
+            lines.append(node_line)
+        lines.append("")
+        
+        # Skeletons Section
+        lines.append("SKELS")
+        for node in sorted(nodes, key=lambda x: x["id"]):
+            node_id = node["id"]
+            mode = node_modes.get(node_id, "sig")
+            if mode in ("skel", "excerpt", "body", "full_body"):
+                node_alias = node_to_alias[node_id]
+                skeleton = node.get("behavior_skeleton", {})
+                if skeleton:
+                    calls_str = ",".join(skeleton.get("calls", []))
+                    flow_str = skeleton.get("flow", "unknown")
+                    effects_str = ",".join(skeleton.get("effects", []))
+                    raises_str = ",".join(skeleton.get("raises", []))
+                    returns_str = skeleton.get("returns", "unknown")
+                    reads_str = ",".join(skeleton.get("reads", []))
+                    lines.append(f"S {node_alias} calls=[{calls_str}] flow=\"{flow_str}\" effects=[{effects_str}] raises=[{raises_str}] returns={returns_str} reads=[{reads_str}]")
+        lines.append("")
+        
+        # Edges Section
+        lines.append("EDGES")
+        for edge in emitted_edges:
+            edge_line = serialize_edge_compact(edge, node_to_alias)
+            if edge_line:
+                lines.append(edge_line)
+        lines.append("")
+        
+        # Bodies Section
+        lines.append("BODIES")
+        for node in sorted(nodes, key=lambda x: x["id"]):
+            node_id = node["id"]
+            mode = node_modes.get(node_id, "sig")
+            if mode in ("full_body", "body"):
+                lines.append(f"### {node_to_alias[node_id]} {node_id}")
+                lines.append((node.get("full_body") or "").rstrip())
+                lines.append("")
+            elif mode == "excerpt":
+                lines.append(f"### {node_to_alias[node_id]} {node_id}")
+                lines.append((node.get("excerpt_body") or "").rstrip())
+                lines.append("")
+                
+        # Notes Section
+        lines.append("NOTES")
+        unresolved_list = [e["target"] for e in emitted_edges if not e["resolved"]]
+        unresolved_uniq = list(dict.fromkeys(unresolved_list))
+        unresolved_str = ",".join(unresolved_uniq) if unresolved_uniq else "none"
+        lines.append(f"unresolved_symbols={unresolved_str}")
+        lines.append(f"parse_errors={parse_error_count}")
+        
+        return "\n".join(lines).strip() + "\n"
+
+    # First pass with placeholders
+    text = build_with_tokens(99999, 0.9999)
+    tokens = approximate_token_count(text)
     
-    full_body_nodes_count = sum(1 for n in nodes if n["mode"] == "full_body")
-    sig_only_nodes_count = len(nodes) - full_body_nodes_count - len(minimal_nodes_set)
-    minimal_nodes_count = len(minimal_nodes_set)
+    # Second pass with actual token count
+    ratio = tokens / max(1, original_tokens)
+    final_text = build_with_tokens(tokens, ratio)
+    tokens = approximate_token_count(final_text)
     
-    meta_line = (
-        f"META repo={repo_name} original_tokens={original_tokens} "
-        f"compressed_tokens={compressed_tokens_placeholder} "
-        f"ratio={compression_ratio_placeholder:.3f} target={target_ratio:.3f} "
-        f"files={len(file_to_alias)} nodes={len(nodes)} edges={len(emitted_edges)} "
-        f"resolved={resolved_edges_count} unresolved={unresolved_edges_count} "
-        f"full={full_body_nodes_count} sig={sig_only_nodes_count}"
-    )
-    if minimal_nodes_count > 0:
-        meta_line += f" minimal={minimal_nodes_count}"
-    lines.append(meta_line)
-    lines.append("")
-    
-    # File Index
-    lines.append("FILES")
-    sorted_files = sorted(file_to_alias.keys())
-    for f_path in sorted_files:
-        lines.append(f"{file_to_alias[f_path]} {f_path}")
-    lines.append("")
-    
-    # Node Index
-    lines.append("NODES")
-    sorted_nodes = sorted(nodes, key=lambda x: x["id"])
-    for node in sorted_nodes:
-        node_alias = node_to_alias[node["id"]]
-        file_alias = file_to_alias[node["file"]]
-        is_minimal = node["id"] in minimal_nodes_set
-        lines.append(serialize_node_compact(
-            node, node_alias, file_alias, max_docstring_tokens,
-            use_docstrings=use_docstrings, use_tags=use_tags, is_minimal=is_minimal
-        ))
-    lines.append("")
-    
-    # Edges
-    lines.append("EDGES")
-    for edge in emitted_edges:
-        edge_line = serialize_edge_compact(edge, node_to_alias)
-        if edge_line:
-            lines.append(edge_line)
-    lines.append("")
-    
-    # Full Bodies
-    lines.append("BODIES")
-    for node in sorted_nodes:
-        if node["mode"] == "full_body":
-            lines.append(f"### {node_to_alias[node['id']]} {node['id']}")
-            body_content = node.get("full_body") or ""
-            lines.append(body_content.rstrip())
-            lines.append("")
-            
-    # Notes Section
-    lines.append("NOTES")
-    unresolved_list = [e["target"] for e in emitted_edges if not e["resolved"]]
-    unresolved_uniq = list(dict.fromkeys(unresolved_list))
-    unresolved_str = ",".join(unresolved_uniq) if unresolved_uniq else "none"
-    lines.append(f"unresolved_symbols={unresolved_str}")
-    lines.append(f"parse_errors={parse_error_count}")
-            
-    return "\n".join(lines).strip() + "\n"
+    # Final check
+    final_tokens = approximate_token_count(final_text)
+    if final_tokens != tokens:
+        final_ratio = final_tokens / max(1, original_tokens)
+        final_text = build_with_tokens(final_tokens, final_ratio)
+        final_tokens = approximate_token_count(final_text)
+        
+    return final_text, final_tokens
 
 
 def get_exact_compact_manifest_string(
@@ -973,44 +1389,36 @@ def get_exact_compact_manifest_string(
     use_docstrings: bool = True,
     use_tags: bool = True,
     minimal_nodes_set: Set[str] = None,
-    parse_error_count: int = 0
+    parse_error_count: int = 0,
+    debug_edges_total: int = 0,
+    status_str: str = "HIT"
 ) -> Tuple[str, int]:
-    """Iterate serialization to ensure that text-represented token stats are exactly accurate."""
-    # First pass with placeholders
-    text = serialize_compact_manifest(
-        repo_name, target_ratio, original_tokens, nodes, file_to_alias, node_to_alias,
-        emitted_edges, resolved_edges_count, unresolved_edges_count, max_docstring_tokens,
-        use_docstrings=use_docstrings, use_tags=use_tags, minimal_nodes_set=minimal_nodes_set,
+    node_modes = {}
+    for n in nodes:
+        node_id = n["id"]
+        if minimal_nodes_set and node_id in minimal_nodes_set:
+            node_modes[node_id] = "min"
+        else:
+            node_modes[node_id] = n.get("mode", "sig")
+            
+    return get_exact_compact_manifest_string_with_modes(
+        repo_name=repo_name,
+        target_ratio=target_ratio,
+        original_tokens=original_tokens,
+        nodes=nodes,
+        file_to_alias=file_to_alias,
+        node_to_alias=node_to_alias,
+        emitted_edges=emitted_edges,
+        resolved_edges_count=resolved_edges_count,
+        unresolved_edges_count=unresolved_edges_count,
+        max_docstring_tokens=max_docstring_tokens,
+        use_docstrings=use_docstrings,
+        use_tags=use_tags,
+        node_modes=node_modes,
         parse_error_count=parse_error_count,
-        compressed_tokens_placeholder=99999, compression_ratio_placeholder=0.9999
+        debug_edges_total=debug_edges_total,
+        status_str=status_str
     )
-    tokens = approximate_token_count(text)
-    
-    # Second pass with actual token count
-    ratio = tokens / max(1, original_tokens)
-    final_text = serialize_compact_manifest(
-        repo_name, target_ratio, original_tokens, nodes, file_to_alias, node_to_alias,
-        emitted_edges, resolved_edges_count, unresolved_edges_count, max_docstring_tokens,
-        use_docstrings=use_docstrings, use_tags=use_tags, minimal_nodes_set=minimal_nodes_set,
-        parse_error_count=parse_error_count,
-        compressed_tokens_placeholder=tokens, compression_ratio_placeholder=ratio
-    )
-    tokens = approximate_token_count(final_text)
-    
-    # Final check
-    final_tokens = approximate_token_count(final_text)
-    if final_tokens != tokens:
-        final_ratio = final_tokens / max(1, original_tokens)
-        final_text = serialize_compact_manifest(
-            repo_name, target_ratio, original_tokens, nodes, file_to_alias, node_to_alias,
-            emitted_edges, resolved_edges_count, unresolved_edges_count, max_docstring_tokens,
-            use_docstrings=use_docstrings, use_tags=use_tags, minimal_nodes_set=minimal_nodes_set,
-            parse_error_count=parse_error_count,
-            compressed_tokens_placeholder=final_tokens, compression_ratio_placeholder=final_ratio
-        )
-        final_tokens = approximate_token_count(final_text)
-        
-    return final_text, final_tokens
 
 
 # --- DEBUG JSON SERIALIZATION HELPERS ---
@@ -1049,8 +1457,11 @@ def get_exact_debug_json_string_and_tokens(
             "resolved_edge_count": resolved_count,
             "unresolved_edge_count": unresolved_count,
             "graph_density": graph_density,
-            "full_body_nodes": sum(1 for n in raw_nodes if n["mode"] == "full_body"),
-            "signature_only_nodes": sum(1 for n in raw_nodes if n["mode"] in ("signature_only", "minimal")),
+            "full_body_nodes": sum(1 for n in raw_nodes if n["mode"] in ("full_body", "body")),
+            "excerpt_nodes": sum(1 for n in raw_nodes if n["mode"] == "excerpt"),
+            "skeleton_nodes": sum(1 for n in raw_nodes if n["mode"] == "skel"),
+            "signature_only_nodes": sum(1 for n in raw_nodes if n["mode"] in ("signature_only", "sig")),
+            "minimal_nodes": sum(1 for n in raw_nodes if n["mode"] in ("minimal", "min", "ultra_min")),
             "parse_error_count": parse_error_count,
             "skipped_file_count": skipped_file_count
         }
@@ -1080,9 +1491,11 @@ def get_exact_debug_json_string_and_tokens(
                 "imports": node["imports"],
                 "base_classes": node["base_classes"],
                 "mode": node["mode"],
-                "tags": node.get("tags", [])
+                "tags": node.get("tags", []),
+                "behavior_skeleton": node.get("behavior_skeleton", {}),
+                "excerpt_body": node.get("excerpt_body", "")
             }
-            if node["mode"] == "full_body":
+            if node["mode"] in ("full_body", "body"):
                 node_out["body"] = node["full_body"]
             manifest_nodes.append(node_out)
             
@@ -1114,8 +1527,11 @@ def get_exact_debug_json_string_and_tokens(
                 "resolved_edge_count": resolved_count,
                 "unresolved_edge_count": unresolved_count,
                 "graph_density": graph_density,
-                "full_body_nodes": sum(1 for n in raw_nodes if n["mode"] == "full_body"),
-                "signature_only_nodes": sum(1 for n in raw_nodes if n["mode"] in ("signature_only", "minimal")),
+                "full_body_nodes": sum(1 for n in raw_nodes if n["mode"] in ("full_body", "body")),
+                "excerpt_nodes": sum(1 for n in raw_nodes if n["mode"] == "excerpt"),
+                "skeleton_nodes": sum(1 for n in raw_nodes if n["mode"] == "skel"),
+                "signature_only_nodes": sum(1 for n in raw_nodes if n["mode"] in ("signature_only", "sig")),
+                "minimal_nodes": sum(1 for n in raw_nodes if n["mode"] in ("minimal", "min", "ultra_min")),
                 "parse_error_count": parse_error_count,
                 "skipped_file_count": skipped_file_count
             }
@@ -1145,9 +1561,11 @@ def get_exact_debug_json_string_and_tokens(
                     "imports": node["imports"],
                     "base_classes": node["base_classes"],
                     "mode": node["mode"],
-                    "tags": node.get("tags", [])
+                    "tags": node.get("tags", []),
+                    "behavior_skeleton": node.get("behavior_skeleton", {}),
+                    "excerpt_body": node.get("excerpt_body", "")
                 }
-                if node["mode"] == "full_body":
+                if node["mode"] in ("full_body", "body"):
                     node_out["body"] = node["full_body"]
                 manifest_nodes.append(node_out)
                 
@@ -1182,7 +1600,8 @@ def compile_codebase(args: argparse.Namespace) -> None:
 
     exclude_dirs = {
         ".git", "__pycache__", ".venv", "venv", "env", "node_modules",
-        "dist", "build", ".mypy_cache", ".pytest_cache", ".ruff_cache"
+        "dist", "build", ".mypy_cache", ".pytest_cache", ".ruff_cache",
+        ".next", "target"
     }
 
     raw_nodes: List[Dict[str, Any]] = []
@@ -1255,6 +1674,14 @@ def compile_codebase(args: argparse.Namespace) -> None:
     # 3. Assign Tags & Metadata BEFORE Scoring
     for node in raw_nodes:
         node["tags"] = assign_tags_and_metadata(node)
+        for dec in node.get("decorators", []):
+            dec_name = dec["name"] or ""
+            if "dataclass" in dec_name.lower():
+                if "schema" not in node["tags"]:
+                    node["tags"].append("schema")
+                if "model" not in node["tags"]:
+                    node["tags"].append("model")
+        node["tags"] = sorted(list(set(node["tags"])))
 
     # 4. Resolve Dependency Edges
     edges: List[Dict[str, Any]] = []
@@ -1264,12 +1691,18 @@ def compile_codebase(args: argparse.Namespace) -> None:
         edge_key = (src, target_val, edge_type)
         if edge_key not in edges_seen:
             edges_seen.add(edge_key)
+            classification = "resolved"
+            if not resolved:
+                src_node = nodes_by_id.get(src)
+                imports = src_node.get("imports", []) if src_node else []
+                classification = classify_unresolved_symbol(target_val, imports)
             edges.append({
                 "source": src,
                 "target": target_val,
                 "type": edge_type,
                 "raw_symbol": raw_sym,
-                "resolved": resolved
+                "resolved": resolved,
+                "classification": classification
             })
 
     # Helper function to resolve a symbol inside a specific file scope
@@ -1284,9 +1717,10 @@ def compile_codebase(args: argparse.Namespace) -> None:
         if local_fqn in fqn_to_node_id:
             return fqn_to_node_id[local_fqn], True
 
-        # B. Class-level / Self prefix resolution helper
-        if symbol.startswith("self."):
-            suffix = symbol[5:]
+        # B. Class-level / Self/Cls prefix resolution helper
+        if symbol.startswith("self.") or symbol.startswith("cls."):
+            prefix_len = 5 if symbol.startswith("self.") else 4
+            suffix = symbol[prefix_len:]
             if source_node and source_node["type"] in ("method", "async_method"):
                 parts = source_node["qualified_name"].split(".")
                 if len(parts) >= 1:
@@ -1434,6 +1868,42 @@ def compile_codebase(args: argparse.Namespace) -> None:
         if resolved and target_id in nodes_by_id:
             nodes_by_id[target_id]["in_degree"] += 1
 
+    # 5.5 Extract Behavior Skeletons and Excerpts
+    file_to_lines = {}
+    for node in raw_nodes:
+        if node["type"] == "module":
+            file_to_lines[node["file"]] = node["full_body"].splitlines(keepends=True)
+
+    for node in raw_nodes:
+        if node["type"] in ("function", "async_function", "method", "async_method"):
+            ast_node = node.get("ast_node")
+            if ast_node:
+                skeleton = extract_behavior_skeleton(
+                    ast_node, node.get("local_types", {}), node["file"], resolve_symbol, node
+                )
+                node["behavior_skeleton"] = skeleton
+                
+                # Add skeleton effects to tags
+                for eff in skeleton.get("effects", []):
+                    if eff in ("db_read", "db_write"):
+                        if "database" not in node["tags"]:
+                            node["tags"].append("database")
+                    else:
+                        if eff not in node["tags"]:
+                            node["tags"].append(eff)
+                node["tags"] = sorted(list(set(node["tags"])))
+                
+                lines = file_to_lines.get(node["file"], [])
+                if lines:
+                    node["excerpt_body"] = generate_excerpt(ast_node, lines)
+                else:
+                    node["excerpt_body"] = ""
+
+    # Clean up temporary ast_node
+    for node in raw_nodes:
+        if "ast_node" in node:
+            node.pop("ast_node", None)
+
     # 6. Compute Structural Importance Scores with Practical Boosts
     for node in raw_nodes:
         in_deg = node["in_degree"]
@@ -1496,10 +1966,27 @@ def compile_codebase(args: argparse.Namespace) -> None:
     node_to_alias = {node["id"]: f"N{i}" for i, node in enumerate(sorted_raw_nodes)}
 
     # 8. Apply Quantization Policy with Greedy Optimization & Strict Budgeting
-    original_token_count = sum(node["token_count"] for node in raw_nodes if node["type"] == "module")
+    original_token_count = 0
+    # Try to read raw file for token count of scanned files
+    for root, dirs, files in os.walk(repo_dir):
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+        for file in files:
+            if file.endswith(".py"):
+                filepath = os.path.join(root, file)
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        original_token_count += approximate_token_count(f.read())
+                except Exception:
+                    pass
+
+    if original_token_count == 0:
+        # Fallback to module tokens if raw scan failed
+        original_token_count = sum(node["token_count"] for node in raw_nodes if node["type"] == "module") or 1
+
     budget_tokens = math.ceil(args.target_ratio * original_token_count)
 
-    # Initialize all nodes to signature_only
+    # Initialize all nodes to "sig" (signature_only) mode
+    node_modes = {node["id"]: "sig" for node in raw_nodes}
     for node in raw_nodes:
         node["mode"] = "signature_only"
 
@@ -1529,257 +2016,253 @@ def compile_codebase(args: argparse.Namespace) -> None:
     emitted_edges = emitted_resolved + emitted_unresolved
     emitted_edges.sort(key=lambda x: (x["source"], x["target"], x["type"]))
 
-    # Compute minimal baseline compact manifest to check baseline tokens
-    baseline_text, baseline_tokens = get_exact_compact_manifest_string(
-        repo_name=os.path.basename(repo_dir),
-        target_ratio=args.target_ratio,
-        original_tokens=original_token_count,
-        nodes=raw_nodes,
-        file_to_alias=file_to_alias,
-        node_to_alias=node_to_alias,
-        emitted_edges=emitted_edges,
-        resolved_edges_count=len(emitted_resolved),
-        unresolved_edges_count=len(emitted_unresolved),
-        max_docstring_tokens=args.max_docstring_tokens,
-        use_docstrings=use_docstrings,
-        use_tags=use_tags,
-        minimal_nodes_set=minimal_nodes_set,
-        parse_error_count=parse_error_count
+    # Pre-identify route/API nodes and their skeletons for protection
+    route_nodes = [n for n in raw_nodes if "route" in n["tags"] or "endpoint" in n["tags"]]
+    route_node_ids = {n["id"] for n in route_nodes}
+    
+    route_nodes_with_skel = [n for n in route_nodes if n.get("behavior_skeleton")]
+    route_nodes_with_skel.sort(key=lambda x: -x["score"])
+    top_route_ids_to_keep_skel = {n["id"] for n in route_nodes_with_skel[:5]} # Top 5 route nodes with skeletons
+
+    route_adjacent_node_ids = set()
+    for e in resolved_edges_all:
+        if e["source"] in route_node_ids:
+            route_adjacent_node_ids.add(e["target"])
+        if e["target"] in route_node_ids:
+            route_adjacent_node_ids.add(e["source"])
+
+    # Function to get current exact manifest tokens
+    def get_current_manifest_tokens(temp_modes, temp_edges, doc_flag, tag_flag, doc_max):
+        _, tokens = get_exact_compact_manifest_string_with_modes(
+            repo_name=os.path.basename(repo_dir),
+            target_ratio=args.target_ratio,
+            original_tokens=original_token_count,
+            nodes=[n for n in raw_nodes if n["id"] in temp_modes],
+            file_to_alias=file_to_alias,
+            node_to_alias=node_to_alias,
+            emitted_edges=temp_edges,
+            resolved_edges_count=sum(1 for e in temp_edges if e["resolved"]),
+            unresolved_edges_count=sum(1 for e in temp_edges if not e["resolved"]),
+            max_docstring_tokens=doc_max,
+            use_docstrings=doc_flag,
+            use_tags=tag_flag,
+            node_modes=temp_modes,
+            parse_error_count=parse_error_count,
+            debug_edges_total=len(edges),
+            status_str="HIT"
+        )
+        return tokens
+
+    current_tokens = get_current_manifest_tokens(
+        node_modes, emitted_edges, use_docstrings, use_tags, args.max_docstring_tokens
     )
 
-    current_tokens = baseline_tokens
-    full_body_nodes_retained = []
-
-    if baseline_tokens <= budget_tokens:
-        # Sort nodes greedily: value_density desc, then score desc, then node ID asc.
+    if current_tokens <= budget_tokens:
+        # ROOM AVAILABLE -> PROMOTE NODES!
+        # Sort non-module nodes by score desc
         sorted_nodes_greedy = sorted(
             [n for n in raw_nodes if n["type"] != "module"],
-            key=lambda x: (-x["value_density"], -x["score"], x["id"])
+            key=lambda x: (-x["score"], x["id"])
         )
         
+        # Stage 1: Promote important functions/methods from "sig" to "skel"
         for node in sorted_nodes_greedy:
-            if len(full_body_nodes_retained) >= args.max_full_body_nodes:
+            if node["type"] in ("function", "async_function", "method", "async_method"):
+                prev_mode = node_modes[node["id"]]
+                node_modes[node["id"]] = "skel"
+                test_tokens = get_current_manifest_tokens(
+                    node_modes, emitted_edges, use_docstrings, use_tags, args.max_docstring_tokens
+                )
+                if test_tokens <= budget_tokens:
+                    current_tokens = test_tokens
+                else:
+                    node_modes[node["id"]] = prev_mode
+                    
+        # Stage 2: Promote very important nodes to "excerpt" or "body" (under budget and max limit)
+        full_body_nodes_retained_count = 0
+        for node in sorted_nodes_greedy:
+            if full_body_nodes_retained_count >= args.max_full_body_nodes:
                 break
                 
-            node["mode"] = "full_body"
-            test_text, test_tokens = get_exact_compact_manifest_string(
-                repo_name=os.path.basename(repo_dir),
-                target_ratio=args.target_ratio,
-                original_tokens=original_token_count,
-                nodes=raw_nodes,
-                file_to_alias=file_to_alias,
-                node_to_alias=node_to_alias,
-                emitted_edges=emitted_edges,
-                resolved_edges_count=len(emitted_resolved),
-                unresolved_edges_count=len(emitted_unresolved),
-                max_docstring_tokens=args.max_docstring_tokens,
-                use_docstrings=use_docstrings,
-                use_tags=use_tags,
-                minimal_nodes_set=minimal_nodes_set,
-                parse_error_count=parse_error_count
+            node_id = node["id"]
+            prev_mode = node_modes[node_id]
+            
+            # Determine candidate: "body" for short nodes, "excerpt" for longer nodes
+            body_tokens = node["token_count"]
+            candidate_mode = "body" if body_tokens <= 120 else "excerpt"
+            
+            node_modes[node_id] = candidate_mode
+            test_tokens = get_current_manifest_tokens(
+                node_modes, emitted_edges, use_docstrings, use_tags, args.max_docstring_tokens
             )
             
             if test_tokens <= budget_tokens:
                 current_tokens = test_tokens
-                full_body_nodes_retained.append(node)
+                full_body_nodes_retained_count += 1
             else:
-                node["mode"] = "signature_only"
+                node_modes[node_id] = prev_mode
                 
-        # Handle min full body node retention constraints
-        if len(full_body_nodes_retained) < args.min_full_body_nodes:
-            tolerance_budget = budget_tokens + 0.02 * original_token_count
+        # Handle min full body node retention constraints (if budget has a little tolerance)
+        if full_body_nodes_retained_count < args.min_full_body_nodes:
+            tolerance_budget = budget_tokens + math.ceil(0.05 * original_token_count)
             for node in sorted_nodes_greedy:
-                if len(full_body_nodes_retained) >= args.min_full_body_nodes:
+                if full_body_nodes_retained_count >= args.min_full_body_nodes:
                     break
-                if node["mode"] == "full_body":
+                node_id = node["id"]
+                if node_modes[node_id] in ("body", "excerpt"):
                     continue
                     
-                node["mode"] = "full_body"
-                test_text, test_tokens = get_exact_compact_manifest_string(
-                    repo_name=os.path.basename(repo_dir),
-                    target_ratio=args.target_ratio,
-                    original_tokens=original_token_count,
-                    nodes=raw_nodes,
-                    file_to_alias=file_to_alias,
-                    node_to_alias=node_to_alias,
-                    emitted_edges=emitted_edges,
-                    resolved_edges_count=len(emitted_resolved),
-                    unresolved_edges_count=len(emitted_unresolved),
-                    max_docstring_tokens=args.max_docstring_tokens,
-                    use_docstrings=use_docstrings,
-                    use_tags=use_tags,
-                    minimal_nodes_set=minimal_nodes_set,
-                    parse_error_count=parse_error_count
+                prev_mode = node_modes[node_id]
+                body_tokens = node["token_count"]
+                candidate_mode = "body" if body_tokens <= 120 else "excerpt"
+                
+                node_modes[node_id] = candidate_mode
+                test_tokens = get_current_manifest_tokens(
+                    node_modes, emitted_edges, use_docstrings, use_tags, args.max_docstring_tokens
                 )
                 if test_tokens <= tolerance_budget:
                     current_tokens = test_tokens
-                    full_body_nodes_retained.append(node)
+                    full_body_nodes_retained_count += 1
                 else:
-                    node["mode"] = "signature_only"
+                    node_modes[node_id] = prev_mode
     else:
-        # Baseline exceeds budget! Trigger Aggressive Compaction (TASK 2)
+        # BUDGET EXCEEDED -> AGGRESSIVE COMPACTION!
         aggressive_compaction_triggered = True
         warnings.append("signature baseline exceeded budget; aggressive compaction enabled")
         
-        # Stage 1: Remove unresolved edges and set docstrings to False
+        # Stage 1: Remove docstrings
         use_docstrings = False
-        emitted_unresolved = []
-        emitted_edges = emitted_resolved
-        emitted_edges.sort(key=lambda x: (x["source"], x["target"], x["type"]))
-        
-        test_text, test_tokens = get_exact_compact_manifest_string(
-            repo_name=os.path.basename(repo_dir),
-            target_ratio=args.target_ratio,
-            original_tokens=original_token_count,
-            nodes=raw_nodes,
-            file_to_alias=file_to_alias,
-            node_to_alias=node_to_alias,
-            emitted_edges=emitted_edges,
-            resolved_edges_count=len(emitted_resolved),
-            unresolved_edges_count=0,
-            max_docstring_tokens=0,
-            use_docstrings=False,
-            use_tags=use_tags,
-            minimal_nodes_set=minimal_nodes_set,
-            parse_error_count=parse_error_count
+        current_tokens = get_current_manifest_tokens(
+            node_modes, emitted_edges, False, use_tags, 0
         )
-        current_tokens = test_tokens
         
-        # Stage 2: Cap resolved edges to 15 if still over budget
+        # Stage 2: Drop all unresolved edges EXCEPT framework route edges
         if current_tokens > budget_tokens:
-            max_resolved_cap = min(15, len(emitted_resolved))
-            emitted_resolved = emitted_resolved[:max_resolved_cap]
-            emitted_edges = emitted_resolved
-            
-            test_text, test_tokens = get_exact_compact_manifest_string(
-                repo_name=os.path.basename(repo_dir),
-                target_ratio=args.target_ratio,
-                original_tokens=original_token_count,
-                nodes=raw_nodes,
-                file_to_alias=file_to_alias,
-                node_to_alias=node_to_alias,
-                emitted_edges=emitted_edges,
-                resolved_edges_count=len(emitted_resolved),
-                unresolved_edges_count=0,
-                max_docstring_tokens=0,
-                use_docstrings=False,
-                use_tags=use_tags,
-                minimal_nodes_set=minimal_nodes_set,
-                parse_error_count=parse_error_count
+            emitted_unresolved = [e for e in emitted_unresolved if e["type"] == "route" or e["target"].startswith("EXT:")]
+            emitted_edges = emitted_resolved + emitted_unresolved
+            emitted_edges.sort(key=lambda x: (x["source"], x["target"], x["type"]))
+            current_tokens = get_current_manifest_tokens(
+                node_modes, emitted_edges, False, use_tags, 0
             )
-            current_tokens = test_tokens
-
-        # Stage 3: Collapse lowest-scoring nodes into ultra-minimal rows
-        if current_tokens > budget_tokens:
-            signature_nodes = [n for n in raw_nodes if n["type"] != "module"]
-            signature_nodes.sort(key=lambda x: x["score"])
             
-            for node in signature_nodes:
+        # Stage 3: Cap resolved edges to at most 15, prioritizing route-adjacent resolved edges and maintaining a minimum of 10 if possible
+        if current_tokens > budget_tokens:
+            adjacent_resolved = [e for e in resolved_edges_all if e["source"] in route_node_ids or e["target"] in route_node_ids]
+            protected_resolved = list(adjacent_resolved)
+            for e in resolved_edges_all:
+                if len(protected_resolved) >= 15:
+                    break
+                if e not in protected_resolved:
+                    protected_resolved.append(e)
+            
+            target_cap = max(10, min(15, len(protected_resolved)))
+            emitted_resolved = protected_resolved[:target_cap]
+            emitted_edges = emitted_resolved + emitted_unresolved
+            emitted_edges.sort(key=lambda x: (x["source"], x["target"], x["type"]))
+            current_tokens = get_current_manifest_tokens(
+                node_modes, emitted_edges, False, use_tags, 0
+            )
+            
+        # Stage 4: Downgrade lowest-scoring non-module nodes to "min" (Protect route/API nodes)
+        if current_tokens > budget_tokens:
+            sorted_by_score_asc = sorted(
+                [n for n in raw_nodes if n["type"] != "module"],
+                key=lambda x: x["score"]
+            )
+            for node in sorted_by_score_asc:
                 if current_tokens <= budget_tokens:
                     break
+                node_id = node["id"]
+                if node_id in route_node_ids:
+                    # Never downgrade route/API nodes below "sig"
+                    # Keep top route/API nodes in "skel" if they are in top_route_ids_to_keep_skel
+                    if node_id in top_route_ids_to_keep_skel:
+                        node_modes[node_id] = "skel"
+                    else:
+                        node_modes[node_id] = "sig"
+                    continue
                     
-                minimal_nodes_set.add(node["id"])
-                node["mode"] = "minimal"
-                
-                test_text, test_tokens = get_exact_compact_manifest_string(
-                    repo_name=os.path.basename(repo_dir),
-                    target_ratio=args.target_ratio,
-                    original_tokens=original_token_count,
-                    nodes=raw_nodes,
-                    file_to_alias=file_to_alias,
-                    node_to_alias=node_to_alias,
-                    emitted_edges=emitted_edges,
-                    resolved_edges_count=len(emitted_resolved),
-                    unresolved_edges_count=0,
-                    max_docstring_tokens=0,
-                    use_docstrings=False,
-                    use_tags=use_tags,
-                    minimal_nodes_set=minimal_nodes_set,
-                    parse_error_count=parse_error_count
+                node_modes[node_id] = "min"
+                minimal_nodes_set.add(node_id)
+                current_tokens = get_current_manifest_tokens(
+                    node_modes, emitted_edges, False, use_tags, 0
                 )
-                current_tokens = test_tokens
-
-        # Stage 4: Drop lowest-scoring unimportant nodes entirely from manifest if still over budget
+                
+        # Stage 5: Drop lowest-scoring unimportant (non-route/non-endpoint/non-adjacent) nodes entirely from manifest!
         if current_tokens > budget_tokens:
-            candidates = [n for n in raw_nodes if n["type"] != "module" and "route" not in n["tags"] and "endpoint" not in n["tags"]]
-            candidates.sort(key=lambda x: x["score"])
-            
-            dropped_set = set()
-            for node in candidates:
+            protected_node_ids = route_node_ids.union(route_adjacent_node_ids)
+            candidates_for_dropping = sorted(
+                [n for n in raw_nodes if n["type"] != "module" and n["id"] not in protected_node_ids],
+                key=lambda x: x["score"]
+            )
+            dropped_node_ids = set()
+            for node in candidates_for_dropping:
                 if current_tokens <= budget_tokens:
                     break
-                dropped_set.add(node["id"])
                 
-                test_nodes = [n for n in raw_nodes if n["id"] not in dropped_set]
-                test_edges = [e for e in emitted_edges if e["source"] not in dropped_set and e["target"] not in dropped_set]
+                temp_dropped = dropped_node_ids.union({node["id"]})
+                temp_modes = {nid: m for nid, m in node_modes.items() if nid not in temp_dropped}
+                temp_edges = [e for e in emitted_edges if e["source"] not in temp_dropped and e["target"] not in temp_dropped]
                 
-                test_text, test_tokens = get_exact_compact_manifest_string(
-                    repo_name=os.path.basename(repo_dir),
-                    target_ratio=args.target_ratio,
-                    original_tokens=original_token_count,
-                    nodes=test_nodes,
-                    file_to_alias=file_to_alias,
-                    node_to_alias=node_to_alias,
-                    emitted_edges=test_edges,
-                    resolved_edges_count=sum(1 for e in test_edges if e["resolved"]),
-                    unresolved_edges_count=0,
-                    max_docstring_tokens=0,
-                    use_docstrings=False,
-                    use_tags=use_tags,
-                    minimal_nodes_set=minimal_nodes_set,
-                    parse_error_count=parse_error_count
+                # Enforce the utility edge floor for non-trivial repos
+                if len(edges) >= 10 and len(temp_edges) < 8:
+                    break
+                
+                dropped_node_ids.add(node["id"])
+                node_modes = temp_modes
+                emitted_edges = temp_edges
+                current_tokens = get_current_manifest_tokens(
+                    node_modes, emitted_edges, False, use_tags, 0
                 )
-                current_tokens = test_tokens
                 
-            raw_nodes = [n for n in raw_nodes if n["id"] not in dropped_set]
-            emitted_edges = [e for e in emitted_edges if e["source"] not in dropped_set and e["target"] not in dropped_set]
-            for d_id in dropped_set:
+            # Filter raw_nodes to exclude dropped ones
+            raw_nodes = [n for n in raw_nodes if n["id"] in node_modes]
+            for d_id in dropped_node_ids:
                 if d_id in minimal_nodes_set:
                     minimal_nodes_set.remove(d_id)
-
-        # Stage 5: Drop all resolved edges if still over budget
-        if current_tokens > budget_tokens:
-            emitted_edges = []
-            
-            test_text, test_tokens = get_exact_compact_manifest_string(
-                repo_name=os.path.basename(repo_dir),
-                target_ratio=args.target_ratio,
-                original_tokens=original_token_count,
-                nodes=raw_nodes,
-                file_to_alias=file_to_alias,
-                node_to_alias=node_to_alias,
-                emitted_edges=emitted_edges,
-                resolved_edges_count=0,
-                unresolved_edges_count=0,
-                max_docstring_tokens=0,
-                use_docstrings=False,
-                use_tags=use_tags,
-                minimal_nodes_set=minimal_nodes_set,
-                parse_error_count=parse_error_count
-            )
-            current_tokens = test_tokens
-
+                    
         # Stage 6: Turn off tags if still over budget
         if current_tokens > budget_tokens:
             use_tags = False
-            
-            test_text, test_tokens = get_exact_compact_manifest_string(
-                repo_name=os.path.basename(repo_dir),
-                target_ratio=args.target_ratio,
-                original_tokens=original_token_count,
-                nodes=raw_nodes,
-                file_to_alias=file_to_alias,
-                node_to_alias=node_to_alias,
-                emitted_edges=emitted_edges,
-                resolved_edges_count=0,
-                unresolved_edges_count=0,
-                max_docstring_tokens=0,
-                use_docstrings=False,
-                use_tags=False,
-                minimal_nodes_set=minimal_nodes_set,
-                parse_error_count=parse_error_count
+            current_tokens = get_current_manifest_tokens(
+                node_modes, emitted_edges, False, False, 0
             )
-            current_tokens = test_tokens
+            
+        # Stage 7: Downgrade lowest-scoring module nodes to "min" if still over budget
+        if current_tokens > budget_tokens:
+            module_nodes = sorted(
+                [n for n in raw_nodes if n["type"] == "module"],
+                key=lambda x: x["score"]
+            )
+            for node in module_nodes:
+                if current_tokens <= budget_tokens:
+                    break
+                node_modes[node["id"]] = "min"
+                minimal_nodes_set.add(node["id"])
+                current_tokens = get_current_manifest_tokens(
+                    node_modes, emitted_edges, False, False, 0
+                )
+
+    # Sync node_modes back to each node's "mode" property
+    for node in raw_nodes:
+        mode_val = node_modes[node["id"]]
+        if mode_val == "sig":
+            node["mode"] = "signature_only"
+        elif mode_val == "min":
+            node["mode"] = "minimal"
+        else:
+            node["mode"] = mode_val
+
+    # Determine budget status prior to final compilation
+    budget_status = "HIT"
+    final_compression_ratio = current_tokens / max(1, original_token_count)
+    if aggressive_compaction_triggered:
+        if final_compression_ratio <= args.target_ratio:
+            budget_status = "AGGRESSIVE_BASELINE_EXCEEDED"
+        else:
+            budget_status = "MINIMUM_GRAPH_EXCEEDS_TARGET"
+    elif final_compression_ratio > args.target_ratio:
+        budget_status = "MISSED"
 
     # Compile Final outputs
     compact_text = ""
@@ -1802,7 +2285,9 @@ def compile_codebase(args: argparse.Namespace) -> None:
         use_docstrings=use_docstrings,
         use_tags=use_tags,
         minimal_nodes_set=minimal_nodes_set,
-        parse_error_count=parse_error_count
+        parse_error_count=parse_error_count,
+        debug_edges_total=len(edges),
+        status_str=budget_status
     )
 
     # Generate JSON Text
@@ -1854,15 +2339,6 @@ def compile_codebase(args: argparse.Namespace) -> None:
         sys.exit(1)
 
     # 10. Print Stdout Summary (TASK 6)
-    budget_status = "HIT"
-    if aggressive_compaction_triggered:
-        if final_compression_ratio <= args.target_ratio:
-            budget_status = "HIT"
-        else:
-            budget_status = "AGGRESSIVE_BASELINE_EXCEEDED"
-    elif final_compression_ratio > args.target_ratio:
-        budget_status = "MISSED"
-
     print("Context Compiler Quantizer Summary")
     print("----------------------------------")
     print(f"Repository: {os.path.basename(repo_dir)}")
@@ -1877,9 +2353,10 @@ def compile_codebase(args: argparse.Namespace) -> None:
     print("-------------")
     print(f"Files: {len(file_to_alias)}")
     print(f"Nodes: {len(raw_nodes)}")
-    print(f"Edges: {len(edges)}")
-    print(f"Resolved edges: {sum(1 for e in emitted_edges if e['resolved'])}")
-    print(f"Unresolved edges: {sum(1 for e in emitted_edges if not e['resolved'])}")
+    print(f"Debug edges total: {len(edges)}")
+    print(f"Serialized edges total: {len(emitted_edges)}")
+    print(f"Serialized resolved edges: {sum(1 for e in emitted_edges if e['resolved'])}")
+    print(f"Serialized unresolved edges: {sum(1 for e in emitted_edges if not e['resolved'])}")
     total_edges = len(edges)
     resolved_total_edges = sum(1 for e in edges if e["resolved"])
     resolved_rate_pct = (resolved_total_edges / max(1, total_edges)) * 100
@@ -1887,15 +2364,16 @@ def compile_codebase(args: argparse.Namespace) -> None:
     v_len = len(raw_nodes)
     possible_edges = v_len * (v_len - 1) if v_len > 1 else 1
     print(f"Graph density: {len(edges) / possible_edges:.5f}")
-    print(f"Full-body nodes: {sum(1 for n in raw_nodes if n['mode'] == 'full_body')}")
-    print(f"Signature-only nodes: {sum(1 for n in raw_nodes if n['mode'] == 'signature_only')}")
-    if len(minimal_nodes_set) > 0:
-        print(f"Ultra-minimal nodes: {len(minimal_nodes_set)}")
+    print(f"Full-body nodes: {sum(1 for n in raw_nodes if n['mode'] in ('full_body', 'body'))}")
+    print(f"Excerpt nodes: {sum(1 for n in raw_nodes if n['mode'] == 'excerpt')}")
+    print(f"Skeleton nodes: {sum(1 for n in raw_nodes if n['mode'] == 'skel')}")
+    print(f"Signature-only nodes: {sum(1 for n in raw_nodes if n['mode'] in ('signature_only', 'sig'))}")
+    print(f"Ultra-minimal nodes: {sum(1 for n in raw_nodes if n['mode'] in ('minimal', 'min'))}")
     print()
-    print("Top retained body nodes")
-    print("-----------------------")
+    print("Top retained body/excerpt nodes")
+    print("-------------------------------")
     top_retained = sorted(
-        [n for n in raw_nodes if n["mode"] == "full_body"],
+        [n for n in raw_nodes if n["mode"] in ("full_body", "body", "excerpt")],
         key=lambda x: -x["score"]
     )[:5]
     if not top_retained:
@@ -1907,16 +2385,28 @@ def compile_codebase(args: argparse.Namespace) -> None:
         alias = node_to_alias.get(node["id"], "N/A")
         print(f"{i}. {alias} {node['file']}:{node['start_line']}-{node['end_line']} {node['type']} {node['qualified_name']} (Score: {node['score']:.2f})")
     print()
+    print("Top skeleton nodes")
+    print("------------------")
+    top_skel = sorted(
+        [n for n in raw_nodes if n["mode"] == "skel"],
+        key=lambda x: -x["score"]
+    )[:5]
+    for i, node in enumerate(top_skel, 1):
+        alias = node_to_alias.get(node["id"], "N/A")
+        print(f"{i}. {alias} {node['file']}:{node['start_line']}-{node['end_line']} {node['type']} {node['qualified_name']} (Score: {node['score']:.2f})")
+    if not top_skel:
+        print("None found")
+    print()
     print("Top route/API nodes")
     print("-------------------")
-    route_nodes = sorted(
+    route_nodes_sorted = sorted(
         [n for n in raw_nodes if "route" in n["tags"] or "endpoint" in n["tags"]],
         key=lambda x: -x["score"]
     )[:5]
-    for i, node in enumerate(route_nodes, 1):
+    for i, node in enumerate(route_nodes_sorted, 1):
         alias = node_to_alias.get(node["id"], "N/A")
         print(f"{i}. {alias} {node['file']}:{node['start_line']}-{node['end_line']} {node['type']} {node['qualified_name']} (Score: {node['score']:.2f})")
-    if not route_nodes:
+    if not route_nodes_sorted:
         print("None found")
     print()
     print("Top unresolved external symbols")
@@ -1927,6 +2417,11 @@ def compile_codebase(args: argparse.Namespace) -> None:
         print(f"{i}. {symbol} (referenced {count} times)")
     if not top_unresolved:
         print("None found")
+
+    # Target warning guidance if low target causes severe minimization
+    non_module_useful_modes = sum(1 for n in raw_nodes if n["type"] != "module" and n["mode"] not in ("minimal", "min", "ultra_min"))
+    if args.target_ratio <= 0.20 and non_module_useful_modes == 0:
+        print(f"\nTarget ratio {args.target_ratio:.2f} is below the minimum useful graph size for this repo; try 0.25 or 0.30 for demo-quality context.")
 
     if warnings:
         print()

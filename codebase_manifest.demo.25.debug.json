@@ -1,0 +1,1993 @@
+{
+  "metadata": {
+    "repo_path": "demo_repo",
+    "target_ratio": 0.25,
+    "original_tokens": 1896,
+    "compressed_tokens": 1005,
+    "compression_ratio": 0.5301,
+    "token_savings": 0.4699,
+    "node_count": 28,
+    "edge_count": 73,
+    "resolved_edge_count": 50,
+    "unresolved_edge_count": 23,
+    "graph_density": 0.09656,
+    "full_body_nodes": 0,
+    "excerpt_nodes": 0,
+    "skeleton_nodes": 3,
+    "signature_only_nodes": 0,
+    "minimal_nodes": 25,
+    "parse_error_count": 0,
+    "skipped_file_count": 0
+  },
+  "nodes": [
+    {
+      "id": "app/api/catalog.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/api/catalog.py",
+      "start_line": 1,
+      "end_line": 10,
+      "signature": "app/api/catalog.py",
+      "docstring": "",
+      "token_count": 126,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 1.3418,
+      "value_density": 0.011182,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/api/catalog.py::list_products",
+      "type": "function",
+      "name": "list_products",
+      "qualified_name": "list_products",
+      "file": "app/api/catalog.py",
+      "start_line": 3,
+      "end_line": 10,
+      "signature": "def list_products() -> list:",
+      "docstring": "List all products available in the store catalog.",
+      "token_count": 118,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 2.8248,
+      "value_density": 0.025449,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "skel",
+      "tags": [
+        "endpoint",
+        "public"
+      ],
+      "behavior_skeleton": {
+        "calls": [],
+        "resolved_calls": [],
+        "flow": "return",
+        "effects": [],
+        "raises": [],
+        "returns": "list",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "def list_products() -> list:\n    ...\n    return [\n        {\"item_id\": \"item_101\", \"name\": \"Standard Widget\", \"price\": 10.99},\n        {\"item_id\": \"item_202\", \"name\": \"Premium Gadget\", \"price\": 99.99},\n        {\"item_id\": \"item_303\", \"name\": \"Out-of-Stock Item\", \"price\": 5.00}\n    ]\n"
+    },
+    {
+      "id": "app/api/checkout.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/api/checkout.py",
+      "start_line": 1,
+      "end_line": 40,
+      "signature": "app/api/checkout.py",
+      "docstring": "",
+      "token_count": 346,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 6,
+      "score": 2.6499,
+      "value_density": 0.007794,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.services.inventory",
+          "name": "InventoryService",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.services.fraud",
+          "name": "FraudService",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.services.payments",
+          "name": "PaymentService",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/api/checkout.py::checkout_endpoint",
+      "type": "function",
+      "name": "checkout_endpoint",
+      "qualified_name": "checkout_endpoint",
+      "file": "app/api/checkout.py",
+      "start_line": 7,
+      "end_line": 40,
+      "signature": "def checkout_endpoint(request: CheckoutRequest) -> dict:",
+      "docstring": "Submit a checkout request, verify stock, assess fraud risk, and capture payment.",
+      "token_count": 304,
+      "signature_token_count": 11,
+      "in_degree": 3,
+      "out_degree": 9,
+      "score": 6.0311,
+      "value_density": 0.020514,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "InventoryService",
+        "item.get",
+        "inventory_service.check_stock",
+        "log_error",
+        "FraudService",
+        "fraud_service.is_fraudulent_attempt",
+        "PaymentService",
+        "payment_service.process_payment"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "skel",
+      "tags": [
+        "endpoint",
+        "logging",
+        "payment",
+        "public",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "fraud_service.is_fraudulent_attempt",
+          "payment_service.process_payment",
+          "inventory_service.check_stock",
+          "InventoryService",
+          "FraudService",
+          "PaymentService"
+        ],
+        "resolved_calls": [
+          "InventoryService",
+          "FraudService",
+          "FraudService.is_fraudulent_attempt",
+          "PaymentService",
+          "PaymentService.process_payment",
+          "InventoryService.check_stock"
+        ],
+        "flow": "InventoryService->loop->FraudService->if->pay->if->return",
+        "effects": [
+          "validation",
+          "payment",
+          "logging"
+        ],
+        "raises": [],
+        "returns": "dict",
+        "reads": [
+          "request.items",
+          "fraud_service.is_fraudulent_attempt",
+          "request.user_id",
+          "request.amount",
+          "payment_service.process_payment",
+          "result.success",
+          "result.transaction_id",
+          "item.get",
+          "result.error_message",
+          "inventory_service.check_stock"
+        ],
+        "control_flow": [
+          "loop",
+          "if",
+          "early_return"
+        ],
+        "assigned": [
+          "payment_service",
+          "result"
+        ],
+        "writes": [],
+        "literals": [
+          "success",
+          "Received checkout request for user ",
+          "error",
+          "PaymentFailed",
+          "Fraud check rejected for user ",
+          "Payment failed: ",
+          "Stock check failed for item "
+        ]
+      },
+      "excerpt_body": "def checkout_endpoint(request: CheckoutRequest) -> dict:\n    ...\n    inventory_service = InventoryService()\n    for item in request.items:\n        ...\n        if not inventory_service.check_stock(item_id, quantity):\n            ...\n            return {\"success\": False, \"error\": \"OutOfStock\"}\n\n...\n    fraud_service = FraudService()\n    if fraud_service.is_fraudulent_attempt(request.user_id, request.amount):\n        ...\n        return {\"success\": False, \"error\": \"FraudRejected\"}\n\n...\n    payment_service = PaymentService()\n    result = payment_service.process_payment(request.user_id, request.amount)\n    \n...\n    if not result.success:\n        ...\n        return {\"success\": False, \"error\": \"PaymentFailed\", \"details\": result.error_message}\n\n...\n    return {\n        \"success\": True,\n        \"transaction_id\": result.transaction_id,\n        \"amount\": request.amount\n    }\n"
+    },
+    {
+      "id": "app/api/users.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/api/users.py",
+      "start_line": 1,
+      "end_line": 13,
+      "signature": "app/api/users.py",
+      "docstring": "",
+      "token_count": 143,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 2.5152,
+      "value_density": 0.018359,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.user",
+          "name": "User",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.models.user",
+          "name": "is_valid_email",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/api/users.py::register_user",
+      "type": "function",
+      "name": "register_user",
+      "qualified_name": "register_user",
+      "file": "app/api/users.py",
+      "start_line": 4,
+      "end_line": 13,
+      "signature": "def register_user(email: str, username: str) -> dict:",
+      "docstring": "Register a new user in the system after validating email format.",
+      "token_count": 123,
+      "signature_token_count": 15,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 4.6678,
+      "value_density": 0.042824,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "is_valid_email",
+        "log_error",
+        "User"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "skel",
+      "tags": [
+        "email",
+        "endpoint",
+        "logging",
+        "public"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "is_valid_email",
+          "User"
+        ],
+        "resolved_calls": [
+          "User",
+          "is_valid_email"
+        ],
+        "flow": "if->User->return",
+        "effects": [
+          "logging",
+          "email"
+        ],
+        "raises": [],
+        "returns": "dict",
+        "reads": [
+          "user.user_id"
+        ],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [
+          "user"
+        ],
+        "writes": [],
+        "literals": [
+          "success",
+          "user_id",
+          "error",
+          "InvalidEmail",
+          "User ",
+          " registered successfully.",
+          "Invalid email: "
+        ]
+      },
+      "excerpt_body": "def register_user(email: str, username: str) -> dict:\n    ...\n    if not is_valid_email(email):\n        ...\n        return {\"success\": False, \"error\": \"InvalidEmail\"}\n        \n...\n    user = User(user_id=username, email=email)\n    ...\n    return {\"success\": True, \"user_id\": user.user_id}\n"
+    },
+    {
+      "id": "app/models/checkout.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/models/checkout.py",
+      "start_line": 1,
+      "end_line": 14,
+      "signature": "app/models/checkout.py",
+      "docstring": "",
+      "token_count": 105,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 2.2516,
+      "value_density": 0.022743,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "dataclasses",
+          "name": "dataclass",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "dataclasses",
+          "name": "field",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "typing",
+          "name": "List",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "typing",
+          "name": "Dict",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "model",
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/payment.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/models/payment.py",
+      "start_line": 1,
+      "end_line": 9,
+      "signature": "app/models/payment.py",
+      "docstring": "",
+      "token_count": 45,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 2.2201,
+      "value_density": 0.056926,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "dataclasses",
+          "name": "dataclass",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "typing",
+          "name": "Optional",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "model",
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/user.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/models/user.py",
+      "start_line": 1,
+      "end_line": 12,
+      "signature": "app/models/user.py",
+      "docstring": "",
+      "token_count": 69,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 1.7653,
+      "value_density": 0.028021,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "dataclasses",
+          "name": "dataclass",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "model",
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/user.py::User",
+      "type": "class",
+      "name": "User",
+      "qualified_name": "User",
+      "file": "app/models/user.py",
+      "start_line": 4,
+      "end_line": 8,
+      "signature": "class User:",
+      "docstring": "Represent a user account in the system.",
+      "token_count": 28,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 5.197,
+      "value_density": 0.199885,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "model",
+        "public",
+        "schema"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/user.py::is_valid_email",
+      "type": "function",
+      "name": "is_valid_email",
+      "qualified_name": "is_valid_email",
+      "file": "app/models/user.py",
+      "start_line": 10,
+      "end_line": 12,
+      "signature": "def is_valid_email(email: str) -> bool:",
+      "docstring": "Check if an email contains a basic '@' character.",
+      "token_count": 35,
+      "signature_token_count": 11,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 4.0463,
+      "value_density": 0.161852,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "email",
+        "model",
+        "public"
+      ],
+      "behavior_skeleton": {
+        "calls": [],
+        "resolved_calls": [],
+        "flow": "return",
+        "effects": [
+          "email"
+        ],
+        "raises": [],
+        "returns": "bool",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "def is_valid_email(email: str) -> bool:\n    ...\n    return \"@\" in email\n"
+    },
+    {
+      "id": "app/services/fraud.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/services/fraud.py",
+      "start_line": 1,
+      "end_line": 23,
+      "signature": "app/services/fraud.py",
+      "docstring": "",
+      "token_count": 172,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 1.6494,
+      "value_density": 0.009936,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/fraud.py::FraudService",
+      "type": "class",
+      "name": "FraudService",
+      "qualified_name": "FraudService",
+      "file": "app/services/fraud.py",
+      "start_line": 3,
+      "end_line": 23,
+      "signature": "class FraudService:",
+      "docstring": "Service to evaluate transaction risk levels.",
+      "token_count": 162,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.2577,
+      "value_density": 0.014111,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "type": "method",
+      "name": "is_fraudulent_attempt",
+      "qualified_name": "FraudService.is_fraudulent_attempt",
+      "file": "app/services/fraud.py",
+      "start_line": 9,
+      "end_line": 23,
+      "signature": "def is_fraudulent_attempt(self, user_id: str, amount: float) -> bool:",
+      "docstring": "Run standard rules to check if this purchase is highly risky.",
+      "token_count": 127,
+      "signature_token_count": 17,
+      "in_degree": 1,
+      "out_degree": 3,
+      "score": 2.9884,
+      "value_density": 0.026923,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "log_error",
+        "user_id.startswith"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "method",
+        "payment",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "user_id.startswith"
+        ],
+        "resolved_calls": [],
+        "flow": "if->return",
+        "effects": [
+          "payment"
+        ],
+        "raises": [],
+        "returns": "bool",
+        "reads": [
+          "user_id.startswith"
+        ],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [],
+        "writes": [],
+        "literals": [
+          "Running fraud assessment for user ",
+          "Transaction rejected: User "
+        ]
+      },
+      "excerpt_body": "    def is_fraudulent_attempt(self, user_id: str, amount: float) -> bool:\n        ...\n        if amount > 10000.0:\n            ...\n            return True\n            \n...\n        if user_id.startswith(\"fraud_\"):\n            ...\n            return True\n            \n...\n        return False\n"
+    },
+    {
+      "id": "app/services/inventory.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/services/inventory.py",
+      "start_line": 1,
+      "end_line": 29,
+      "signature": "app/services/inventory.py",
+      "docstring": "",
+      "token_count": 228,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 1.5643,
+      "value_density": 0.007046,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/inventory.py::InventoryService",
+      "type": "class",
+      "name": "InventoryService",
+      "qualified_name": "InventoryService",
+      "file": "app/services/inventory.py",
+      "start_line": 3,
+      "end_line": 29,
+      "signature": "class InventoryService:",
+      "docstring": "Service to handle stock checks and inventory allocations.",
+      "token_count": 218,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.1339,
+      "value_density": 0.009879,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "method",
+      "name": "check_stock",
+      "qualified_name": "InventoryService.check_stock",
+      "file": "app/services/inventory.py",
+      "start_line": 14,
+      "end_line": 21,
+      "signature": "def check_stock(self, item_id: str, quantity: int) -> bool:",
+      "docstring": "Check if inventory has sufficient stock for the requested quantity.",
+      "token_count": 95,
+      "signature_token_count": 17,
+      "in_degree": 2,
+      "out_degree": 3,
+      "score": 3.8341,
+      "value_density": 0.048533,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "self.stock_db.get",
+        "log_error"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "method",
+        "public",
+        "service",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [],
+        "resolved_calls": [],
+        "flow": "if->return",
+        "effects": [
+          "validation"
+        ],
+        "raises": [],
+        "returns": "bool",
+        "reads": [],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "    def check_stock(self, item_id: str, quantity: int) -> bool:\n        ...\n        if available >= quantity:\n            return True\n        ...\n        return False\n"
+    },
+    {
+      "id": "app/services/payments.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/services/payments.py",
+      "start_line": 1,
+      "end_line": 24,
+      "signature": "app/services/payments.py",
+      "docstring": "",
+      "token_count": 204,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 5,
+      "score": 2.5362,
+      "value_density": 0.012809,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "uuid",
+          "name": "uuid",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "app.models.payment",
+          "name": "PaymentResult",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.money",
+          "name": "format_currency",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/payments.py::PaymentService",
+      "type": "class",
+      "name": "PaymentService",
+      "qualified_name": "PaymentService",
+      "file": "app/services/payments.py",
+      "start_line": 6,
+      "end_line": 24,
+      "signature": "class PaymentService:",
+      "docstring": "Service to process charges against payment gateways.",
+      "token_count": 176,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.8013,
+      "value_density": 0.016099,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/payments.py::PaymentService.process_payment",
+      "type": "method",
+      "name": "process_payment",
+      "qualified_name": "PaymentService.process_payment",
+      "file": "app/services/payments.py",
+      "start_line": 12,
+      "end_line": 24,
+      "signature": "def process_payment(self, user_id: str, amount: float) -> PaymentResult:",
+      "docstring": "Process payment through the remote provider gateway.",
+      "token_count": 140,
+      "signature_token_count": 17,
+      "in_degree": 1,
+      "out_degree": 6,
+      "score": 4.5466,
+      "value_density": 0.036666,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "format_currency",
+        "log_info",
+        "log_error",
+        "PaymentResult",
+        "str",
+        "uuid.uuid4"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "method",
+        "payment",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "format_currency",
+          "uuid.uuid4",
+          "PaymentResult"
+        ],
+        "resolved_calls": [
+          "format_currency",
+          "PaymentResult"
+        ],
+        "flow": "format_currency->if->uuid4->return",
+        "effects": [
+          "payment"
+        ],
+        "raises": [],
+        "returns": "PaymentResult",
+        "reads": [],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [],
+        "writes": [],
+        "literals": [
+          " for user ",
+          "Payment successful. Transaction ID: ",
+          "Invalid payment amount"
+        ]
+      },
+      "excerpt_body": "    def process_payment(self, user_id: str, amount: float) -> PaymentResult:\n        ...\n        formatted = format_currency(amount)\n        ...\n        if amount <= 0.0:\n            ...\n            return PaymentResult(success=False, error_message=\"Invalid payment amount\")\n\n...\n        transaction_id = str(uuid.uuid4())\n        ...\n        return PaymentResult(success=True, transaction_id=transaction_id)\n"
+    },
+    {
+      "id": "app/utils/logging.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/logging.py",
+      "start_line": 1,
+      "end_line": 11,
+      "signature": "app/utils/logging.py",
+      "docstring": "",
+      "token_count": 112,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 1.1634,
+      "value_density": 0.010975,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "datetime",
+          "name": "datetime",
+          "alias": null,
+          "type": "import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/utils/logging.py::log_error",
+      "type": "function",
+      "name": "log_error",
+      "qualified_name": "log_error",
+      "file": "app/utils/logging.py",
+      "start_line": 8,
+      "end_line": 11,
+      "signature": "def log_error(message: str) -> None:",
+      "docstring": "Log an error level message with a timestamp.",
+      "token_count": 55,
+      "signature_token_count": 11,
+      "in_degree": 10,
+      "out_degree": 3,
+      "score": 8.5707,
+      "value_density": 0.19046,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "isoformat",
+        "datetime.datetime.now",
+        "print"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "isoformat",
+          "datetime.datetime.now"
+        ],
+        "resolved_calls": [],
+        "flow": "isoformat->now",
+        "effects": [
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": [
+          "] ERROR: "
+        ]
+      },
+      "excerpt_body": "def log_error(message: str) -> None:\n    ...\n    timestamp = datetime.datetime.now().isoformat()\n    ...\n"
+    },
+    {
+      "id": "app/utils/logging.py::log_info",
+      "type": "function",
+      "name": "log_info",
+      "qualified_name": "log_info",
+      "file": "app/utils/logging.py",
+      "start_line": 3,
+      "end_line": 6,
+      "signature": "def log_info(message: str) -> None:",
+      "docstring": "Log an info level message with a timestamp.",
+      "token_count": 55,
+      "signature_token_count": 11,
+      "in_degree": 13,
+      "out_degree": 3,
+      "score": 10.0612,
+      "value_density": 0.223582,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "isoformat",
+        "datetime.datetime.now",
+        "print"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "isoformat",
+          "datetime.datetime.now"
+        ],
+        "resolved_calls": [],
+        "flow": "isoformat->now",
+        "effects": [
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "def log_info(message: str) -> None:\n    ...\n    timestamp = datetime.datetime.now().isoformat()\n    ...\n"
+    },
+    {
+      "id": "app/utils/money.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/money.py",
+      "start_line": 1,
+      "end_line": 7,
+      "signature": "app/utils/money.py",
+      "docstring": "",
+      "token_count": 81,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 0,
+      "score": 1.0212,
+      "value_density": 0.013616,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/utils/validation.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/validation.py",
+      "start_line": 1,
+      "end_line": 14,
+      "signature": "app/utils/validation.py",
+      "docstring": "",
+      "token_count": 83,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 1.467,
+      "value_density": 0.019052,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "tests/test_checkout.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "tests/test_checkout.py",
+      "start_line": 1,
+      "end_line": 24,
+      "signature": "tests/test_checkout.py",
+      "docstring": "",
+      "token_count": 182,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -3.3684,
+      "value_density": -0.018924,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.api.checkout",
+          "name": "checkout_endpoint",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "test"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "type": "function",
+      "name": "test_out_of_stock_checkout",
+      "qualified_name": "test_out_of_stock_checkout",
+      "file": "tests/test_checkout.py",
+      "start_line": 15,
+      "end_line": 24,
+      "signature": "def test_out_of_stock_checkout():",
+      "docstring": "Test that ordering an out-of-stock item returns stock failure.",
+      "token_count": 88,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -2.2152,
+      "value_density": -0.026371,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "CheckoutRequest",
+        "checkout_endpoint"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "payment",
+        "public",
+        "test",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "checkout_endpoint",
+          "CheckoutRequest"
+        ],
+        "resolved_calls": [
+          "CheckoutRequest",
+          "checkout_endpoint"
+        ],
+        "flow": "validate",
+        "effects": [
+          "validation",
+          "payment",
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [
+          "response"
+        ],
+        "writes": [],
+        "literals": [
+          "success",
+          "error"
+        ]
+      },
+      "excerpt_body": "def test_out_of_stock_checkout():\n    ...\n    req = CheckoutRequest(\n        user_id=\"bob\",\n        items=[{\"item_id\": \"item_303\", \"quantity\": 1}],\n        amount=5.00\n    )\n    response = checkout_endpoint(req)\n    ...\n"
+    },
+    {
+      "id": "tests/test_checkout.py::test_successful_checkout",
+      "type": "function",
+      "name": "test_successful_checkout",
+      "qualified_name": "test_successful_checkout",
+      "file": "tests/test_checkout.py",
+      "start_line": 4,
+      "end_line": 13,
+      "signature": "def test_successful_checkout():",
+      "docstring": "Test that a standard valid request goes through successfully.",
+      "token_count": 78,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -2.1392,
+      "value_density": -0.028908,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "CheckoutRequest",
+        "checkout_endpoint"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "payment",
+        "public",
+        "test",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "checkout_endpoint",
+          "CheckoutRequest"
+        ],
+        "resolved_calls": [
+          "CheckoutRequest",
+          "checkout_endpoint"
+        ],
+        "flow": "validate",
+        "effects": [
+          "validation",
+          "payment"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [
+          "response"
+        ],
+        "writes": [],
+        "literals": [
+          "success"
+        ]
+      },
+      "excerpt_body": "def test_successful_checkout():\n    ...\n    req = CheckoutRequest(\n        user_id=\"alice\",\n        items=[{\"item_id\": \"item_101\", \"quantity\": 2}],\n        amount=21.98\n    )\n    response = checkout_endpoint(req)\n    ...\n"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app/api/catalog.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/catalog.py::list_products",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "import",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/fraud.py::FraudService",
+      "type": "import",
+      "raw_symbol": "app.services.fraud.FraudService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/inventory.py::InventoryService",
+      "type": "import",
+      "raw_symbol": "app.services.inventory.InventoryService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/payments.py::PaymentService",
+      "type": "import",
+      "raw_symbol": "app.services.payments.PaymentService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/fraud.py::FraudService",
+      "type": "call",
+      "raw_symbol": "FraudService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "type": "call",
+      "raw_symbol": "fraud_service.is_fraudulent_attempt",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/inventory.py::InventoryService",
+      "type": "call",
+      "raw_symbol": "InventoryService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "call",
+      "raw_symbol": "inventory_service.check_stock",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/payments.py::PaymentService",
+      "type": "call",
+      "raw_symbol": "PaymentService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/payments.py::PaymentService.process_payment",
+      "type": "call",
+      "raw_symbol": "payment_service.process_payment",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "item.get",
+      "type": "call",
+      "raw_symbol": "item.get",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/models/user.py::User",
+      "type": "import",
+      "raw_symbol": "app.models.user.User",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/models/user.py::is_valid_email",
+      "type": "import",
+      "raw_symbol": "app.models.user.is_valid_email",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::register_user",
+      "target": "app/models/user.py::User",
+      "type": "call",
+      "raw_symbol": "User",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::register_user",
+      "target": "app/models/user.py::is_valid_email",
+      "type": "call",
+      "raw_symbol": "is_valid_email",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::register_user",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::register_user",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/models/checkout.py::<module>",
+      "target": "dataclasses.dataclass",
+      "type": "import",
+      "raw_symbol": "dataclasses.dataclass",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/checkout.py::<module>",
+      "target": "dataclasses.field",
+      "type": "import",
+      "raw_symbol": "dataclasses.field",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/checkout.py::<module>",
+      "target": "typing.Dict",
+      "type": "import",
+      "raw_symbol": "typing.Dict",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/checkout.py::<module>",
+      "target": "typing.List",
+      "type": "import",
+      "raw_symbol": "typing.List",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/checkout.py::CheckoutRequest",
+      "target": "field",
+      "type": "call",
+      "raw_symbol": "field",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/models/checkout.py::CheckoutRequest.has_items",
+      "target": "len",
+      "type": "call",
+      "raw_symbol": "len",
+      "resolved": false,
+      "classification": "builtin"
+    },
+    {
+      "source": "app/models/payment.py::<module>",
+      "target": "dataclasses.dataclass",
+      "type": "import",
+      "raw_symbol": "dataclasses.dataclass",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/payment.py::<module>",
+      "target": "typing.Optional",
+      "type": "import",
+      "raw_symbol": "typing.Optional",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/models/user.py::<module>",
+      "target": "dataclasses.dataclass",
+      "type": "import",
+      "raw_symbol": "dataclasses.dataclass",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/services/fraud.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "user_id.startswith",
+      "type": "call",
+      "raw_symbol": "user_id.startswith",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/services/inventory.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.allocate_stock",
+      "target": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "call",
+      "raw_symbol": "self.check_stock",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.allocate_stock",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "self.stock_db.get",
+      "type": "call",
+      "raw_symbol": "self.stock_db.get",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/models/payment.py::PaymentResult",
+      "type": "import",
+      "raw_symbol": "app.models.payment.PaymentResult",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/money.py::format_currency",
+      "type": "import",
+      "raw_symbol": "app.utils.money.format_currency",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "uuid.uuid",
+      "type": "import",
+      "raw_symbol": "uuid.uuid",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/models/payment.py::PaymentResult",
+      "type": "call",
+      "raw_symbol": "PaymentResult",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/money.py::format_currency",
+      "type": "call",
+      "raw_symbol": "format_currency",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "str",
+      "type": "call",
+      "raw_symbol": "str",
+      "resolved": false,
+      "classification": "builtin"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "uuid.uuid4",
+      "type": "call",
+      "raw_symbol": "uuid.uuid4",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::<module>",
+      "target": "datetime.datetime",
+      "type": "import",
+      "raw_symbol": "datetime.datetime",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::log_error",
+      "target": "datetime.datetime.now",
+      "type": "call",
+      "raw_symbol": "datetime.datetime.now",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::log_error",
+      "target": "isoformat",
+      "type": "call",
+      "raw_symbol": "isoformat",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/utils/logging.py::log_error",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false,
+      "classification": "builtin"
+    },
+    {
+      "source": "app/utils/logging.py::log_info",
+      "target": "datetime.datetime.now",
+      "type": "call",
+      "raw_symbol": "datetime.datetime.now",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::log_info",
+      "target": "isoformat",
+      "type": "call",
+      "raw_symbol": "isoformat",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/utils/logging.py::log_info",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false,
+      "classification": "builtin"
+    },
+    {
+      "source": "app/utils/money.py::calculate_tax",
+      "target": "round",
+      "type": "call",
+      "raw_symbol": "round",
+      "resolved": false,
+      "classification": "builtin"
+    },
+    {
+      "source": "app/utils/validation.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "import",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/utils/validation.py::validate_checkout_request",
+      "target": "app/models/checkout.py::CheckoutRequest.has_items",
+      "type": "call",
+      "raw_symbol": "request.has_items",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::<module>",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "import",
+      "raw_symbol": "app.api.checkout.checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "import",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "call",
+      "raw_symbol": "checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "call",
+      "raw_symbol": "CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_successful_checkout",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "call",
+      "raw_symbol": "checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_successful_checkout",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "call",
+      "raw_symbol": "CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    }
+  ],
+  "warnings": [
+    "signature baseline exceeded budget; aggressive compaction enabled"
+  ]
+}
