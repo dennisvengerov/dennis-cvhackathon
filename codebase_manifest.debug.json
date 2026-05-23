@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "demo_repo",
+    "repo_path": "context_compiler_gemini_demo_repo",
     "target_ratio": 0.15,
     "original_tokens": 1896,
     "compressed_tokens": 1005,

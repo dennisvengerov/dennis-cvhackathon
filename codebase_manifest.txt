@@ -1,5 +1,5 @@
 # Context Compiler Manifest v3
-META repo=demo_repo original_tokens=1896 compressed_tokens=1005 ratio=0.530 target=0.150 files=13 nodes=28 debug_edges_total=73 serialized_edges_total=15 serialized_resolved_edges=15 serialized_unresolved_edges=0 body=0 excerpt=0 skel=3 sig=0 min=25 status=MINIMUM_GRAPH_EXCEEDS_TARGET
+META repo=context_compiler_gemini_demo_repo original_tokens=1896 compressed_tokens=1005 ratio=0.530 target=0.150 files=13 nodes=28 debug_edges_total=73 serialized_edges_total=15 serialized_resolved_edges=15 serialized_unresolved_edges=0 body=0 excerpt=0 skel=3 sig=0 min=25 status=MINIMUM_GRAPH_EXCEEDS_TARGET
 
 FILES
 F0 app/api/catalog.py

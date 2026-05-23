@@ -1,7 +1,7 @@
 # Edit Plan & Task Routing Report (Deterministic Fallback)
 
 ### Selected Files & Nodes
-- **F1 app/api/checkout.py**: Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)
+- **F1 app/api/checkout.py**: Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, request, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)
 - **F8 app/services/payments.py**: Contains PaymentService.process_payment (Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type); also contains PaymentService
 - **F12 tests/test_checkout.py**: Contains test_out_of_stock_checkout (Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match); also contains test_successful_checkout
 - **F7 app/services/inventory.py**: Contains InventoryService.check_stock (Semantic Card relevance 0.14 (Selected due to graph dependency or structural importance in the neighborhood.); Product/Inventory component match; Preferred executable node type)
@@ -10,7 +10,7 @@
 - **F4 app/models/payment.py**: Companion validation/model context selected due to request-validation task intent.
 
 **Nodes Selected:**
-- **N3 app.api.checkout::checkout_endpoint** (score: 180.40): Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match
+- **N3 app.api.checkout::checkout_endpoint** (score: 180.40): Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: checkout, request, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match
 - **N26 app.services.payments::PaymentService.process_payment** (score: 110.50): Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type
 - **N36 tests.test_checkout::test_out_of_stock_checkout** (score: 95.50): Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match
 - **N24 app.services.payments::PaymentService** (score: 93.50): Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Preferred class definition node type
