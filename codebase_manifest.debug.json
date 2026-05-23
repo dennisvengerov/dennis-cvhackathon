@@ -6,6 +6,7 @@
     "compressed_tokens": 1005,
     "compression_ratio": 0.5301,
     "token_savings": 0.4699,
+    "budget_status": "MINIMUM_GRAPH_EXCEEDS_TARGET",
     "node_count": 28,
     "edge_count": 73,
     "resolved_edge_count": 50,

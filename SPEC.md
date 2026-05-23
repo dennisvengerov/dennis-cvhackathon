@@ -390,7 +390,7 @@ Responsible for deterministic structural compilation.
 
 Command:
 
-python quantizer.py \
+python3 quantizer.py \
   --repo ./demo_repo \
   --out codebase_manifest.txt \
   --target-ratio 0.15 \
@@ -416,7 +416,7 @@ Responsible for semantic compression.
 
 Command:
 
-python semantic_cards.py \
+python3 semantic_cards.py \
   --manifest codebase_manifest.txt \
   --debug-json codebase_manifest.debug.json \
   --out semantic_cards.jsonl \
@@ -435,7 +435,7 @@ Responsible for task routing and edit planning.
 
 Command:
 
-python agent_harness.py \
+python3 agent_harness.py \
   --manifest codebase_manifest.txt \
   --semantic-cards semantic_cards.jsonl \
   --task "Add request validation to the checkout endpoint before payment processing" \
@@ -456,7 +456,7 @@ Responsible for loading only selected original snippets.
 
 Command:
 
-python source_loader.py \
+python3 source_loader.py \
   --repo ./demo_repo \
   --debug-json codebase_manifest.debug.json \
   --selected edit_plan.json \
@@ -474,7 +474,7 @@ Responsible for producing a patch.
 
 Command:
 
-python patch_agent.py \
+python3 patch_agent.py \
   --repo ./demo_repo \
   --manifest codebase_manifest.txt \
   --semantic-cards semantic_cards.jsonl \
@@ -494,7 +494,7 @@ Responsible for validation.
 
 Command:
 
-python validator_agent.py \
+python3 validator_agent.py \
   --repo ./demo_repo \
   --test-command "pytest -q" \
   --out validation_report.md
@@ -502,7 +502,7 @@ python validator_agent.py \
 Responsibilities:
 
 run tests,
-fall back to python -m compileall,
+fall back to python3 -m compileall,
 capture stdout/stderr,
 summarize pass/fail,
 optionally suggest repair.
@@ -512,8 +512,8 @@ Responsible for Managed Agent orchestration.
 
 Commands:
 
-python main.py --smoke-test
-python main.py \
+python3 main.py --smoke-test
+python3 main.py \
   --repo-url https://github.com/example/example_repo \
   --target-ratio 0.15 \
   --task "Add request validation to the checkout endpoint before payment processing"
@@ -532,7 +532,7 @@ Responsible for static dashboard generation.
 
 Command:
 
-python viewer.py \
+python3 viewer.py \
   --manifest codebase_manifest.txt \
   --debug-json codebase_manifest.debug.json \
   --semantic-cards semantic_cards.jsonl \
@@ -599,7 +599,7 @@ Validator runs tests or syntax checks.
 Dashboard shows compressed context → selected files → patch → validation.
 14. Live Demo Flow
 Step 1 — Managed Agent smoke test
-python main.py --smoke-test
+python3 main.py --smoke-test
 
 Show:
 
@@ -608,7 +608,7 @@ OS info,
 Python version,
 fallback local mode if credentials unavailable.
 Step 2 — Compile repository context
-python quantizer.py \
+python3 quantizer.py \
   --repo ./demo_repo \
   --out codebase_manifest.txt \
   --target-ratio 0.15 \
@@ -626,7 +626,7 @@ edges,
 resolved edge rate,
 retained body nodes.
 Step 3 — Generate semantic cards
-python semantic_cards.py \
+python3 semantic_cards.py \
   --manifest codebase_manifest.txt \
   --debug-json codebase_manifest.debug.json \
   --out semantic_cards.jsonl \
@@ -638,7 +638,7 @@ Gemini mode or fallback mode,
 cards generated,
 high-relevance checkout card.
 Step 4 — Route task and generate edit plan
-python agent_harness.py \
+python3 agent_harness.py \
   --manifest codebase_manifest.txt \
   --semantic-cards semantic_cards.jsonl \
   --task "Add request validation to the checkout endpoint before payment processing" \
@@ -650,7 +650,7 @@ selected files,
 dependency path,
 reason for each selected node.
 Step 5 — Generate patch and validate
-python patch_agent.py \
+python3 patch_agent.py \
   --repo ./demo_repo \
   --manifest codebase_manifest.txt \
   --semantic-cards semantic_cards.jsonl \
@@ -659,15 +659,15 @@ python patch_agent.py \
 
 Optional:
 
-python patch_agent.py ... --apply
-python validator_agent.py --repo ./demo_repo --test-command "pytest -q" --out validation_report.md
+python3 patch_agent.py ... --apply
+python3 validator_agent.py --repo ./demo_repo --test-command "pytest -q" --out validation_report.md
 
 Show:
 
 proposed diff,
 validation status.
 Step 6 — Open dashboard
-python viewer.py \
+python3 viewer.py \
   --manifest codebase_manifest.txt \
   --debug-json codebase_manifest.debug.json \
   --semantic-cards semantic_cards.jsonl \

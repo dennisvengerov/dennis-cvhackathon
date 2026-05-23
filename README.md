@@ -106,13 +106,13 @@ Show the judges how Context Compiler performs end-to-end orchestration in **unde
 ### 1. Verification Smoke Test
 Quickly verify system dependencies, python environment, API configuration, and orchestration capability:
 ```bash
-python main.py --smoke-test
+python3 main.py --smoke-test
 ```
 
 ### 2. The Main Event: Judge-Facing Live Patching Demo (Copied Repo Safe-Path)
 Run the master live patching demo on a copied version of our target repo. This preserves our original repo files while showing judges a fully modified and validated temporary target:
 ```bash
-python main.py \
+python3 main.py \
   --repo ./demo_repo \
   --target-ratio 0.15 \
   --task "Add request validation to the checkout endpoint before payment processing" \
@@ -129,7 +129,7 @@ python main.py \
 ### 3. Generate & View the Stunning HTML Dashboard
 If you want to manually rebuild the dashboard from existing execution run reports:
 ```bash
-python viewer.py \
+python3 viewer.py \
   --manifest codebase_manifest.txt \
   --debug-json codebase_manifest.debug.json \
   --semantic-cards semantic_cards.jsonl \
@@ -163,11 +163,11 @@ Follow this exact presentation flow to win the **Managed Agents / Google I/O Pri
 1. **Step 1: The Problem (30s)**
    * Show them the `demo_repo/app/api/checkout.py`. Explain how other coding agents dump the entire codebase into their prompt. This is extremely slow, risks missing detail, and wastes thousands of tokens.
 2. **Step 2: Smoke Test & System Overview (30s)**
-   * Run `python main.py --smoke-test`. Point out how our system reports whether it is using Gemini AI or Local Deterministic Fallbacks. Explain that the core front-end quantizer is built entirely on local AST parsers.
+   * Run `python3 main.py --smoke-test`. Point out how our system reports whether it is using Gemini AI or Local Deterministic Fallbacks. Explain that the core front-end quantizer is built entirely on local AST parsers.
 3. **Step 3: Run the Master Live Demo (60s)**
    * Execute:
      ```bash
-     python main.py --repo ./demo_repo --task "Add request validation to the checkout endpoint before payment processing" --judge-demo
+     python3 main.py --repo ./demo_repo --task "Add request validation to the checkout endpoint before payment processing" --judge-demo
      ```
    * Walk them through the terminal output: See how our quantizer analyzed the 13 files, found 28 syntactic nodes, generated 12 Semantic Cards, selected 7 high-relevance source files, produced a unified diff, and executed tests!
 4. **Step 4: Present the Stunning Dashboard (60s)**

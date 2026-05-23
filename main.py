@@ -268,9 +268,9 @@ def main():
         
         # Use python-based diff or subprocess diff
         try:
-            # -ruN diff
+            # -ruN diff with pycache and pyc exclusions
             with open(diff_file, "w") as df:
-                subprocess.run(["diff", "-ruN", orig_repo, temp_repo], stdout=df)
+                subprocess.run(["diff", "-ruN", "--exclude=__pycache__", "--exclude=*.pyc", orig_repo, temp_repo], stdout=df)
             print(f"Saved live patch diff to: {os.path.abspath(diff_file)}")
         except Exception as e:
             print(f"Warning: Failed to run command-line diff: {e}")

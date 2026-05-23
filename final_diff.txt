@@ -1,73 +1,64 @@
-Binary files ./demo_repo/app/api/__pycache__/checkout.cpython-313.pyc and /tmp/context_compiler_live_demo_repo/app/api/__pycache__/checkout.cpython-313.pyc differ
-diff -ruN ./demo_repo/app/api/checkout.py /tmp/context_compiler_live_demo_repo/app/api/checkout.py
+diff -ruN --exclude=__pycache__ --exclude=*.pyc ./demo_repo/app/api/checkout.py /tmp/context_compiler_live_demo_repo/app/api/checkout.py
 --- ./demo_repo/app/api/checkout.py	2026-05-23 12:42:11
-+++ /tmp/context_compiler_live_demo_repo/app/api/checkout.py	2026-05-23 15:50:19
-@@ -3,10 +3,17 @@
++++ /tmp/context_compiler_live_demo_repo/app/api/checkout.py	2026-05-23 16:23:35
+@@ -1,12 +1,19 @@
+ from app.models.checkout import CheckoutRequest
+ from app.services.inventory import InventoryService
  from app.services.fraud import FraudService
- from app.services.payments import PaymentService
+-from app.services.payments import PaymentService
++from app.services.payments import PaymentService 
  from app.utils.logging import log_info, log_error
 +from app.utils.validation import validate_checkout_request
  
  def checkout_endpoint(request: CheckoutRequest) -> dict:
      """Submit a checkout request, verify stock, assess fraud risk, and capture payment."""
--    log_info(f"Received checkout request for user {request.user_id}")
-+    user_id_for_log = request.user_id if request.user_id else 'UNKNOWN_USER'
-+    log_info(f"Received checkout request for user {user_id_for_log}")
+     log_info(f"Received checkout request for user {request.user_id}")
 +
-+    # 0. Validate incoming request structure and basic data
++    # 0. Validate Request before processing
 +    if not validate_checkout_request(request):
-+        log_error(f"Invalid checkout request received for user {user_id_for_log}")
++        # Safely log user_id, handling cases where it might be empty
++        log_error(f"Invalid checkout request received for user {request.user_id if request.user_id else 'N/A'} - Validation failed.")
 +        return {"success": False, "error": "InvalidRequest"}
  
      # 1. Verify stock for each item
      inventory_service = InventoryService()
-Binary files ./demo_repo/tests/__pycache__/test_checkout.cpython-313.pyc and /tmp/context_compiler_live_demo_repo/tests/__pycache__/test_checkout.cpython-313.pyc differ
-diff -ruN ./demo_repo/tests/test_checkout.py /tmp/context_compiler_live_demo_repo/tests/test_checkout.py
+diff -ruN --exclude=__pycache__ --exclude=*.pyc ./demo_repo/tests/test_checkout.py /tmp/context_compiler_live_demo_repo/tests/test_checkout.py
 --- ./demo_repo/tests/test_checkout.py	2026-05-23 12:42:21
-+++ /tmp/context_compiler_live_demo_repo/tests/test_checkout.py	2026-05-23 15:50:19
-@@ -22,3 +22,45 @@
++++ /tmp/context_compiler_live_demo_repo/tests/test_checkout.py	2026-05-23 16:23:35
+@@ -22,3 +22,36 @@
      response = checkout_endpoint(req)
      assert response["success"] is False
      assert response["error"] == "OutOfStock"
 +
-+def test_invalid_checkout_request():
-+    """Test that an invalid request (e.g., empty user_id, no items, non-positive amount) is rejected by validation."""
-+    # Test with empty user_id
-+    req_invalid_user = CheckoutRequest(
-+        user_id="",
++def test_invalid_checkout_request_empty_user_id():
++    """Test that a checkout request with an empty user_id is rejected."""
++    req = CheckoutRequest(
++        user_id="",  # Invalid user_id
 +        items=[{"item_id": "item_101", "quantity": 1}],
 +        amount=10.00
 +    )
-+    response = checkout_endpoint(req_invalid_user)
++    response = checkout_endpoint(req)
 +    assert response["success"] is False
 +    assert response["error"] == "InvalidRequest"
 +
-+    # Test with no items
-+    req_no_items = CheckoutRequest(
++def test_invalid_checkout_request_no_items():
++    """Test that a checkout request with no items is rejected."""
++    req = CheckoutRequest(
 +        user_id="charlie",
-+        items=[],
++        items=[],  # No items
 +        amount=10.00
 +    )
-+    response = checkout_endpoint(req_no_items)
++    response = checkout_endpoint(req)
 +    assert response["success"] is False
 +    assert response["error"] == "InvalidRequest"
 +
-+    # Test with zero amount
-+    req_zero_amount = CheckoutRequest(
++def test_invalid_checkout_request_zero_amount():
++    """Test that a checkout request with zero or negative amount is rejected."""
++    req = CheckoutRequest(
 +        user_id="diana",
 +        items=[{"item_id": "item_101", "quantity": 1}],
-+        amount=0.0
++        amount=0.0  # Invalid amount
 +    )
-+    response = checkout_endpoint(req_zero_amount)
-+    assert response["success"] is False
-+    assert response["error"] == "InvalidRequest"
-+
-+    # Test with negative amount
-+    req_negative_amount = CheckoutRequest(
-+        user_id="eve",
-+        items=[{"item_id": "item_101", "quantity": 1}],
-+        amount=-5.00
-+    )
-+    response = checkout_endpoint(req_negative_amount)
++    response = checkout_endpoint(req)
 +    assert response["success"] is False
 +    assert response["error"] == "InvalidRequest"

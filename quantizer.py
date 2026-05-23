@@ -1432,7 +1432,8 @@ def get_exact_debug_json_string_and_tokens(
     warnings: List[str],
     parse_error_count: int,
     skipped_file_count: int,
-    use_compact_tokens: Optional[int] = None
+    use_compact_tokens: Optional[int] = None,
+    budget_status: str = "UNKNOWN"
 ) -> Tuple[str, int, float]:
     """Generate the exact verbose debug JSON manifest and compute its token count if requested."""
     resolved_count = sum(1 for e in edges if e["resolved"])
@@ -1452,6 +1453,7 @@ def get_exact_debug_json_string_and_tokens(
             "compressed_tokens": comp_tokens,
             "compression_ratio": round(comp_ratio, 4),
             "token_savings": round(1.0 - comp_ratio, 4),
+            "budget_status": budget_status,
             "node_count": len(raw_nodes),
             "edge_count": len(edges),
             "resolved_edge_count": resolved_count,
@@ -1522,6 +1524,7 @@ def get_exact_debug_json_string_and_tokens(
                 "compressed_tokens": placeholder_tokens,
                 "compression_ratio": round(placeholder_tokens / max(1, original_token_count), 4),
                 "token_savings": round(1.0 - (placeholder_tokens / max(1, original_token_count)), 4),
+                "budget_status": budget_status,
                 "node_count": len(raw_nodes),
                 "edge_count": len(edges),
                 "resolved_edge_count": resolved_count,
@@ -2301,7 +2304,8 @@ def compile_codebase(args: argparse.Namespace) -> None:
             warnings=warnings,
             parse_error_count=parse_error_count,
             skipped_file_count=skipped_file_count,
-            use_compact_tokens=None
+            use_compact_tokens=None,
+            budget_status=budget_status
         )
         final_compressed_tokens = debug_tokens_count
         final_compression_ratio = debug_ratio
@@ -2318,7 +2322,8 @@ def compile_codebase(args: argparse.Namespace) -> None:
             warnings=warnings,
             parse_error_count=parse_error_count,
             skipped_file_count=skipped_file_count,
-            use_compact_tokens=compact_tokens_count
+            use_compact_tokens=compact_tokens_count,
+            budget_status=budget_status
         )
 
     # Write Output Files
