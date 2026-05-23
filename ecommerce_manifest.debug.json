@@ -1,0 +1,3101 @@
+{
+  "metadata": {
+    "repo_path": "ecommerce-fastapi-stripe",
+    "target_ratio": 0.25,
+    "original_tokens": 3960,
+    "compressed_tokens": 948,
+    "compression_ratio": 0.2394,
+    "token_savings": 0.7606,
+    "node_count": 46,
+    "edge_count": 188,
+    "resolved_edge_count": 20,
+    "unresolved_edge_count": 168,
+    "graph_density": 0.09082,
+    "full_body_nodes": 0,
+    "signature_only_nodes": 46,
+    "parse_error_count": 0,
+    "skipped_file_count": 0
+  },
+  "nodes": [
+    {
+      "id": "src/__init__.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/__init__.py",
+      "start_line": 1,
+      "end_line": 5,
+      "signature": "src/__init__.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 28,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 0,
+      "score": 0.297,
+      "value_density": 0.012375,
+      "is_public": false,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "private"
+      ]
+    },
+    {
+      "id": "src/app.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/app.py",
+      "start_line": 1,
+      "end_line": 24,
+      "signature": "src/app.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 153,
+      "signature_token_count": 5,
+      "in_degree": 2,
+      "out_degree": 11,
+      "score": 5.0626,
+      "value_density": 0.033977,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "FastAPI",
+        "app.mount",
+        "StaticFiles",
+        "app.include_router"
+      ],
+      "imports": [
+        {
+          "module": "itertools",
+          "name": "product",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "FastAPI",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi.staticfiles",
+          "name": "StaticFiles",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src.config",
+          "name": "settings",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src.routers.ui_routes",
+          "name": "router",
+          "alias": "ui_router",
+          "type": "from_import"
+        },
+        {
+          "module": "src.routers.products",
+          "name": "router",
+          "alias": "product_router",
+          "type": "from_import"
+        },
+        {
+          "module": "src.routers.auth",
+          "name": "router",
+          "alias": "auth_router",
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "src/config.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/config.py",
+      "start_line": 1,
+      "end_line": 32,
+      "signature": "src/config.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 145,
+      "signature_token_count": 5,
+      "in_degree": 3,
+      "out_degree": 2,
+      "score": 3.5115,
+      "value_density": 0.024904,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "Settings"
+      ],
+      "imports": [
+        {
+          "module": "pydantic",
+          "name": "BaseSettings",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "src/helpers/utils.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/helpers/utils.py",
+      "start_line": 1,
+      "end_line": 32,
+      "signature": "src/helpers/utils.py",
+      "docstring": "",
+      "token_count": 155,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 5,
+      "score": 2.0793,
+      "value_density": 0.013955,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "json",
+          "name": "json",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "os",
+          "name": "path",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "os",
+          "name": "listdir",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "venv",
+          "name": "create",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src",
+          "name": "schemas",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public",
+        "utility"
+      ]
+    },
+    {
+      "id": "src/routers/auth.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/routers/auth.py",
+      "start_line": 1,
+      "end_line": 79,
+      "signature": "src/routers/auth.py",
+      "docstring": "",
+      "token_count": 530,
+      "signature_token_count": 7,
+      "in_degree": 1,
+      "out_degree": 9,
+      "score": 2.9483,
+      "value_density": 0.005627,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [
+        "APIRouter"
+      ],
+      "imports": [
+        {
+          "module": "stripe",
+          "name": "stripe",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "fastapi",
+          "name": "APIRouter",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "HTTPException",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "status",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "Request",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi.responses",
+          "name": "RedirectResponse",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src",
+          "name": "app",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src.config",
+          "name": "settings",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "src/routers/auth.py::authorize_stripe",
+      "type": "function",
+      "name": "authorize_stripe",
+      "qualified_name": "authorize_stripe",
+      "file": "src/routers/auth.py",
+      "start_line": 32,
+      "end_line": 52,
+      "signature": "def authorize_stripe(request: Request):",
+      "docstring": "",
+      "token_count": 140,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 8,
+      "score": 4.3445,
+      "value_density": 0.032665,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "request.query_params.get",
+        "stripe.OAuth.token",
+        "RedirectResponse",
+        "app.ui_router.url_path_for",
+        "redirect.set_cookie",
+        "print",
+        "HTTPException",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/auth.py::deauthorize_stripe",
+      "type": "function",
+      "name": "deauthorize_stripe",
+      "qualified_name": "deauthorize_stripe",
+      "file": "src/routers/auth.py",
+      "start_line": 55,
+      "end_line": 79,
+      "signature": "def deauthorize_stripe(request: Request):",
+      "docstring": "",
+      "token_count": 180,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 8,
+      "score": 4.1358,
+      "value_density": 0.023906,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "request.cookies.get",
+        "HTTPException",
+        "stripe.OAuth.deauthorize",
+        "RedirectResponse",
+        "app.ui_router.url_path_for",
+        "redirect.set_cookie",
+        "print",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/auth.py::stripe_login",
+      "type": "function",
+      "name": "stripe_login",
+      "qualified_name": "stripe_login",
+      "file": "src/routers/auth.py",
+      "start_line": 22,
+      "end_line": 29,
+      "signature": "def stripe_login(request: Request):",
+      "docstring": "",
+      "token_count": 93,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 3,
+      "score": 2.9714,
+      "value_density": 0.034551,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "HTTPException",
+        "RedirectResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/products.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/routers/products.py",
+      "start_line": 1,
+      "end_line": 41,
+      "signature": "src/routers/products.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 216,
+      "signature_token_count": 7,
+      "in_degree": 1,
+      "out_degree": 7,
+      "score": 3.2529,
+      "value_density": 0.01549,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "APIRouter"
+      ],
+      "imports": [
+        {
+          "module": "fastapi",
+          "name": "APIRouter",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "HTTPException",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "status",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "typing",
+          "name": "List",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src",
+          "name": "schemas",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src.helpers.utils",
+          "name": "get_local_products",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "src/routers/products.py::get_product_by_slug",
+      "type": "async_function",
+      "name": "get_product_by_slug",
+      "qualified_name": "get_product_by_slug",
+      "file": "src/routers/products.py",
+      "start_line": 29,
+      "end_line": 40,
+      "signature": "async def get_product_by_slug(slug: str):",
+      "docstring": "",
+      "token_count": 72,
+      "signature_token_count": 9,
+      "in_degree": 0,
+      "out_degree": 3,
+      "score": 3.3796,
+      "value_density": 0.052806,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "get_local_products",
+        "HTTPException",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/products.py::get_products",
+      "type": "async_function",
+      "name": "get_products",
+      "qualified_name": "get_products",
+      "file": "src/routers/products.py",
+      "start_line": 18,
+      "end_line": 25,
+      "signature": "async def get_products():",
+      "docstring": "",
+      "token_count": 35,
+      "signature_token_count": 6,
+      "in_degree": 0,
+      "out_degree": 3,
+      "score": 3.7672,
+      "value_density": 0.125573,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [
+        "get_local_products",
+        "HTTPException",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 1,
+      "end_line": 372,
+      "signature": "src/routers/ui_routes.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 2662,
+      "signature_token_count": 7,
+      "in_degree": 1,
+      "out_degree": 19,
+      "score": 3.867,
+      "value_density": 0.001456,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "APIRouter",
+        "resolve",
+        "Path",
+        "Jinja2Templates",
+        "str"
+      ],
+      "imports": [
+        {
+          "module": "fastapi",
+          "name": "APIRouter",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "Request",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "status",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi",
+          "name": "HTTPException",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi.responses",
+          "name": "HTMLResponse",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi.responses",
+          "name": "RedirectResponse",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "fastapi.templating",
+          "name": "Jinja2Templates",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "pathlib",
+          "name": "Path",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src.config",
+          "name": "settings",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "http3",
+          "name": "http3",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "stripe",
+          "name": "stripe",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "json",
+          "name": "json",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "src",
+          "name": "app",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "src",
+          "name": "schemas",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::attention_catchers_alerts",
+      "type": "function",
+      "name": "attention_catchers_alerts",
+      "qualified_name": "attention_catchers_alerts",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 297,
+      "end_line": 301,
+      "signature": "def attention_catchers_alerts(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::attention_catchers_modals",
+      "type": "function",
+      "name": "attention_catchers_modals",
+      "qualified_name": "attention_catchers_modals",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 304,
+      "end_line": 308,
+      "signature": "def attention_catchers_modals(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
+      "type": "function",
+      "name": "attention_catchers_tooltips_popovers",
+      "qualified_name": "attention_catchers_tooltips_popovers",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 311,
+      "end_line": 315,
+      "signature": "def attention_catchers_tooltips_popovers(request: Request):",
+      "docstring": "",
+      "token_count": 41,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3443,
+      "value_density": 0.098362,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::cancelled",
+      "type": "function",
+      "name": "cancelled",
+      "qualified_name": "cancelled",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 137,
+      "end_line": 141,
+      "signature": "def cancelled(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::create_checkout_session",
+      "type": "async_function",
+      "name": "create_checkout_session",
+      "qualified_name": "create_checkout_session",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 145,
+      "end_line": 186,
+      "signature": "async def create_checkout_session(path, request: Request):",
+      "docstring": "",
+      "token_count": 327,
+      "signature_token_count": 11,
+      "in_degree": 0,
+      "out_degree": 9,
+      "score": 3.884,
+      "value_density": 0.012252,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "app.product_router.url_path_for",
+        "base_url.__str__",
+        "product_url.__str__",
+        "http3.AsyncClient",
+        "http3client.get",
+        "response.json",
+        "stripe.checkout.Session.create",
+        "HTTPException",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_avatars",
+      "type": "function",
+      "name": "elements_avatars",
+      "qualified_name": "elements_avatars",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 325,
+      "end_line": 329,
+      "signature": "def elements_avatars(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_badges",
+      "type": "function",
+      "name": "elements_badges",
+      "qualified_name": "elements_badges",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 353,
+      "end_line": 357,
+      "signature": "def elements_badges(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_breadcrumbs",
+      "type": "function",
+      "name": "elements_breadcrumbs",
+      "qualified_name": "elements_breadcrumbs",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 346,
+      "end_line": 350,
+      "signature": "def elements_breadcrumbs(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_buttons",
+      "type": "function",
+      "name": "elements_buttons",
+      "qualified_name": "elements_buttons",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 318,
+      "end_line": 322,
+      "signature": "def elements_buttons(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_dropdowns",
+      "type": "function",
+      "name": "elements_dropdowns",
+      "qualified_name": "elements_dropdowns",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 332,
+      "end_line": 336,
+      "signature": "def elements_dropdowns(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_progress_bars",
+      "type": "function",
+      "name": "elements_progress_bars",
+      "qualified_name": "elements_progress_bars",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 367,
+      "end_line": 371,
+      "signature": "def elements_progress_bars(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_toggles",
+      "type": "function",
+      "name": "elements_toggles",
+      "qualified_name": "elements_toggles",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 339,
+      "end_line": 343,
+      "signature": "def elements_toggles(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::elements_typography",
+      "type": "function",
+      "name": "elements_typography",
+      "qualified_name": "elements_typography",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 360,
+      "end_line": 364,
+      "signature": "def elements_typography(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::get_publishable_key",
+      "type": "function",
+      "name": "get_publishable_key",
+      "qualified_name": "get_publishable_key",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 125,
+      "end_line": 127,
+      "signature": "def get_publishable_key():",
+      "docstring": "",
+      "token_count": 21,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 3.3969,
+      "value_density": 0.199818,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::index",
+      "type": "async_function",
+      "name": "index",
+      "qualified_name": "index",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 35,
+      "end_line": 36,
+      "signature": "async def index(request: Request, response_model=HTMLResponse):",
+      "docstring": "",
+      "token_count": 34,
+      "signature_token_count": 13,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.5158,
+      "value_density": 0.159809,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::input_areas_forms",
+      "type": "function",
+      "name": "input_areas_forms",
+      "qualified_name": "input_areas_forms",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 290,
+      "end_line": 294,
+      "signature": "def input_areas_forms(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::input_areas_inputs",
+      "type": "function",
+      "name": "input_areas_inputs",
+      "qualified_name": "input_areas_inputs",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 283,
+      "end_line": 287,
+      "signature": "def input_areas_inputs(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::navigation_nav_tabs",
+      "type": "function",
+      "name": "navigation_nav_tabs",
+      "qualified_name": "navigation_nav_tabs",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 269,
+      "end_line": 273,
+      "signature": "def navigation_nav_tabs(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::navigation_navbars",
+      "type": "function",
+      "name": "navigation_navbars",
+      "qualified_name": "navigation_navbars",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 262,
+      "end_line": 266,
+      "signature": "def navigation_navbars(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::navigation_pagination",
+      "type": "function",
+      "name": "navigation_pagination",
+      "qualified_name": "navigation_pagination",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 276,
+      "end_line": 280,
+      "signature": "def navigation_pagination(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_404",
+      "type": "function",
+      "name": "page_404",
+      "qualified_name": "page_404",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 241,
+      "end_line": 245,
+      "signature": "def page_404(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_about_us",
+      "type": "function",
+      "name": "page_about_us",
+      "qualified_name": "page_about_us",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 205,
+      "end_line": 209,
+      "signature": "def page_about_us(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_author",
+      "type": "function",
+      "name": "page_author",
+      "qualified_name": "page_author",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 220,
+      "end_line": 224,
+      "signature": "def page_author(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 4.2611,
+      "value_density": 0.142037,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_contact_us",
+      "type": "function",
+      "name": "page_contact_us",
+      "qualified_name": "page_contact_us",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 213,
+      "end_line": 217,
+      "signature": "def page_contact_us(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_sections_features",
+      "type": "function",
+      "name": "page_sections_features",
+      "qualified_name": "page_sections_features",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 255,
+      "end_line": 259,
+      "signature": "def page_sections_features(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_sections_hero_sections",
+      "type": "function",
+      "name": "page_sections_hero_sections",
+      "qualified_name": "page_sections_hero_sections",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 248,
+      "end_line": 252,
+      "signature": "def page_sections_hero_sections(request: Request):",
+      "docstring": "",
+      "token_count": 41,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3443,
+      "value_density": 0.098362,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_sign_in",
+      "type": "function",
+      "name": "page_sign_in",
+      "qualified_name": "page_sign_in",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 227,
+      "end_line": 231,
+      "signature": "def page_sign_in(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::page_sign_up",
+      "type": "function",
+      "name": "page_sign_up",
+      "qualified_name": "page_sign_up",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 234,
+      "end_line": 238,
+      "signature": "def page_sign_up(request: Request):",
+      "docstring": "",
+      "token_count": 39,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.3886,
+      "value_density": 0.105894,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::presentation",
+      "type": "function",
+      "name": "presentation",
+      "qualified_name": "presentation",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 197,
+      "end_line": 201,
+      "signature": "def presentation(request: Request):",
+      "docstring": "",
+      "token_count": 35,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4882,
+      "value_density": 0.124579,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::product_info",
+      "type": "async_function",
+      "name": "product_info",
+      "qualified_name": "product_info",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 104,
+      "end_line": 122,
+      "signature": "async def product_info(product_slug: str, request: Request, response_model=HTMLResponse):",
+      "docstring": "",
+      "token_count": 138,
+      "signature_token_count": 17,
+      "in_degree": 0,
+      "out_degree": 10,
+      "score": 4.1544,
+      "value_density": 0.034052,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "app.product_router.url_path_for",
+        "base_url.__str__",
+        "product_url.__str__",
+        "http3.AsyncClient",
+        "http3client.get",
+        "RedirectResponse",
+        "router.url_path_for",
+        "response.json",
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::products_index",
+      "type": "async_function",
+      "name": "products_index",
+      "qualified_name": "products_index",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 39,
+      "end_line": 101,
+      "signature": "async def products_index(request: Request, response_model=HTMLResponse):",
+      "docstring": "",
+      "token_count": 492,
+      "signature_token_count": 13,
+      "in_degree": 0,
+      "out_degree": 16,
+      "score": 4.2738,
+      "value_density": 0.008904,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "app.product_router.url_path_for",
+        "base_url.__str__",
+        "product_url.__str__",
+        "http3.AsyncClient",
+        "http3client.get",
+        "response.json",
+        "products_url.__str__",
+        "enumerate",
+        "request.cookies.get",
+        "stripe.Product.list",
+        "print",
+        "productdict.append",
+        "json.dumps",
+        "json_data.append",
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "async",
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::success",
+      "type": "function",
+      "name": "success",
+      "qualified_name": "success",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 130,
+      "end_line": 134,
+      "signature": "def success(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 0,
+      "score": 2.8865,
+      "value_density": 0.096217,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/routers/ui_routes.py::success",
+      "type": "function",
+      "name": "success",
+      "qualified_name": "success",
+      "file": "src/routers/ui_routes.py",
+      "start_line": 190,
+      "end_line": 194,
+      "signature": "def success(request: Request):",
+      "docstring": "",
+      "token_count": 37,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 3.4363,
+      "value_density": 0.114543,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": true,
+      "calls": [
+        "TEMPLATES.TemplateResponse",
+        "router.get"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "endpoint",
+        "public",
+        "route"
+      ]
+    },
+    {
+      "id": "src/schemas.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "src/schemas.py",
+      "start_line": 1,
+      "end_line": 20,
+      "signature": "src/schemas.py",
+      "docstring": "Copyright (c) 2019 - present AppSeed.us",
+      "token_count": 71,
+      "signature_token_count": 5,
+      "in_degree": 3,
+      "out_degree": 1,
+      "score": 4.092,
+      "value_density": 0.061075,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "pydantic",
+          "name": "BaseModel",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public",
+        "schema"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "src/app.py::<module>",
+      "target": "FastAPI",
+      "type": "call",
+      "raw_symbol": "FastAPI",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "StaticFiles",
+      "type": "call",
+      "raw_symbol": "StaticFiles",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "app.include_router",
+      "type": "call",
+      "raw_symbol": "app.include_router",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "app.mount",
+      "type": "call",
+      "raw_symbol": "app.mount",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "fastapi.FastAPI",
+      "type": "import",
+      "raw_symbol": "fastapi.FastAPI",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "fastapi.staticfiles.StaticFiles",
+      "type": "import",
+      "raw_symbol": "fastapi.staticfiles.StaticFiles",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "itertools.product",
+      "type": "import",
+      "raw_symbol": "itertools.product",
+      "resolved": false
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "src/config.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.config",
+      "resolved": true
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "src/routers/auth.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.routers.auth",
+      "resolved": true
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "src/routers/products.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.routers.products",
+      "resolved": true
+    },
+    {
+      "source": "src/app.py::<module>",
+      "target": "src/routers/ui_routes.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.routers.ui_routes",
+      "resolved": true
+    },
+    {
+      "source": "src/config.py::<module>",
+      "target": "pydantic.BaseSettings",
+      "type": "import",
+      "raw_symbol": "pydantic.BaseSettings",
+      "resolved": false
+    },
+    {
+      "source": "src/config.py::<module>",
+      "target": "src/config.py::Settings",
+      "type": "call",
+      "raw_symbol": "Settings",
+      "resolved": true
+    },
+    {
+      "source": "src/config.py::Settings",
+      "target": "BaseSettings",
+      "type": "inheritance",
+      "raw_symbol": "BaseSettings",
+      "resolved": false
+    },
+    {
+      "source": "src/config.py::Settings.__init__",
+      "target": "src/config.py::Settings.__init__",
+      "type": "call",
+      "raw_symbol": "__init__",
+      "resolved": true
+    },
+    {
+      "source": "src/config.py::Settings.__init__",
+      "target": "src/config.py::Settings.check_stripe",
+      "type": "call",
+      "raw_symbol": "self.check_stripe",
+      "resolved": true
+    },
+    {
+      "source": "src/config.py::Settings.__init__",
+      "target": "super",
+      "type": "call",
+      "raw_symbol": "super",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::<module>",
+      "target": "json.json",
+      "type": "import",
+      "raw_symbol": "json.json",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::<module>",
+      "target": "os.listdir",
+      "type": "import",
+      "raw_symbol": "os.listdir",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::<module>",
+      "target": "os.path",
+      "type": "import",
+      "raw_symbol": "os.path",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::<module>",
+      "target": "src/schemas.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.schemas",
+      "resolved": true
+    },
+    {
+      "source": "src/helpers/utils.py::<module>",
+      "target": "venv.create",
+      "type": "import",
+      "raw_symbol": "venv.create",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::create_slug",
+      "target": "json_file_name.split",
+      "type": "call",
+      "raw_symbol": "json_file_name.split",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "json.load",
+      "type": "call",
+      "raw_symbol": "json.load",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "listdir",
+      "type": "call",
+      "raw_symbol": "listdir",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "open",
+      "type": "call",
+      "raw_symbol": "open",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "path.expanduser",
+      "type": "call",
+      "raw_symbol": "path.expanduser",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "path.join",
+      "type": "call",
+      "raw_symbol": "path.join",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "product_dicts.append",
+      "type": "call",
+      "raw_symbol": "product_dicts.append",
+      "resolved": false
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "src/helpers/utils.py::create_slug",
+      "type": "call",
+      "raw_symbol": "create_slug",
+      "resolved": true
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "src/schemas.py::ProductBase",
+      "type": "call",
+      "raw_symbol": "schemas.ProductBase",
+      "resolved": true
+    },
+    {
+      "source": "src/helpers/utils.py::get_local_products",
+      "target": "str",
+      "type": "call",
+      "raw_symbol": "str",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "APIRouter",
+      "type": "call",
+      "raw_symbol": "APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "fastapi.APIRouter",
+      "type": "import",
+      "raw_symbol": "fastapi.APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "fastapi.HTTPException",
+      "type": "import",
+      "raw_symbol": "fastapi.HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "fastapi.Request",
+      "type": "import",
+      "raw_symbol": "fastapi.Request",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "fastapi.responses.RedirectResponse",
+      "type": "import",
+      "raw_symbol": "fastapi.responses.RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "fastapi.status",
+      "type": "import",
+      "raw_symbol": "fastapi.status",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "src/app.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.app",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "src/config.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.config",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/auth.py::<module>",
+      "target": "stripe.stripe",
+      "type": "import",
+      "raw_symbol": "stripe.stripe",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "RedirectResponse",
+      "type": "call",
+      "raw_symbol": "RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "app.ui_router.url_path_for",
+      "type": "call",
+      "raw_symbol": "app.ui_router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "redirect.set_cookie",
+      "type": "call",
+      "raw_symbol": "redirect.set_cookie",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "request.query_params.get",
+      "type": "call",
+      "raw_symbol": "request.query_params.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::authorize_stripe",
+      "target": "stripe.OAuth.token",
+      "type": "call",
+      "raw_symbol": "stripe.OAuth.token",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "RedirectResponse",
+      "type": "call",
+      "raw_symbol": "RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "app.ui_router.url_path_for",
+      "type": "call",
+      "raw_symbol": "app.ui_router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "redirect.set_cookie",
+      "type": "call",
+      "raw_symbol": "redirect.set_cookie",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "request.cookies.get",
+      "type": "call",
+      "raw_symbol": "request.cookies.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::deauthorize_stripe",
+      "target": "stripe.OAuth.deauthorize",
+      "type": "call",
+      "raw_symbol": "stripe.OAuth.deauthorize",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::stripe_login",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::stripe_login",
+      "target": "RedirectResponse",
+      "type": "call",
+      "raw_symbol": "RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/auth.py::stripe_login",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "APIRouter",
+      "type": "call",
+      "raw_symbol": "APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "fastapi.APIRouter",
+      "type": "import",
+      "raw_symbol": "fastapi.APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "fastapi.HTTPException",
+      "type": "import",
+      "raw_symbol": "fastapi.HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "fastapi.status",
+      "type": "import",
+      "raw_symbol": "fastapi.status",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "src/helpers/utils.py::get_local_products",
+      "type": "import",
+      "raw_symbol": "src.helpers.utils.get_local_products",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "src/schemas.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.schemas",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/products.py::<module>",
+      "target": "typing.List",
+      "type": "import",
+      "raw_symbol": "typing.List",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::get_product_by_slug",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::get_product_by_slug",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::get_product_by_slug",
+      "target": "src/helpers/utils.py::get_local_products",
+      "type": "call",
+      "raw_symbol": "get_local_products",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/products.py::get_products",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::get_products",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/products.py::get_products",
+      "target": "src/helpers/utils.py::get_local_products",
+      "type": "call",
+      "raw_symbol": "get_local_products",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "APIRouter",
+      "type": "call",
+      "raw_symbol": "APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "Jinja2Templates",
+      "type": "call",
+      "raw_symbol": "Jinja2Templates",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "Path",
+      "type": "call",
+      "raw_symbol": "Path",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.APIRouter",
+      "type": "import",
+      "raw_symbol": "fastapi.APIRouter",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.HTTPException",
+      "type": "import",
+      "raw_symbol": "fastapi.HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.Request",
+      "type": "import",
+      "raw_symbol": "fastapi.Request",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.responses.HTMLResponse",
+      "type": "import",
+      "raw_symbol": "fastapi.responses.HTMLResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.responses.RedirectResponse",
+      "type": "import",
+      "raw_symbol": "fastapi.responses.RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.status",
+      "type": "import",
+      "raw_symbol": "fastapi.status",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "fastapi.templating.Jinja2Templates",
+      "type": "import",
+      "raw_symbol": "fastapi.templating.Jinja2Templates",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "http3.http3",
+      "type": "import",
+      "raw_symbol": "http3.http3",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "json.json",
+      "type": "import",
+      "raw_symbol": "json.json",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "pathlib.Path",
+      "type": "import",
+      "raw_symbol": "pathlib.Path",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "resolve",
+      "type": "call",
+      "raw_symbol": "resolve",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "src/app.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.app",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "src/config.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.config",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "src/schemas.py::<module>",
+      "type": "import",
+      "raw_symbol": "src.schemas",
+      "resolved": true
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "str",
+      "type": "call",
+      "raw_symbol": "str",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::<module>",
+      "target": "stripe.stripe",
+      "type": "import",
+      "raw_symbol": "stripe.stripe",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_alerts",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_alerts",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_modals",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_modals",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::cancelled",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::cancelled",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "HTTPException",
+      "type": "call",
+      "raw_symbol": "HTTPException",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "app.product_router.url_path_for",
+      "type": "call",
+      "raw_symbol": "app.product_router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "base_url.__str__",
+      "type": "call",
+      "raw_symbol": "base_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "http3.AsyncClient",
+      "type": "call",
+      "raw_symbol": "http3.AsyncClient",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "http3client.get",
+      "type": "call",
+      "raw_symbol": "http3client.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "product_url.__str__",
+      "type": "call",
+      "raw_symbol": "product_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "response.json",
+      "type": "call",
+      "raw_symbol": "response.json",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::create_checkout_session",
+      "target": "stripe.checkout.Session.create",
+      "type": "call",
+      "raw_symbol": "stripe.checkout.Session.create",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_avatars",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_avatars",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_badges",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_badges",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_breadcrumbs",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_breadcrumbs",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_buttons",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_buttons",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_dropdowns",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_dropdowns",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_progress_bars",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_progress_bars",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_toggles",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_toggles",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_typography",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::elements_typography",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::get_publishable_key",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::index",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::index",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::input_areas_forms",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::input_areas_forms",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::input_areas_inputs",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::input_areas_inputs",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_nav_tabs",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_nav_tabs",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_navbars",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_navbars",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_pagination",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::navigation_pagination",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_404",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_404",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_about_us",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_about_us",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_author",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_author",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_contact_us",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_contact_us",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sections_features",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sections_features",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sections_hero_sections",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sections_hero_sections",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sign_in",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sign_in",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sign_up",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::page_sign_up",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::presentation",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::presentation",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "RedirectResponse",
+      "type": "call",
+      "raw_symbol": "RedirectResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "app.product_router.url_path_for",
+      "type": "call",
+      "raw_symbol": "app.product_router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "base_url.__str__",
+      "type": "call",
+      "raw_symbol": "base_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "http3.AsyncClient",
+      "type": "call",
+      "raw_symbol": "http3.AsyncClient",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "http3client.get",
+      "type": "call",
+      "raw_symbol": "http3client.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "product_url.__str__",
+      "type": "call",
+      "raw_symbol": "product_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "response.json",
+      "type": "call",
+      "raw_symbol": "response.json",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::product_info",
+      "target": "router.url_path_for",
+      "type": "call",
+      "raw_symbol": "router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "app.product_router.url_path_for",
+      "type": "call",
+      "raw_symbol": "app.product_router.url_path_for",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "base_url.__str__",
+      "type": "call",
+      "raw_symbol": "base_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "enumerate",
+      "type": "call",
+      "raw_symbol": "enumerate",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "http3.AsyncClient",
+      "type": "call",
+      "raw_symbol": "http3.AsyncClient",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "http3client.get",
+      "type": "call",
+      "raw_symbol": "http3client.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "json.dumps",
+      "type": "call",
+      "raw_symbol": "json.dumps",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "json_data.append",
+      "type": "call",
+      "raw_symbol": "json_data.append",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "print",
+      "type": "call",
+      "raw_symbol": "print",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "product_url.__str__",
+      "type": "call",
+      "raw_symbol": "product_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "productdict.append",
+      "type": "call",
+      "raw_symbol": "productdict.append",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "products_url.__str__",
+      "type": "call",
+      "raw_symbol": "products_url.__str__",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "request.cookies.get",
+      "type": "call",
+      "raw_symbol": "request.cookies.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "response.json",
+      "type": "call",
+      "raw_symbol": "response.json",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::products_index",
+      "target": "stripe.Product.list",
+      "type": "call",
+      "raw_symbol": "stripe.Product.list",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::success",
+      "target": "TEMPLATES.TemplateResponse",
+      "type": "call",
+      "raw_symbol": "TEMPLATES.TemplateResponse",
+      "resolved": false
+    },
+    {
+      "source": "src/routers/ui_routes.py::success",
+      "target": "router.get",
+      "type": "route",
+      "raw_symbol": "router.get",
+      "resolved": false
+    },
+    {
+      "source": "src/schemas.py::<module>",
+      "target": "pydantic.BaseModel",
+      "type": "import",
+      "raw_symbol": "pydantic.BaseModel",
+      "resolved": false
+    },
+    {
+      "source": "src/schemas.py::Product",
+      "target": "src/schemas.py::ProductBase",
+      "type": "inheritance",
+      "raw_symbol": "ProductBase",
+      "resolved": true
+    },
+    {
+      "source": "src/schemas.py::ProductBase",
+      "target": "BaseModel",
+      "type": "inheritance",
+      "raw_symbol": "BaseModel",
+      "resolved": false
+    }
+  ],
+  "warnings": [
+    "signature baseline exceeded budget; aggressive compaction enabled"
+  ]
+}
