@@ -1,0 +1,7 @@
+Semantic Agent Layer
+--------------------
+Mode: deterministic fallback
+Cards generated: 20
+Model: deterministic fallback
+Task: Add request validation to the checkout endpoint before payment processing
+

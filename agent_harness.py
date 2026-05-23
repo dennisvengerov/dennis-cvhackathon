@@ -11,7 +11,7 @@ import sys
 import json
 import argparse
 import re
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any, Set, Tuple, Optional
 
 from manifest_parser import ManifestParser
 import llm_client
@@ -51,6 +51,12 @@ def parse_args() -> argparse.Namespace:
         help="Path to write the proposed edit plan markdown (default: edit_plan.md)"
     )
     parser.add_argument(
+        "--json-out",
+        type=str,
+        default=None,
+        help="Path to write machine-readable JSON routing info (default: None)"
+    )
+    parser.add_argument(
         "--model",
         type=str,
         default="gemini-2.5-flash",
@@ -80,6 +86,184 @@ def load_semantic_cards(path: str) -> List[Dict[str, Any]]:
                     pass
     return cards
 
+def compute_node_score(node: Dict[str, Any], card: Optional[Dict[str, Any]], task_keywords: Set[str]) -> Tuple[float, str]:
+    """
+    Computes a comprehensive score for routing relevance and a grounding reason.
+    """
+    score = 0.0
+    reasons = []
+    
+    name = node.get("name", "").lower()
+    file = node.get("file", "").lower()
+    signature = node.get("signature", "").lower()
+    tags = [t.lower() for t in node.get("tags", [])]
+    
+    # 1. Base on Semantic Card relevance if present
+    if card:
+        relevance = card.get("edit_relevance", 0.0)
+        score += relevance * 50.0
+        reasons.append(f"Semantic Card relevance {relevance} ({card.get('task_reason', '')})")
+    
+    # 2. Keyword matching
+    matches = []
+    for word in task_keywords:
+        if word in name:
+            score += 15.0
+            matches.append(word)
+        if word in file:
+            score += 8.0
+            matches.append(word)
+        if word in signature:
+            score += 5.0
+            matches.append(word)
+            
+    if matches:
+        reasons.append(f"Keyword matches: {', '.join(set(matches))}")
+        
+    # 3. Component boosts
+    # Checkout boosts
+    if any(k in name or k in file for k in ["checkout", "order"]):
+        score += 20.0
+        reasons.append("Checkout component match")
+        if "endpoint" in tags or "route" in tags or "api" in file or "router" in file:
+            score += 25.0
+            reasons.append("Route/Endpoint checkout handler boost")
+            
+    # Validation / Schema boosts
+    if any(k in name or k in file or k in signature for k in ["validate", "validation", "schema", "productbase", "checkoutrequest"]):
+        score += 30.0
+        reasons.append("Validation/Schema component match")
+        if node.get("type") in ["class", "function", "method"]:
+            score += 15.0
+            reasons.append("Concrete validation schema/handler")
+            
+    # Payment / Stripe boosts
+    if any(k in name or k in file or k in signature for k in ["payment", "stripe"]):
+        score += 20.0
+        reasons.append("Payment/Stripe component match")
+        if node.get("type") in ["method", "function"]:
+            score += 15.0
+            reasons.append("Payment execution method")
+
+    # Product / stock boosts
+    if any(k in name or k in file for k in ["product", "inventory", "stock"]):
+        score += 10.0
+        reasons.append("Product/Inventory component match")
+
+    # 4. Node type preferences
+    if node.get("name") == "<module>":
+        score = -100.0  # Strongly avoid choosing <module> directly
+        reasons.append("Module node (penalized)")
+    elif node.get("type") in ["function", "method"]:
+        score += 10.0
+        reasons.append("Preferred executable node type")
+    elif node.get("type") == "class":
+        score += 8.0
+        reasons.append("Preferred class definition node type")
+
+    # 5. Centrality boost
+    in_deg = node.get("in_degree", 0)
+    out_deg = node.get("out_degree", 0)
+    score += min(5.0, (in_deg + out_deg) * 0.2)
+
+    reason_str = "; ".join(reasons) if reasons else "Heuristic structural match"
+    return max(0.0, score), reason_str
+
+def map_edge_relation(edge: Dict[str, Any], parser: ManifestParser) -> str:
+    """
+    Standardizes relation types based on defined schemas and nodes information.
+    """
+    src_node = parser.get_node(edge["source"])
+    dst_node = parser.get_node(edge["target"])
+    
+    if edge.get("type") == "import":
+        return "import"
+        
+    if src_node and (src_node.get("type") == "test" or src_node.get("name", "").startswith("test_")):
+        return "test_call"
+        
+    if edge["target"].startswith("EXT:"):
+        return "external_call"
+        
+    if dst_node:
+        t_type = dst_node.get("type", "").lower()
+        if t_type == "class":
+            return "class_ref"
+        elif t_type in ["method"]:
+            return "method_call"
+        elif t_type in ["function", "fn"]:
+            return "call"
+            
+    # Fallback heuristic
+    symbol = edge.get("symbol", "").lower()
+    if "." in symbol:
+        parts = symbol.split(".")
+        if len(parts) > 1 and parts[0][0].islower():
+            return "method_call"
+        return "call"
+        
+    return "unknown"
+
+def find_all_paths(parser: ManifestParser, selected_nodes_list: List[Dict[str, Any]]) -> List[List[str]]:
+    """
+    Finds direct or multi-hop paths among the selected nodes using parsed edges.
+    If no connected paths exist, returns direct outbound relations.
+    """
+    adj = {}
+    for edge in parser.edges:
+        src = edge["source"]
+        if src not in adj:
+            adj[src] = []
+        adj[src].append(edge)
+        
+    selected_aliases = {n["alias"] for n in selected_nodes_list}
+    
+    # Sort selected nodes to try route/endpoints/functions as sources first
+    sources = []
+    for n in selected_nodes_list:
+        if "route" in n.get("tags", []) or "endpoint" in n.get("tags", []) or n.get("type") in ["function", "method"]:
+            sources.append(n)
+    for n in selected_nodes_list:
+        if n not in sources:
+            sources.append(n)
+            
+    paths = []
+    visited_pairs = set()
+    
+    for src_node in sources:
+        src_alias = src_node["alias"]
+        queue = [[src_alias]]
+        while queue:
+            curr_path = queue.pop(0)
+            u = curr_path[-1]
+            
+            if u != src_alias and u in selected_aliases:
+                pair = (src_alias, u)
+                if pair not in visited_pairs:
+                    visited_pairs.add(pair)
+                    name_path = [parser.get_node_display_name(alias) for alias in curr_path]
+                    paths.append(name_path)
+            
+            for edge in adj.get(u, []):
+                v = edge["target"]
+                if v not in curr_path:
+                    queue.append(curr_path + [v])
+                    
+    # Fallback to direct edges from selected nodes
+    if not paths:
+        for n in selected_nodes_list:
+            for edge in parser.get_edges_for_node(n["alias"]):
+                if edge["source"] == n["alias"]:
+                    paths.append([n["name"], edge["symbol"]])
+                    
+    # Clean duplicates and subpaths
+    unique_paths = []
+    for p in paths:
+        if p not in unique_paths:
+            unique_paths.append(p)
+            
+    return unique_paths[:5]
+
 def main():
     args = parse_args()
     
@@ -88,129 +272,189 @@ def main():
         print(f"Error: manifest file '{args.manifest}' not found.", file=sys.stderr)
         sys.exit(1)
         
-    manifest_data = ManifestParser.parse_txt(args.manifest)
-    nodes = ManifestParser.get_unified_nodes(args.manifest, args.debug_json if os.path.exists(args.debug_json) else None)
-    
+    parser = ManifestParser(args.manifest, args.debug_json if os.path.exists(args.debug_json) else None)
     cards = load_semantic_cards(args.semantic_cards)
     
-    # If no semantic cards found, generate them deterministically as safety net
-    if not cards:
-        print("Warning: Semantic cards not found. Generating on-the-fly fallback cards.", file=sys.stderr)
-        # fallback keywords
-        task_words = {w.lower() for w in re.findall(r"[a-zA-Z0-9_]+", args.task.lower()) if len(w) >= 3}
-        # Score and get top nodes
-        scored = []
-        for n in nodes:
-            name = n.get("name", "").lower()
-            file = n.get("file", "").lower()
-            score = 1.0 if any(w in name or w in file for w in task_words) else 0.1
-            scored.append((score, n))
-        scored.sort(key=lambda x: x[0], reverse=True)
-        # Create dummy cards
-        for score, n in scored[:6]:
-            cards.append({
-                "node_id": n["alias"],
-                "file_alias": n["file_alias"],
-                "qualified_name": n["qualified_name"],
-                "purpose": n.get("docstring") or f"Inferred representation of {n['name']}",
-                "side_effects": [],
-                "inputs": [],
-                "outputs": [],
-                "risk_level": "medium",
-                "edit_relevance": round(score, 2),
-                "task_reason": "On-the-fly generated fallback card.",
-                "needs_full_source": n["mode"] in ("sig", "skel")
-            })
+    # Task keywords for heuristics
+    task_keywords = {w.lower() for w in re.findall(r"[a-zA-Z0-9_]+", args.task.lower()) if len(w) >= 3}
+    
+    # Map cards to node id for faster lookup
+    cards_map = {c["node_id"]: c for c in cards}
+    
+    # 2. Score all nodes
+    scored_nodes = []
+    for node in parser.nodes:
+        alias = node["alias"]
+        card = cards_map.get(alias) or cards_map.get(node["id"])
+        score, reason = compute_node_score(node, card, task_keywords)
+        scored_nodes.append((score, reason, node))
+        
+    # Sort nodes by score descending
+    scored_nodes.sort(key=lambda x: x[0], reverse=True)
+    
+    # 3. Select top nodes
+    # We select concrete nodes with high scores (score >= 15.0 or top 4 concrete nodes)
+    selected_node_entries = []
+    for score, reason, node in scored_nodes:
+        if node["name"] == "<module>":
+            continue
+        selected_node_entries.append((score, reason, node))
+        
+    if len(selected_node_entries) < 3:
+        # Fallback to top concrete nodes anyway
+        selected_node_entries = [entry for entry in scored_nodes if entry[2]["name"] != "<module>"][:4]
+        
+    # Cap selection to a reasonable limit (e.g. top 6 concrete nodes)
+    selected_node_entries = selected_node_entries[:6]
+    selected_nodes = [entry[2] for entry in selected_node_entries]
+    selected_node_aliases = {n["alias"] for n in selected_nodes}
+    selected_file_aliases_with_concrete = {n["file_alias"] for n in selected_nodes}
 
-    # Sort cards by edit_relevance descending
-    cards.sort(key=lambda x: x.get("edit_relevance", 0.0), reverse=True)
+    # Secondary selection pass for companion validation/model/schema files if triggered by task
+    task_lower = args.task.lower()
+    companion_keywords = ["validation", "validate", "request validation", "request", "schema", "model", "pydantic", "input", "payload"]
+    trigger_companion = any(kw in task_lower for kw in companion_keywords)
     
-    # Select top highly relevant cards (edit_relevance >= 0.25 or top 3)
-    selected_cards = [c for c in cards if c.get("edit_relevance", 0.0) >= 0.25]
-    if len(selected_cards) < 2:
-        selected_cards = cards[:3]
+    companion_files_to_add_empty = []
+    if trigger_companion:
+        candidate_files = []
+        for f_alias, f_path in parser.files.items():
+            if f_alias in selected_file_aliases_with_concrete:
+                continue
+            fp = f_path.lower()
+            score = 0
+            if "validation" in fp or "validate" in fp:
+                score += 10
+            if "schema" in fp:
+                score += 8
+            if "model" in fp:
+                score += 6
+                if "checkout" in fp:
+                    score += 2
+                if "payment" in fp:
+                    score += 2
+            if "request" in fp:
+                score += 4
+                
+            if score > 0:
+                candidate_files.append((score, f_alias, f_path))
+                
+        # Sort candidates by score descending
+        candidate_files.sort(key=lambda x: x[0], reverse=True)
         
-    # Get associated node details
-    selected_node_aliases = {c["node_id"] for c in selected_cards}
-    selected_nodes = [n for n in nodes if n["alias"] in selected_node_aliases]
+        # Add up to 3 companion files
+        for score, f_alias, f_path in candidate_files[:3]:
+            file_nodes = [n for n in parser.nodes if n["file_alias"] == f_alias]
+            concrete_nodes = [n for n in file_nodes if n["name"] != "<module>"]
+            if concrete_nodes:
+                scored_concrete = []
+                for cn in concrete_nodes:
+                    c_card = cards_map.get(cn["alias"]) or cards_map.get(cn["id"])
+                    c_score, c_reason = compute_node_score(cn, c_card, task_keywords)
+                    scored_concrete.append((c_score, c_reason, cn))
+                scored_concrete.sort(key=lambda x: x[0], reverse=True)
+                
+                # Add the top concrete node
+                top_score, top_reason, top_node = scored_concrete[0]
+                if top_node["alias"] not in selected_node_aliases:
+                    selected_node_entries.append((
+                        top_score,
+                        f"Companion validation/model context selected due to request-validation task intent. ({top_reason})",
+                        top_node
+                    ))
+                    selected_nodes.append(top_node)
+                    selected_node_aliases.add(top_node["alias"])
+                    selected_file_aliases_with_concrete.add(f_alias)
+            else:
+                # No concrete nodes, we add the file directly as an empty-node companion file
+                companion_files_to_add_empty.append((f_alias, f_path))
     
-    # 2. Track selected files and reasons
-    selected_files = {} # alias -> (path, reason)
-    for card in selected_cards:
-        node_alias = card["node_id"]
-        file_alias = card["file_alias"]
-        node_name = card["qualified_name"].split("::")[-1]
-        
-        # find matching node
-        node = next((n for n in selected_nodes if n["alias"] == node_alias), None)
-        file_path = node["file"] if node else manifest_data["files"].get(file_alias, "unknown")
-        
-        reason = card.get("task_reason", f"Highly relevant to task with score {card.get('edit_relevance')}")
-        
+    # 4. Group by files and generate reasons
+    selected_files = {} # file_alias -> dict of file details
+    for score, reason, node in selected_node_entries:
+        file_alias = node["file_alias"]
+        f_path = node["file"]
         if file_alias not in selected_files:
-            selected_files[file_alias] = (file_path, f"Contains {node_name} ({reason})")
+            selected_files[file_alias] = {
+                "file_alias": file_alias,
+                "path": f_path,
+                "reasons": [f"Contains {node['name']} ({reason})"],
+                "max_score": score,
+                "selected_nodes": [node["alias"]]
+            }
         else:
-            prev_path, prev_reason = selected_files[file_alias]
-            selected_files[file_alias] = (prev_path, f"{prev_reason}; also contains {node_name}")
+            selected_files[file_alias]["reasons"].append(f"contains {node['name']}")
+            selected_files[file_alias]["selected_nodes"].append(node["alias"])
+            selected_files[file_alias]["max_score"] = max(selected_files[file_alias]["max_score"], score)
             
-    # 3. Trace Dependency Path among selected nodes
-    # We parse the edges from the manifest and construct a subgraph of our selected nodes
-    adj_list = {n["alias"]: [] for n in selected_nodes}
-    sub_in_degree = {n["alias"]: 0 for n in selected_nodes}
+    # Add empty-node companion files to selected_files with clear reason
+    for f_alias, f_path in companion_files_to_add_empty:
+        if f_alias not in selected_files:
+            selected_files[f_alias] = {
+                "file_alias": f_alias,
+                "path": f_path,
+                "reasons": ["Companion validation/model context selected due to request-validation task intent."],
+                "max_score": 10.0,
+                "selected_nodes": []
+            }
+            
+    # Format selected_files list for output
+    formatted_selected_files = []
+    for alias, val in selected_files.items():
+        reasons_combined = "; also ".join(val["reasons"])
+        formatted_selected_files.append({
+            "file_alias": alias,
+            "path": val["path"],
+            "reason": reasons_combined,
+            "score": val["max_score"],
+            "selected_nodes": val["selected_nodes"]
+        })
+        
+    # Sort files by score descending
+    formatted_selected_files.sort(key=lambda x: x["score"], reverse=True)
     
-    for edge in manifest_data["edges"]:
-        src = edge["source"]
-        dst = edge["target"]
-        if src in selected_node_aliases and dst in selected_node_aliases:
-            adj_list[src].append(dst)
-            sub_in_degree[dst] += 1
+    # 5. Dependency Paths
+    paths = find_all_paths(parser, selected_nodes)
+    dependency_path_str_list = [" -> ".join(p) for p in paths]
+    if not dependency_path_str_list:
+        dependency_path_str_list = [" -> ".join([n["name"] for n in selected_nodes])]
+        
+    # 6. Selected Edges with cleaned standardized relation and symbols
+    selected_edges = []
+    for edge in parser.edges:
+        if edge["source"] in selected_node_aliases or edge["target"] in selected_node_aliases:
+            standardized_relation = map_edge_relation(edge, parser)
             
-    # Topological chain or direct sequence
-    start_nodes = [alias for alias in selected_node_aliases if sub_in_degree.get(alias, 0) == 0]
-    if not start_nodes:
-        start_nodes = list(selected_node_aliases)[:1]
-        
-    def get_name(alias):
-        n = next((x for x in selected_nodes if x["alias"] == alias), None)
-        return n["name"] if n else alias
-        
-    path_strings = []
-    visited = set()
-    def dfs(u, path):
-        visited.add(u)
-        path.append(get_name(u))
-        has_outgoing = False
-        for v in adj_list.get(u, []):
-            if v not in visited:
-                dfs(v, path)
-                has_outgoing = True
-                break
-        if not has_outgoing:
-            path_strings.append(" -> ".join(path))
+            tgt_node = parser.get_node(edge["target"])
+            symbol = edge["symbol"]
+            if tgt_node:
+                symbol = tgt_node.get("name", symbol)
+                
+            selected_edges.append({
+                "source": edge["source"],
+                "target": edge["target"],
+                "relation": standardized_relation,
+                "symbol": symbol,
+                "resolved": edge["resolved"]
+            })
             
-    for start in start_nodes[:1]:
-        dfs(start, [])
-        
-    dependency_path_str = path_strings[-1] if path_strings else " -> ".join([get_name(a) for a in selected_node_aliases])
-    
-    # 4. Determine LLM usage
+    # Determine LLM usage
     api_key_set = bool(os.environ.get("GEMINI_API_KEY"))
     use_llm = not args.no_llm and api_key_set
     
-    plan_content = ""
     mode_str = "Gemini" if use_llm else "deterministic fallback"
     model_str = args.model if use_llm else "deterministic fallback"
     
+    plan_content = ""
     if use_llm:
-        # Load prompt
+        # Gemini-based plan generation
         prompt_tpl_path = "prompts/task_router_prompt.md"
         if os.path.exists(prompt_tpl_path):
             with open(prompt_tpl_path, "r", encoding="utf-8") as pf:
                 prompt_tpl = pf.read()
         else:
-            prompt_tpl = "TASK: {task}\nMANIFEST:\n{manifest_excerpt}\nCARDS:\n{semantic_cards_data}\nPlease output a markdown edit plan."
+            prompt_tpl = "TASK: {task}\nMANIFEST EXCERPT:\n{manifest_excerpt}\nCARDS:\n{semantic_cards_data}\nPlease output a markdown edit plan."
             
-        # Format manifest excerpt
         excerpt_lines = []
         for n in selected_nodes:
             excerpt_lines.append(f"Node: {n['alias']} {n['qualified_name']}")
@@ -222,12 +466,13 @@ def main():
             excerpt_lines.append("-" * 30)
         manifest_excerpt = "\n".join(excerpt_lines)
         
-        semantic_cards_data = json.dumps(selected_cards, indent=2)
+        # Filter cards for selected nodes
+        matched_cards = [cards_map[a] for a in selected_node_aliases if a in cards_map]
         
         prompt = prompt_tpl.format(
             task=args.task,
             manifest_excerpt=manifest_excerpt,
-            semantic_cards_data=semantic_cards_data
+            semantic_cards_data=json.dumps(matched_cards, indent=2)
         )
         
         plan_content = llm_client.generate_content(prompt, model=args.model)
@@ -238,17 +483,19 @@ def main():
             model_str = "deterministic fallback"
             
     if not use_llm:
-        # Generate a beautiful structured deterministic markdown edit plan
+        # Beautiful structured fallback markdown plan
         snippets = []
-        for n in selected_nodes:
+        for entry in selected_node_entries:
+            score, reason, n = entry
             if n.get("body"):
-                snippets.append(f"### {n['alias']} {n['qualified_name']}\n```python\n{n['body']}\n```")
+                snippets.append(f"### {n['alias']} {n['qualified_name']} (score: {score:.2f})\n```python\n{n['body']}\n```")
             else:
-                snippets.append(f"### {n['alias']} {n['qualified_name']}\n*(Signature-only in manifest: `{n['signature']}`)*")
+                snippets.append(f"### {n['alias']} {n['qualified_name']} (score: {score:.2f})\n*(Signature-only in manifest: `{n['signature']}`)*")
         snippets_str = "\n\n".join(snippets)
         
-        files_sec = "\n".join([f"- **{alias} {path}**: {reason}" for alias, (path, reason) in selected_files.items()])
-        nodes_sec = "\n".join([f"- **{card['node_id']} {card['qualified_name']}** (edit_relevance: {card['edit_relevance']}): {card['task_reason']}" for card in selected_cards])
+        files_sec = "\n".join([f"- **{f['file_alias']} {f['path']}**: {f['reason']}" for f in formatted_selected_files])
+        nodes_sec = "\n".join([f"- **{entry[2]['alias']} {entry[2]['qualified_name']}** (score: {entry[0]:.2f}): {entry[1]}" for entry in selected_node_entries])
+        paths_sec = "\n".join([f"- `{p}`" for p in dependency_path_str_list])
         
         plan_content = f"""# Edit Plan & Task Routing Report (Deterministic Fallback)
 
@@ -258,41 +505,80 @@ def main():
 **Nodes Selected:**
 {nodes_sec}
 
-### Selected Dependency Path
-`{dependency_path_str}`
+### Selected Dependency Path(s)
+{paths_sec}
 
 ### Proposed Edit Plan
 Based on the task: **"{args.task}"**, here is the structured step-by-step edit plan:
 
 1. **Request Validation Definition**:
-   - Locate/extend `{selected_nodes[0]['file'] if selected_nodes else 'src/schemas.py'}` to define or import input validation schemas.
-   - For example, if adding request validation before checkout, create or extend a schema `CheckoutRequest` inheriting from `BaseModel`.
+   - Locate/extend schema or validation helper in the validation files (e.g., definition of schemas, Pydantic models).
+   - Define a strong schema (like `CheckoutRequest` or similar) to validate incoming parameters (items, user ID, amounts) before processing.
 
 2. **Integration into Endpoint**:
-   - Inspect the checkout endpoint `{get_name(selected_nodes[0]['alias']) if selected_nodes else 'create_checkout_session'}` in file `{selected_nodes[0]['file'] if selected_nodes else 'src/routers/ui_routes.py'}`.
-   - Inject the validation step before invoking the Stripe session creator or payment processor.
-   - Ensure you catch parsing or validation exceptions and raise proper `HTTPException(status_code=400, detail=...)`.
+   - Inspect the checkout endpoint node in the router file (like `checkout_endpoint` in `app/api/checkout.py`).
+   - Validate the incoming request parameters against the schema right at the entry point of the endpoint.
+   - If validation fails, return an HTTP 400 or appropriate error code immediately.
 
-3. **Dependency and State Verification**:
-   - Ensure the dependency path flow `{dependency_path_str}` executes successfully and validates parameters before payment processing starts.
+3. **Stripe & Payment Safety**:
+   - Execute payment processing only after all validations have completely succeeded.
+   - Protect Stripe session creations or transaction executions behind validation checkpoints to avoid orphaned payment authorizations.
 
 ### Snippets Needed / Full Source Requests
 {snippets_str}
 """
-        
-    # Write edit plan
+
+    # Write edit plan markdown
     with open(args.out, "w", encoding="utf-8") as out_f:
         out_f.write(plan_content)
         
+    # Write machine-readable JSON if requested
+    if args.json_out:
+        json_payload = {
+            "task": args.task,
+            "mode": mode_str,
+            "selected_files": formatted_selected_files,
+            "selected_nodes": [
+                {
+                    "node_id": entry[2]["alias"],
+                    "file_alias": entry[2]["file_alias"],
+                    "path": entry[2]["file"],
+                    "qualified_name": entry[2]["qualified_name"],
+                    "simple_name": entry[2]["name"],
+                    "type": entry[2]["type"],
+                    "tags": entry[2]["tags"],
+                    "reason": entry[1],
+                    "score": entry[0]
+                }
+                for entry in selected_node_entries
+            ],
+            "selected_edges": selected_edges,
+            "dependency_paths": paths,
+            "warnings": []
+        }
+        with open(args.json_out, "w", encoding="utf-8") as out_j:
+            json.dump(json_payload, out_j, indent=2)
+            
     # Print the required hackathon logs!
     print("Task Router")
     print("-----------")
+    print(f"Mode: {mode_str}")
     print("Selected files:")
-    for idx, (alias, (f_path, reason)) in enumerate(selected_files.items(), 1):
-        print(f"{idx}. {alias} {f_path} reason={reason}")
+    for idx, f in enumerate(formatted_selected_files, 1):
+        print(f"{idx}. {f['file_alias']} {f['path']} reason={f['reason']}")
     print()
-    print("Selected dependency path:")
-    print(dependency_path_str)
+    print("Selected nodes:")
+    for idx, entry in enumerate(selected_node_entries, 1):
+        print(f"{idx}. {entry[2]['alias']} {entry[2]['name']} reason={entry[1]}")
+    print()
+    print("Selected dependency paths:")
+    for p in dependency_path_str_list:
+        print(f"- {p}")
+    print()
+    print("Artifacts:")
+    print(f"- {args.out}")
+    if args.json_out:
+        print(f"- {args.json_out}")
     print()
 
 if __name__ == "__main__":

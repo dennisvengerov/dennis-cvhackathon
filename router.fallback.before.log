@@ -1,0 +1,13 @@
+Task Router
+-----------
+Selected files:
+1. F1 app/api/checkout.py reason=Contains checkout_endpoint (Node matches task keywords: checkout.); also contains <module>
+2. F8 app/services/payments.py reason=Contains PaymentService (Node matches task keywords: payment.); also contains PaymentService.process_payment; also contains <module>
+3. F12 tests/test_checkout.py reason=Contains test_out_of_stock_checkout (Node matches task keywords: checkout.); also contains test_successful_checkout; also contains <module>
+4. F11 app/utils/validation.py reason=Contains <module> (Node matches task keywords: validation.)
+5. F3 app/models/checkout.py reason=Contains <module> (Node matches task keywords: checkout.)
+6. F4 app/models/payment.py reason=Contains <module> (Node matches task keywords: payment.)
+
+Selected dependency path:
+test_successful_checkout -> checkout_endpoint -> PaymentService
+

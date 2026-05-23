@@ -1,8 +1,110 @@
 import re
+import os
 import json
 from typing import Dict, List, Any, Optional
 
 class ManifestParser:
+    def __init__(self, txt_path: str, json_path: Optional[str] = None):
+        self.txt_path = txt_path
+        self.json_path = json_path
+        self.data = self.parse_txt(txt_path)
+        self.metadata = self.data.get("metadata", {})
+        self.files = self.data.get("files", {})
+        self.file_to_alias = self.data.get("file_to_alias", {})
+        self.nodes_map = self.data.get("nodes_map", {})
+        self.edges_raw = self.data.get("edges", [])
+        self.unresolved_symbols = self.data.get("unresolved_symbols", [])
+        self.parse_errors = self.data.get("parse_errors", 0)
+        
+        # Enrich and unify with debug JSON if it exists
+        if json_path and os.path.exists(json_path):
+            self.debug_data = self.load_debug_json(json_path)
+            self._merge_debug_data()
+        else:
+            self.debug_data = {}
+            
+        self.nodes = list(self.nodes_map.values())
+        self.edges = self._enrich_edges(self.edges_raw)
+
+    def _merge_debug_data(self):
+        """
+        Merges rich metadata from codebase_manifest.debug.json into parsed compact-manifest nodes.
+        """
+        debug_nodes = self.debug_data.get("nodes", [])
+        # Build mapping from file + start_line + name -> node alias
+        # and from ID -> node alias
+        lookup = {}
+        for alias, node in self.nodes_map.items():
+            key = (node["file"], node["start_line"], node["name"])
+            lookup[key] = alias
+            lookup[node["id"]] = alias
+
+        for d_node in debug_nodes:
+            alias = None
+            if d_node.get("id") in lookup:
+                alias = lookup[d_node["id"]]
+            else:
+                key = (d_node.get("file"), d_node.get("start_line"), d_node.get("name"))
+                alias = lookup.get(key)
+                
+            if alias and alias in self.nodes_map:
+                node = self.nodes_map[alias]
+                node["token_count"] = d_node.get("token_count", node.get("token_count", 0))
+                node["signature_token_count"] = d_node.get("signature_token_count", 0)
+                node["value_density"] = d_node.get("value_density", 0.0)
+                node["is_public"] = d_node.get("is_public", True)
+                node["calls"] = d_node.get("calls", node.get("calls", []))
+                node["imports"] = d_node.get("imports", node.get("imports", []))
+                node["base_classes"] = d_node.get("base_classes", [])
+                
+                # If skeleton is more descriptive
+                if d_node.get("behavior_skeleton") and not node.get("behavior_skeleton"):
+                    node["behavior_skeleton"] = d_node["behavior_skeleton"]
+                # If body is not in text but present in json (some times full body is in debug json)
+                if d_node.get("full_body") and not node.get("body"):
+                    node["body"] = d_node["full_body"]
+
+    def _enrich_edges(self, edges_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """
+        Enriches raw edge records with resolved source/target names, symbols, and resolved flags.
+        """
+        enriched = []
+        for edge in edges_list:
+            src_alias = edge["source"]
+            dst_alias = edge["target"]
+            edge_type = edge["type"]
+            relation = edge["relation"]
+            status = edge["status"]
+            
+            resolved = (status == "resolved")
+            symbol = "unknown"
+            if dst_alias.startswith("EXT:"):
+                symbol = dst_alias[4:]
+                resolved = False
+            else:
+                tgt_node = self.nodes_map.get(dst_alias)
+                if tgt_node:
+                    symbol = tgt_node.get("name", dst_alias)
+                    resolved = True
+                    
+            src_node = self.nodes_map.get(src_alias)
+            src_name = src_node.get("name", src_alias) if src_node else src_alias
+            tgt_node = self.nodes_map.get(dst_alias)
+            tgt_name = tgt_node.get("name", dst_alias) if tgt_node else dst_alias
+            
+            enriched.append({
+                "source": src_alias,
+                "target": dst_alias,
+                "type": edge_type,
+                "relation": relation,
+                "status": status,
+                "resolved": resolved,
+                "symbol": symbol,
+                "source_name": src_name,
+                "target_name": tgt_name
+            })
+        return enriched
+
     @staticmethod
     def parse_txt(path: str) -> Dict[str, Any]:
         """
@@ -121,6 +223,7 @@ class ManifestParser:
                         "end_line": end_line,
                         "type": node_type,
                         "name": node_name,
+                        "simple_name": node_name,
                         "qualified_name": f_path.replace("/", ".").replace(".py", "") + "::" + node_name,
                         "signature": sig,
                         "docstring": doc,
@@ -255,48 +358,106 @@ class ManifestParser:
         """
         Parses compact text manifest and optional debug json, returning a fully enriched node list.
         """
-        manifest_data = cls.parse_txt(txt_path)
-        nodes_map = manifest_data["nodes_map"] # alias -> node_dict
-        
-        # Build mapping from file + start_line + name -> node alias
-        lookup = {}
-        for alias, node in nodes_map.items():
-            key = (node["file"], node["start_line"], node["name"])
-            lookup[key] = alias
-            # Also qualified name lookup
-            lookup[node["id"]] = alias
-            
-        if json_path:
-            debug_data = cls.load_debug_json(json_path)
-            debug_nodes = debug_data.get("nodes", [])
-            for d_node in debug_nodes:
-                alias = None
-                # Try to look up by ID
-                if d_node.get("id") in lookup:
-                    alias = lookup[d_node["id"]]
-                else:
-                    # Try look up by file, start_line, name
-                    key = (d_node.get("file"), d_node.get("start_line"), d_node.get("name"))
-                    alias = lookup.get(key)
-                    
-                if alias and alias in nodes_map:
-                    # Enrich node dict with any fields missing or more detailed in json
-                    node = nodes_map[alias]
-                    node["token_count"] = d_node.get("token_count", node.get("token_count", 0))
-                    node["signature_token_count"] = d_node.get("signature_token_count", 0)
-                    node["value_density"] = d_node.get("value_density", 0.0)
-                    node["is_public"] = d_node.get("is_public", True)
-                    node["calls"] = d_node.get("calls", node.get("calls", []))
-                    node["imports"] = d_node.get("imports", node.get("imports", []))
-                    node["base_classes"] = d_node.get("base_classes", [])
-                    
-                    # If skeleton is more descriptive
-                    if d_node.get("behavior_skeleton") and not node["behavior_skeleton"]:
-                        node["behavior_skeleton"] = d_node["behavior_skeleton"]
-                    # If body is not in text but present in json (some times full body is in debug json)
-                    if d_node.get("full_body") and not node["body"]:
-                        # If node is meant to have body
-                        if node["mode"] in ("body", "full_body"):
-                            node["body"] = d_node["full_body"]
-                            
-        return list(nodes_map.values())
+        parser = cls(txt_path, json_path)
+        return parser.nodes
+
+    # Convenience Helpers
+    def get_node(self, node_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Returns a node dict from its node_id (the alias N0, or the full id path::name).
+        """
+        if node_id in self.nodes_map:
+            return self.nodes_map[node_id]
+        for node in self.nodes_map.values():
+            if node["id"] == node_id:
+                return node
+        return None
+
+    def get_file_path(self, file_alias: str) -> Optional[str]:
+        """
+        Returns the file path for a file alias (e.g. F0 -> app/api/catalog.py).
+        """
+        return self.files.get(file_alias)
+
+    def get_node_display_name(self, node_id: str) -> str:
+        """
+        Returns a user-friendly display name of the node.
+        """
+        node = self.get_node(node_id)
+        if not node:
+            return node_id
+        name = node.get("name", "")
+        if name == "<module>":
+            return f"{node.get('file', 'unknown')} (module)"
+        return name
+
+    def get_concrete_nodes(self) -> List[Dict[str, Any]]:
+        """
+        Returns all nodes that are not <module>.
+        """
+        return [n for n in self.nodes if n.get("name") != "<module>"]
+
+    def _get_alias(self, node_id: str) -> Optional[str]:
+        if node_id in self.nodes_map:
+            return node_id
+        node = self.get_node(node_id)
+        return node["alias"] if node else None
+
+    def get_outbound_neighbors(self, node_id: str) -> List[Dict[str, Any]]:
+        """
+        Returns nodes that this node points to.
+        """
+        alias = self._get_alias(node_id)
+        if not alias:
+            return []
+        neighbors = []
+        for edge in self.edges:
+            if edge["source"] == alias:
+                tgt_alias = edge["target"]
+                tgt_node = self.get_node(tgt_alias)
+                if tgt_node:
+                    neighbors.append(tgt_node)
+        return neighbors
+
+    def get_inbound_neighbors(self, node_id: str) -> List[Dict[str, Any]]:
+        """
+        Returns nodes that point to this node.
+        """
+        alias = self._get_alias(node_id)
+        if not alias:
+            return []
+        neighbors = []
+        for edge in self.edges:
+            if edge["target"] == alias:
+                src_alias = edge["source"]
+                src_node = self.get_node(src_alias)
+                if src_node:
+                    neighbors.append(src_node)
+        return neighbors
+
+    def get_neighbors(self, node_id: str) -> List[Dict[str, Any]]:
+        """
+        Returns all inbound and outbound neighbors.
+        """
+        outbound = self.get_outbound_neighbors(node_id)
+        inbound = self.get_inbound_neighbors(node_id)
+        seen = set()
+        neighbors = []
+        for n in outbound + inbound:
+            if n["alias"] not in seen:
+                seen.add(n["alias"])
+                neighbors.append(n)
+        return neighbors
+
+    def get_edges_for_node(self, node_id: str) -> List[Dict[str, Any]]:
+        """
+        Returns all enriched edges where the node is source or target.
+        """
+        alias = self._get_alias(node_id)
+        if not alias:
+            return []
+        res = []
+        for edge in self.edges:
+            if edge["source"] == alias or edge["target"] == alias:
+                res.append(edge)
+        return res

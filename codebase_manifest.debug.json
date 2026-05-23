@@ -1,563 +1,159 @@
 {
   "metadata": {
-    "repo_path": "ecommerce-fastapi-stripe",
-    "target_ratio": 0.85,
-    "original_tokens": 3960,
-    "compressed_tokens": 3541,
-    "compression_ratio": 0.8942,
-    "token_savings": 0.1058,
-    "node_count": 53,
-    "edge_count": 188,
-    "resolved_edge_count": 20,
-    "unresolved_edge_count": 168,
-    "graph_density": 0.06821,
-    "full_body_nodes": 3,
+    "repo_path": "demo_repo",
+    "target_ratio": 0.55,
+    "original_tokens": 1896,
+    "compressed_tokens": 1041,
+    "compression_ratio": 0.5491,
+    "token_savings": 0.4509,
+    "node_count": 28,
+    "edge_count": 73,
+    "resolved_edge_count": 50,
+    "unresolved_edge_count": 23,
+    "graph_density": 0.09656,
+    "full_body_nodes": 0,
     "excerpt_nodes": 0,
-    "skeleton_nodes": 5,
-    "signature_only_nodes": 45,
-    "minimal_nodes": 0,
+    "skeleton_nodes": 3,
+    "signature_only_nodes": 6,
+    "minimal_nodes": 19,
     "parse_error_count": 0,
     "skipped_file_count": 0
   },
   "nodes": [
     {
-      "id": "src/__init__.py::<module>",
+      "id": "app/api/catalog.py::<module>",
       "type": "module",
       "name": "<module>",
       "qualified_name": "<module>",
-      "file": "src/__init__.py",
+      "file": "app/api/catalog.py",
       "start_line": 1,
-      "end_line": 5,
-      "signature": "src/__init__.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 28,
-      "signature_token_count": 5,
+      "end_line": 10,
+      "signature": "app/api/catalog.py",
+      "docstring": "",
+      "token_count": 126,
+      "signature_token_count": 7,
       "in_degree": 0,
-      "out_degree": 0,
-      "score": 0.297,
-      "value_density": 0.012375,
-      "is_public": false,
-      "has_docstring": true,
-      "has_type_annotations": false,
-      "calls": [],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "private"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": ""
-    },
-    {
-      "id": "src/app.py::<module>",
-      "type": "module",
-      "name": "<module>",
-      "qualified_name": "<module>",
-      "file": "src/app.py",
-      "start_line": 1,
-      "end_line": 24,
-      "signature": "src/app.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 153,
-      "signature_token_count": 5,
-      "in_degree": 2,
-      "out_degree": 11,
-      "score": 5.0626,
-      "value_density": 0.033977,
-      "is_public": true,
-      "has_docstring": true,
-      "has_type_annotations": false,
-      "calls": [
-        "FastAPI",
-        "app.mount",
-        "StaticFiles",
-        "app.include_router"
-      ],
-      "imports": [
-        {
-          "module": "itertools",
-          "name": "product",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi",
-          "name": "FastAPI",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi.staticfiles",
-          "name": "StaticFiles",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src.config",
-          "name": "settings",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src.routers.ui_routes",
-          "name": "router",
-          "alias": "ui_router",
-          "type": "from_import"
-        },
-        {
-          "module": "src.routers.products",
-          "name": "router",
-          "alias": "product_router",
-          "type": "from_import"
-        },
-        {
-          "module": "src.routers.auth",
-          "name": "router",
-          "alias": "auth_router",
-          "type": "from_import"
-        }
-      ],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "public"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": ""
-    },
-    {
-      "id": "src/config.py::<module>",
-      "type": "module",
-      "name": "<module>",
-      "qualified_name": "<module>",
-      "file": "src/config.py",
-      "start_line": 1,
-      "end_line": 32,
-      "signature": "src/config.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 145,
-      "signature_token_count": 5,
-      "in_degree": 3,
-      "out_degree": 2,
-      "score": 3.5115,
-      "value_density": 0.024904,
-      "is_public": true,
-      "has_docstring": true,
-      "has_type_annotations": false,
-      "calls": [
-        "Settings"
-      ],
-      "imports": [
-        {
-          "module": "pydantic",
-          "name": "BaseSettings",
-          "alias": null,
-          "type": "from_import"
-        }
-      ],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "public"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": ""
-    },
-    {
-      "id": "src/config.py::Settings",
-      "type": "class",
-      "name": "Settings",
-      "qualified_name": "Settings",
-      "file": "src/config.py",
-      "start_line": 8,
-      "end_line": 29,
-      "signature": "class Settings(BaseSettings):",
-      "docstring": "",
-      "token_count": 108,
-      "signature_token_count": 6,
-      "in_degree": 1,
       "out_degree": 1,
-      "score": 2.4513,
-      "value_density": 0.023799,
+      "score": 1.3418,
+      "value_density": 0.011182,
       "is_public": true,
       "has_docstring": false,
-      "has_type_annotations": true,
+      "has_type_annotations": false,
       "calls": [],
-      "imports": [],
-      "base_classes": [
-        "BaseSettings"
+      "imports": [
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        }
       ],
-      "mode": "signature_only",
+      "base_classes": [],
+      "mode": "minimal",
       "tags": [
-        "class",
-        "model",
         "public"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
     },
     {
-      "id": "src/config.py::Settings.__init__",
-      "type": "method",
-      "name": "__init__",
-      "qualified_name": "Settings.__init__",
-      "file": "src/config.py",
-      "start_line": 19,
-      "end_line": 21,
-      "signature": "def __init__(self):",
-      "docstring": "",
-      "token_count": 18,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 3,
-      "score": 2.3774,
-      "value_density": 0.182877,
-      "is_public": false,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "__init__",
-        "super",
-        "self.check_stripe"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "method",
-        "private"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "__init__"
-        ],
-        "resolved_calls": [
-          "Settings.__init__"
-        ],
-        "flow": "__init__",
-        "effects": [],
-        "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": []
-      },
-      "excerpt_body": "    def __init__(self):\n        super().__init__()\n        ...\n"
-    },
-    {
-      "id": "src/config.py::Settings.check_stripe",
-      "type": "method",
-      "name": "check_stripe",
-      "qualified_name": "Settings.check_stripe",
-      "file": "src/config.py",
-      "start_line": 23,
-      "end_line": 25,
-      "signature": "def check_stripe(self):",
-      "docstring": "",
-      "token_count": 20,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 0,
-      "score": 2.4634,
-      "value_density": 0.164227,
+      "id": "app/api/catalog.py::list_products",
+      "type": "function",
+      "name": "list_products",
+      "qualified_name": "list_products",
+      "file": "app/api/catalog.py",
+      "start_line": 3,
+      "end_line": 10,
+      "signature": "def list_products() -> list:",
+      "docstring": "List all products available in the store catalog.",
+      "token_count": 118,
+      "signature_token_count": 8,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 2.8248,
+      "value_density": 0.025449,
       "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [],
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info"
+      ],
       "imports": [],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "skel",
       "tags": [
-        "external_api",
-        "method",
-        "payment",
-        "public",
-        "validation"
+        "endpoint",
+        "public"
       ],
       "behavior_skeleton": {
         "calls": [],
         "resolved_calls": [],
-        "flow": "if",
-        "effects": [
-          "validation",
-          "payment",
-          "external_api"
-        ],
+        "flow": "return",
+        "effects": [],
         "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [
-          "if"
-        ],
-        "assigned": [],
-        "writes": [
-          "self.stripe_is_active"
-        ],
-        "literals": []
-      },
-      "excerpt_body": "    def check_stripe(self):\n        ...\n"
-    },
-    {
-      "id": "src/helpers/utils.py::<module>",
-      "type": "module",
-      "name": "<module>",
-      "qualified_name": "<module>",
-      "file": "src/helpers/utils.py",
-      "start_line": 1,
-      "end_line": 32,
-      "signature": "src/helpers/utils.py",
-      "docstring": "",
-      "token_count": 155,
-      "signature_token_count": 7,
-      "in_degree": 0,
-      "out_degree": 5,
-      "score": 2.0793,
-      "value_density": 0.013955,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [],
-      "imports": [
-        {
-          "module": "json",
-          "name": "json",
-          "alias": null,
-          "type": "import"
-        },
-        {
-          "module": "os",
-          "name": "path",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "os",
-          "name": "listdir",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "venv",
-          "name": "create",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src",
-          "name": "schemas",
-          "alias": null,
-          "type": "from_import"
-        }
-      ],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "public",
-        "utility"
-      ],
-      "behavior_skeleton": {},
-      "excerpt_body": ""
-    },
-    {
-      "id": "src/helpers/utils.py::create_slug",
-      "type": "function",
-      "name": "create_slug",
-      "qualified_name": "create_slug",
-      "file": "src/helpers/utils.py",
-      "start_line": 7,
-      "end_line": 9,
-      "signature": "def create_slug(json_file_name):",
-      "docstring": "",
-      "token_count": 21,
-      "signature_token_count": 6,
-      "in_degree": 1,
-      "out_degree": 1,
-      "score": 3.7204,
-      "value_density": 0.232525,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "json_file_name.split"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "database",
-        "public",
-        "serialization",
-        "utility"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "json_file_name.split"
-        ],
-        "resolved_calls": [],
-        "flow": "split->return",
-        "effects": [
-          "db_write",
-          "serialization"
-        ],
-        "raises": [],
-        "returns": "unknown",
+        "returns": "list",
         "reads": [],
         "control_flow": [],
         "assigned": [],
         "writes": [],
         "literals": []
       },
-      "excerpt_body": "def create_slug(json_file_name):\n    filename, _blank = json_file_name.split('.json')\n    return filename\n"
+      "excerpt_body": "def list_products() -> list:\n    ...\n    return [\n        {\"item_id\": \"item_101\", \"name\": \"Standard Widget\", \"price\": 10.99},\n        {\"item_id\": \"item_202\", \"name\": \"Premium Gadget\", \"price\": 99.99},\n        {\"item_id\": \"item_303\", \"name\": \"Out-of-Stock Item\", \"price\": 5.00}\n    ]\n"
     },
     {
-      "id": "src/helpers/utils.py::get_local_products",
-      "type": "function",
-      "name": "get_local_products",
-      "qualified_name": "get_local_products",
-      "file": "src/helpers/utils.py",
-      "start_line": 11,
-      "end_line": 31,
-      "signature": "def get_local_products():",
-      "docstring": "",
-      "token_count": 118,
-      "signature_token_count": 5,
-      "in_degree": 3,
-      "out_degree": 10,
-      "score": 5.3357,
-      "value_density": 0.046804,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "path.expanduser",
-        "listdir",
-        "path.join",
-        "open",
-        "json.load",
-        "create_slug",
-        "schemas.ProductBase",
-        "product_dicts.append",
-        "print",
-        "str"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "body",
-      "tags": [
-        "database",
-        "public",
-        "serialization",
-        "utility",
-        "validation"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "path.expanduser",
-          "listdir",
-          "path.join",
-          "json.load",
-          "create_slug",
-          "schemas.ProductBase"
-        ],
-        "resolved_calls": [
-          "create_slug",
-          "ProductBase"
-        ],
-        "flow": "expanduser->listdir->loop->return",
-        "effects": [
-          "validation",
-          "db_read",
-          "db_write",
-          "serialization"
-        ],
-        "raises": [],
-        "returns": "unknown",
-        "reads": [],
-        "control_flow": [
-          "loop",
-          "try",
-          "except"
-        ],
-        "assigned": [
-          "data"
-        ],
-        "writes": [],
-        "literals": []
-      },
-      "excerpt_body": "def get_local_products():\n    products_path = path.expanduser('./src/templates/products')\n    products = listdir(products_path)\n\n...\n    for product in products:\n        absolute_path = path.join(products_path, product)\n\n...\n    return product_dicts\n",
-      "body": "def get_local_products():\n    products_path = path.expanduser('./src/templates/products')\n    products = listdir(products_path)\n\n    product_dicts = []\n    for product in products:\n        absolute_path = path.join(products_path, product)\n\n        with open(absolute_path, 'r') as product_json:\n            data = json.load(product_json)\n            try:\n                product_slug = create_slug(product)\n                data['slug'] = product_slug\n                verify_product = schemas.ProductBase(**data)\n                product_dicts.append(data)\n            \n            except Exception as e:\n                print( 'Err: ' + str(e) )\n                continue\n\n    return product_dicts\n"
-    },
-    {
-      "id": "src/routers/auth.py::<module>",
+      "id": "app/api/checkout.py::<module>",
       "type": "module",
       "name": "<module>",
       "qualified_name": "<module>",
-      "file": "src/routers/auth.py",
+      "file": "app/api/checkout.py",
       "start_line": 1,
-      "end_line": 79,
-      "signature": "src/routers/auth.py",
+      "end_line": 40,
+      "signature": "app/api/checkout.py",
       "docstring": "",
-      "token_count": 530,
+      "token_count": 346,
       "signature_token_count": 7,
-      "in_degree": 1,
-      "out_degree": 9,
-      "score": 2.9483,
-      "value_density": 0.005627,
+      "in_degree": 0,
+      "out_degree": 6,
+      "score": 2.6499,
+      "value_density": 0.007794,
       "is_public": true,
       "has_docstring": false,
       "has_type_annotations": false,
-      "calls": [
-        "APIRouter"
-      ],
+      "calls": [],
       "imports": [
         {
-          "module": "stripe",
-          "name": "stripe",
-          "alias": null,
-          "type": "import"
-        },
-        {
-          "module": "fastapi",
-          "name": "APIRouter",
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "HTTPException",
+          "module": "app.services.inventory",
+          "name": "InventoryService",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "status",
+          "module": "app.services.fraud",
+          "name": "FraudService",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "Request",
+          "module": "app.services.payments",
+          "name": "PaymentService",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi.responses",
-          "name": "RedirectResponse",
+          "module": "app.utils.logging",
+          "name": "log_info",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "src",
-          "name": "app",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src.config",
-          "name": "settings",
+          "module": "app.utils.logging",
+          "name": "log_error",
           "alias": null,
           "type": "from_import"
         }
@@ -571,288 +167,261 @@
       "excerpt_body": ""
     },
     {
-      "id": "src/routers/auth.py::authorize_stripe",
+      "id": "app/api/checkout.py::checkout_endpoint",
       "type": "function",
-      "name": "authorize_stripe",
-      "qualified_name": "authorize_stripe",
-      "file": "src/routers/auth.py",
-      "start_line": 32,
-      "end_line": 52,
-      "signature": "def authorize_stripe(request: Request):",
-      "docstring": "",
-      "token_count": 140,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 8,
-      "score": 4.3445,
-      "value_density": 0.032665,
+      "name": "checkout_endpoint",
+      "qualified_name": "checkout_endpoint",
+      "file": "app/api/checkout.py",
+      "start_line": 7,
+      "end_line": 40,
+      "signature": "def checkout_endpoint(request: CheckoutRequest) -> dict:",
+      "docstring": "Submit a checkout request, verify stock, assess fraud risk, and capture payment.",
+      "token_count": 304,
+      "signature_token_count": 11,
+      "in_degree": 3,
+      "out_degree": 9,
+      "score": 6.0311,
+      "value_density": 0.020514,
       "is_public": true,
-      "has_docstring": false,
+      "has_docstring": true,
       "has_type_annotations": true,
       "calls": [
-        "request.query_params.get",
-        "stripe.OAuth.token",
-        "RedirectResponse",
-        "app.ui_router.url_path_for",
-        "redirect.set_cookie",
-        "print",
-        "HTTPException",
-        "router.get"
+        "log_info",
+        "InventoryService",
+        "item.get",
+        "inventory_service.check_stock",
+        "log_error",
+        "FraudService",
+        "fraud_service.is_fraudulent_attempt",
+        "PaymentService",
+        "payment_service.process_payment"
       ],
       "imports": [],
       "base_classes": [],
       "mode": "skel",
       "tags": [
-        "auth",
         "endpoint",
-        "external_api",
         "logging",
         "payment",
         "public",
-        "route"
+        "validation"
       ],
       "behavior_skeleton": {
         "calls": [
-          "stripe.OAuth.token",
-          "redirect.set_cookie",
-          "app.ui_router.url_path_for",
-          "RedirectResponse"
+          "fraud_service.is_fraudulent_attempt",
+          "payment_service.process_payment",
+          "inventory_service.check_stock",
+          "InventoryService",
+          "FraudService",
+          "PaymentService"
         ],
-        "resolved_calls": [],
-        "flow": "try->return",
+        "resolved_calls": [
+          "InventoryService",
+          "FraudService",
+          "FraudService.is_fraudulent_attempt",
+          "PaymentService",
+          "PaymentService.process_payment",
+          "InventoryService.check_stock"
+        ],
+        "flow": "InventoryService->loop->FraudService->if->pay->if->return",
         "effects": [
-          "auth",
+          "validation",
           "payment",
-          "logging",
-          "external_api"
+          "logging"
         ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "unknown",
+        "raises": [],
+        "returns": "dict",
         "reads": [
-          "router.get",
-          "request.query_params.get",
-          "redirect.status_code",
-          "request.query_params",
-          "redirect.set_cookie"
+          "request.items",
+          "fraud_service.is_fraudulent_attempt",
+          "request.user_id",
+          "request.amount",
+          "payment_service.process_payment",
+          "result.success",
+          "result.transaction_id",
+          "item.get",
+          "result.error_message",
+          "inventory_service.check_stock"
         ],
         "control_flow": [
-          "try",
-          "except",
-          "early_return"
-        ],
-        "assigned": [
-          "authorization_code",
-          "response",
-          "stripe_user_id",
-          "access_token"
-        ],
-        "writes": [
-          "redirect.status_code"
-        ],
-        "literals": [
-          "/login",
-          "stripe_user_id",
-          "Stripe-User-ID",
-          "authorization_code",
-          "login error",
-          "Missing Authorization Code"
-        ]
-      },
-      "excerpt_body": "def authorize_stripe(request: Request):\n    ...\n    try:\n        response = stripe.OAuth.token(\n            grant_type='authorization_code',\n            code=authorization_code,\n        )\n        \n...\n        redirect = RedirectResponse(url=app.ui_router.url_path_for('products_index'))\n        ...\n        redirect.set_cookie('Stripe-Account', access_token)\n        redirect.set_cookie('Stripe-User-ID', stripe_user_id)\n\n...\n        return redirect\n    except Exception as e:\n        ...\n"
-    },
-    {
-      "id": "src/routers/auth.py::deauthorize_stripe",
-      "type": "function",
-      "name": "deauthorize_stripe",
-      "qualified_name": "deauthorize_stripe",
-      "file": "src/routers/auth.py",
-      "start_line": 55,
-      "end_line": 79,
-      "signature": "def deauthorize_stripe(request: Request):",
-      "docstring": "",
-      "token_count": 180,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 8,
-      "score": 4.1358,
-      "value_density": 0.023906,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "request.cookies.get",
-        "HTTPException",
-        "stripe.OAuth.deauthorize",
-        "RedirectResponse",
-        "app.ui_router.url_path_for",
-        "redirect.set_cookie",
-        "print",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "skel",
-      "tags": [
-        "auth",
-        "endpoint",
-        "external_api",
-        "logging",
-        "payment",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "stripe.OAuth.deauthorize",
-          "redirect.set_cookie",
-          "app.ui_router.url_path_for",
-          "RedirectResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "try->return",
-        "effects": [
-          "auth",
-          "payment",
-          "logging",
-          "external_api"
-        ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "unknown",
-        "reads": [
-          "router.get",
-          "redirect.status_code",
-          "request.cookies.get",
-          "redirect.set_cookie",
-          "request.cookies"
-        ],
-        "control_flow": [
-          "try",
-          "except",
+          "loop",
           "if",
           "early_return"
         ],
         "assigned": [
-          "stripe_user_id"
+          "payment_service",
+          "result"
         ],
-        "writes": [
-          "redirect.status_code"
-        ],
-        "literals": [
-          "/logout",
-          "Stripe-User-ID",
-          "Missing Authorization Code"
-        ]
-      },
-      "excerpt_body": "def deauthorize_stripe(request: Request):\n    try:\n        ...\n        if (not stripe_user_id or not access_key):\n            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=\"TYou are not logged in\")\n\n...\n        stripe.OAuth.deauthorize(\n            client_id=settings.stripe_client_id,\n            stripe_user_id=stripe_user_id\n        )\n\n...\n        redirect = RedirectResponse(url=app.ui_router.url_path_for('index'))\n        ...\n        redirect.set_cookie('Stripe-Account', '')\n        redirect.set_cookie('Stripe-User-ID', '')\n\n...\n        return redirect\n    except Exception as e:\n        ...\n"
-    },
-    {
-      "id": "src/routers/auth.py::stripe_login",
-      "type": "function",
-      "name": "stripe_login",
-      "qualified_name": "stripe_login",
-      "file": "src/routers/auth.py",
-      "start_line": 22,
-      "end_line": 29,
-      "signature": "def stripe_login(request: Request):",
-      "docstring": "",
-      "token_count": 93,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 3,
-      "score": 2.9714,
-      "value_density": 0.034551,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "HTTPException",
-        "RedirectResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "auth",
-        "endpoint",
-        "external_api",
-        "logging",
-        "payment",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "RedirectResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "if->RedirectResponse->return",
-        "effects": [
-          "auth",
-          "payment",
-          "logging",
-          "external_api"
-        ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "unknown",
-        "reads": [
-          "router.get"
-        ],
-        "control_flow": [
-          "if"
-        ],
-        "assigned": [],
         "writes": [],
         "literals": [
-          "/stripe_login"
+          "success",
+          "Received checkout request for user ",
+          "error",
+          "PaymentFailed",
+          "Fraud check rejected for user ",
+          "Payment failed: ",
+          "Stock check failed for item "
         ]
       },
-      "excerpt_body": "def stripe_login(request: Request):\n    if not settings.stripe_client_id:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=\"Missing a Required Credential, Stripe Client ID, check your environment variables\")\n\n...\n    redirect = RedirectResponse(url=stripe_login_url)\n\n...\n    return redirect\n"
+      "excerpt_body": "def checkout_endpoint(request: CheckoutRequest) -> dict:\n    ...\n    inventory_service = InventoryService()\n    for item in request.items:\n        ...\n        if not inventory_service.check_stock(item_id, quantity):\n            ...\n            return {\"success\": False, \"error\": \"OutOfStock\"}\n\n...\n    fraud_service = FraudService()\n    if fraud_service.is_fraudulent_attempt(request.user_id, request.amount):\n        ...\n        return {\"success\": False, \"error\": \"FraudRejected\"}\n\n...\n    payment_service = PaymentService()\n    result = payment_service.process_payment(request.user_id, request.amount)\n    \n...\n    if not result.success:\n        ...\n        return {\"success\": False, \"error\": \"PaymentFailed\", \"details\": result.error_message}\n\n...\n    return {\n        \"success\": True,\n        \"transaction_id\": result.transaction_id,\n        \"amount\": request.amount\n    }\n"
     },
     {
-      "id": "src/routers/products.py::<module>",
+      "id": "app/api/users.py::<module>",
       "type": "module",
       "name": "<module>",
       "qualified_name": "<module>",
-      "file": "src/routers/products.py",
+      "file": "app/api/users.py",
       "start_line": 1,
-      "end_line": 41,
-      "signature": "src/routers/products.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 216,
+      "end_line": 13,
+      "signature": "app/api/users.py",
+      "docstring": "",
+      "token_count": 143,
       "signature_token_count": 7,
-      "in_degree": 1,
-      "out_degree": 7,
-      "score": 3.2529,
-      "value_density": 0.01549,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 2.5152,
+      "value_density": 0.018359,
       "is_public": true,
-      "has_docstring": true,
+      "has_docstring": false,
       "has_type_annotations": false,
-      "calls": [
-        "APIRouter"
-      ],
+      "calls": [],
       "imports": [
         {
-          "module": "fastapi",
-          "name": "APIRouter",
+          "module": "app.models.user",
+          "name": "User",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "HTTPException",
+          "module": "app.models.user",
+          "name": "is_valid_email",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "status",
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "signature_only",
+      "tags": [
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/api/users.py::register_user",
+      "type": "function",
+      "name": "register_user",
+      "qualified_name": "register_user",
+      "file": "app/api/users.py",
+      "start_line": 4,
+      "end_line": 13,
+      "signature": "def register_user(email: str, username: str) -> dict:",
+      "docstring": "Register a new user in the system after validating email format.",
+      "token_count": 123,
+      "signature_token_count": 15,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 4.6678,
+      "value_density": 0.042824,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "is_valid_email",
+        "log_error",
+        "User"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "skel",
+      "tags": [
+        "email",
+        "endpoint",
+        "logging",
+        "public"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "is_valid_email",
+          "User"
+        ],
+        "resolved_calls": [
+          "User",
+          "is_valid_email"
+        ],
+        "flow": "if->User->return",
+        "effects": [
+          "logging",
+          "email"
+        ],
+        "raises": [],
+        "returns": "dict",
+        "reads": [
+          "user.user_id"
+        ],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [
+          "user"
+        ],
+        "writes": [],
+        "literals": [
+          "success",
+          "user_id",
+          "error",
+          "InvalidEmail",
+          "User ",
+          " registered successfully.",
+          "Invalid email: "
+        ]
+      },
+      "excerpt_body": "def register_user(email: str, username: str) -> dict:\n    ...\n    if not is_valid_email(email):\n        ...\n        return {\"success\": False, \"error\": \"InvalidEmail\"}\n        \n...\n    user = User(user_id=username, email=email)\n    ...\n    return {\"success\": True, \"user_id\": user.user_id}\n"
+    },
+    {
+      "id": "app/models/checkout.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/models/checkout.py",
+      "start_line": 1,
+      "end_line": 14,
+      "signature": "app/models/checkout.py",
+      "docstring": "",
+      "token_count": 105,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 4,
+      "score": 2.2516,
+      "value_density": 0.022743,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "dataclasses",
+          "name": "dataclass",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "dataclasses",
+          "name": "field",
           "alias": null,
           "type": "from_import"
         },
@@ -863,14 +432,8 @@
           "type": "from_import"
         },
         {
-          "module": "src",
-          "name": "schemas",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src.helpers.utils",
-          "name": "get_local_products",
+          "module": "typing",
+          "name": "Dict",
           "alias": null,
           "type": "from_import"
         }
@@ -878,249 +441,42 @@
       "base_classes": [],
       "mode": "signature_only",
       "tags": [
+        "model",
         "public"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
     },
     {
-      "id": "src/routers/products.py::get_product_by_slug",
-      "type": "async_function",
-      "name": "get_product_by_slug",
-      "qualified_name": "get_product_by_slug",
-      "file": "src/routers/products.py",
-      "start_line": 29,
-      "end_line": 40,
-      "signature": "async def get_product_by_slug(slug: str):",
-      "docstring": "",
-      "token_count": 72,
-      "signature_token_count": 9,
-      "in_degree": 0,
-      "out_degree": 3,
-      "score": 3.3796,
-      "value_density": 0.052806,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "get_local_products",
-        "HTTPException",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "async",
-        "database",
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "get_local_products"
-        ],
-        "resolved_calls": [
-          "get_local_products"
-        ],
-        "flow": "fetch->if->loop->return",
-        "effects": [
-          "db_read"
-        ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "unknown",
-        "reads": [
-          "router.get"
-        ],
-        "control_flow": [
-          "if",
-          "loop",
-          "early_return"
-        ],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/{slug}",
-          "Product was not found"
-        ]
-      },
-      "excerpt_body": "async def get_product_by_slug(slug: str):\n\n    products = get_local_products()\n\n...\n    if not products:\n        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Product was not found\")\n\n...\n    for product in products:\n        if product['slug']==slug:\n            return product\n\n...\n    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Product was not found\")\n"
-    },
-    {
-      "id": "src/routers/products.py::get_products",
-      "type": "async_function",
-      "name": "get_products",
-      "qualified_name": "get_products",
-      "file": "src/routers/products.py",
-      "start_line": 18,
-      "end_line": 25,
-      "signature": "async def get_products():",
-      "docstring": "",
-      "token_count": 35,
-      "signature_token_count": 6,
-      "in_degree": 0,
-      "out_degree": 3,
-      "score": 3.7672,
-      "value_density": 0.125573,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": false,
-      "calls": [
-        "get_local_products",
-        "HTTPException",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "async",
-        "database",
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "get_local_products"
-        ],
-        "resolved_calls": [
-          "get_local_products"
-        ],
-        "flow": "fetch->if->return",
-        "effects": [
-          "db_read"
-        ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "unknown",
-        "reads": [
-          "router.get"
-        ],
-        "control_flow": [
-          "if"
-        ],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/",
-          "Product Was Not Found"
-        ]
-      },
-      "excerpt_body": "async def get_products():\n    \n    products = get_local_products()\n\n...\n    if not products:\n        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Product Was Not Found')\n\n...\n    return products\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::<module>",
+      "id": "app/models/payment.py::<module>",
       "type": "module",
       "name": "<module>",
       "qualified_name": "<module>",
-      "file": "src/routers/ui_routes.py",
+      "file": "app/models/payment.py",
       "start_line": 1,
-      "end_line": 372,
-      "signature": "src/routers/ui_routes.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 2662,
+      "end_line": 9,
+      "signature": "app/models/payment.py",
+      "docstring": "",
+      "token_count": 45,
       "signature_token_count": 7,
-      "in_degree": 1,
-      "out_degree": 19,
-      "score": 3.867,
-      "value_density": 0.001456,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 2.2201,
+      "value_density": 0.056926,
       "is_public": true,
-      "has_docstring": true,
+      "has_docstring": false,
       "has_type_annotations": false,
-      "calls": [
-        "APIRouter",
-        "resolve",
-        "Path",
-        "Jinja2Templates",
-        "str"
-      ],
+      "calls": [],
       "imports": [
         {
-          "module": "fastapi",
-          "name": "APIRouter",
+          "module": "dataclasses",
+          "name": "dataclass",
           "alias": null,
           "type": "from_import"
         },
         {
-          "module": "fastapi",
-          "name": "Request",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi",
-          "name": "status",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi",
-          "name": "HTTPException",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi.responses",
-          "name": "HTMLResponse",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi.responses",
-          "name": "RedirectResponse",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "fastapi.templating",
-          "name": "Jinja2Templates",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "pathlib",
-          "name": "Path",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src.config",
-          "name": "settings",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "http3",
-          "name": "http3",
-          "alias": null,
-          "type": "import"
-        },
-        {
-          "module": "stripe",
-          "name": "stripe",
-          "alias": null,
-          "type": "import"
-        },
-        {
-          "module": "json",
-          "name": "json",
-          "alias": null,
-          "type": "import"
-        },
-        {
-          "module": "src",
-          "name": "app",
-          "alias": null,
-          "type": "from_import"
-        },
-        {
-          "module": "src",
-          "name": "schemas",
+          "module": "typing",
+          "name": "Optional",
           "alias": null,
           "type": "from_import"
         }
@@ -1128,1911 +484,435 @@
       "base_classes": [],
       "mode": "signature_only",
       "tags": [
+        "model",
         "public"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
     },
     {
-      "id": "src/routers/ui_routes.py::attention_catchers_alerts",
-      "type": "function",
-      "name": "attention_catchers_alerts",
-      "qualified_name": "attention_catchers_alerts",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 297,
-      "end_line": 301,
-      "signature": "def attention_catchers_alerts(request: Request):",
+      "id": "app/models/user.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/models/user.py",
+      "start_line": 1,
+      "end_line": 12,
+      "signature": "app/models/user.py",
       "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/attention-catchers-alerts"
-        ]
-      },
-      "excerpt_body": "def attention_catchers_alerts(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/attention-catchers-alerts.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::attention_catchers_modals",
-      "type": "function",
-      "name": "attention_catchers_modals",
-      "qualified_name": "attention_catchers_modals",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 304,
-      "end_line": 308,
-      "signature": "def attention_catchers_modals(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/attention-catchers-modals"
-        ]
-      },
-      "excerpt_body": "def attention_catchers_modals(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/attention-catchers-modals.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
-      "type": "function",
-      "name": "attention_catchers_tooltips_popovers",
-      "qualified_name": "attention_catchers_tooltips_popovers",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 311,
-      "end_line": 315,
-      "signature": "def attention_catchers_tooltips_popovers(request: Request):",
-      "docstring": "",
-      "token_count": 41,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3443,
-      "value_density": 0.098362,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/attention-catchers-tooltips-popovers"
-        ]
-      },
-      "excerpt_body": "def attention_catchers_tooltips_popovers(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/attention-catchers-tooltips-popovers.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::cancelled",
-      "type": "function",
-      "name": "cancelled",
-      "qualified_name": "cancelled",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 137,
-      "end_line": 141,
-      "signature": "def cancelled(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "payment",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [
-          "payment"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/cancelled",
-          "ecommerce/payment-cancelled.html"
-        ]
-      },
-      "excerpt_body": "def cancelled(request: Request):\n    return TEMPLATES.TemplateResponse(\"ecommerce/payment-cancelled.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::create_checkout_session",
-      "type": "async_function",
-      "name": "create_checkout_session",
-      "qualified_name": "create_checkout_session",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 145,
-      "end_line": 186,
-      "signature": "async def create_checkout_session(path, request: Request):",
-      "docstring": "",
-      "token_count": 327,
-      "signature_token_count": 11,
-      "in_degree": 0,
-      "out_degree": 9,
-      "score": 3.884,
-      "value_density": 0.012252,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "app.product_router.url_path_for",
-        "base_url.__str__",
-        "product_url.__str__",
-        "http3.AsyncClient",
-        "http3client.get",
-        "response.json",
-        "stripe.checkout.Session.create",
-        "HTTPException",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "async",
-        "database",
-        "endpoint",
-        "external_api",
-        "payment",
-        "public",
-        "route",
-        "serialization",
-        "validation"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "app.product_router.url_path_for",
-          "response.json",
-          "base_url.__str__",
-          "stripe.checkout.Session.create",
-          "product_url.__str__",
-          "http3.AsyncClient"
-        ],
-        "resolved_calls": [],
-        "flow": "url_path_for->__str__->AsyncClient->json->try->return",
-        "effects": [
-          "validation",
-          "payment",
-          "db_write",
-          "external_api",
-          "serialization"
-        ],
-        "raises": [
-          "HTTPException"
-        ],
-        "returns": "dict",
-        "reads": [
-          "request.base_url",
-          "router.get",
-          "http3client.get",
-          "product_url.__str__"
-        ],
-        "control_flow": [
-          "try",
-          "except",
-          "early_return"
-        ],
-        "assigned": [
-          "http3client",
-          "response"
-        ],
-        "writes": [],
-        "literals": [
-          "/create-checkout-session/{path}/",
-          "payment"
-        ]
-      },
-      "excerpt_body": "async def create_checkout_session(path, request: Request):\n    ...\n    product_url = app.product_router.url_path_for(\"get_product_by_slug\", slug=path)\n    request_url = base_url.__str__() + product_url.__str__()[1:]\n\n...\n    http3client = http3.AsyncClient()\n    ...\n    product = response.json()\n\n...\n    try:\n        ...\n        checkout_session = stripe.checkout.Session.create(\n            success_url=domain_url + \"success?session_id={CHECKOUT_SESSION_ID}\",\n            cancel_url=domain_url + \"cancelled\",\n            payment_method_types=[\"card\"],\n            mode=\"payment\",\n            line_items=[\n                {\n                    \"name\": product['name'],\n                    \"quantity\": 1,\n                    \"currency\": 'usd',\n                    \"amount\": product['price'] * 100,\n                }\n            ]\n        )\n        return ({\"sessionId\": checkout_session[\"id\"]})\n    except Exception as e:\n        ...\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_avatars",
-      "type": "function",
-      "name": "elements_avatars",
-      "qualified_name": "elements_avatars",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 325,
-      "end_line": 329,
-      "signature": "def elements_avatars(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-avatars"
-        ]
-      },
-      "excerpt_body": "def elements_avatars(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-avatars.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_badges",
-      "type": "function",
-      "name": "elements_badges",
-      "qualified_name": "elements_badges",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 353,
-      "end_line": 357,
-      "signature": "def elements_badges(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-badges"
-        ]
-      },
-      "excerpt_body": "def elements_badges(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-badges.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_breadcrumbs",
-      "type": "function",
-      "name": "elements_breadcrumbs",
-      "qualified_name": "elements_breadcrumbs",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 346,
-      "end_line": 350,
-      "signature": "def elements_breadcrumbs(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "database",
-        "endpoint",
-        "file_io",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [
-          "db_read",
-          "file_io"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-breadcrumbs"
-        ]
-      },
-      "excerpt_body": "def elements_breadcrumbs(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-breadcrumbs.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_buttons",
-      "type": "function",
-      "name": "elements_buttons",
-      "qualified_name": "elements_buttons",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 318,
-      "end_line": 322,
-      "signature": "def elements_buttons(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-buttons"
-        ]
-      },
-      "excerpt_body": "def elements_buttons(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-buttons.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_dropdowns",
-      "type": "function",
-      "name": "elements_dropdowns",
-      "qualified_name": "elements_dropdowns",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 332,
-      "end_line": 336,
-      "signature": "def elements_dropdowns(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-dropdowns"
-        ]
-      },
-      "excerpt_body": "def elements_dropdowns(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-dropdowns.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_progress_bars",
-      "type": "function",
-      "name": "elements_progress_bars",
-      "qualified_name": "elements_progress_bars",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 367,
-      "end_line": 371,
-      "signature": "def elements_progress_bars(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-progress-bars"
-        ]
-      },
-      "excerpt_body": "def elements_progress_bars(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-progress-bars.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_toggles",
-      "type": "function",
-      "name": "elements_toggles",
-      "qualified_name": "elements_toggles",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 339,
-      "end_line": 343,
-      "signature": "def elements_toggles(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-toggles"
-        ]
-      },
-      "excerpt_body": "def elements_toggles(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-toggles.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::elements_typography",
-      "type": "function",
-      "name": "elements_typography",
-      "qualified_name": "elements_typography",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 360,
-      "end_line": 364,
-      "signature": "def elements_typography(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/elements-typography"
-        ]
-      },
-      "excerpt_body": "def elements_typography(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/elements-typography.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::get_publishable_key",
-      "type": "function",
-      "name": "get_publishable_key",
-      "qualified_name": "get_publishable_key",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 125,
-      "end_line": 127,
-      "signature": "def get_publishable_key():",
-      "docstring": "",
-      "token_count": 21,
-      "signature_token_count": 5,
+      "token_count": 69,
+      "signature_token_count": 7,
       "in_degree": 0,
       "out_degree": 1,
-      "score": 3.3969,
-      "value_density": 0.199818,
+      "score": 1.7653,
+      "value_density": 0.028021,
       "is_public": true,
       "has_docstring": false,
       "has_type_annotations": false,
-      "calls": [
-        "router.get"
+      "calls": [],
+      "imports": [
+        {
+          "module": "dataclasses",
+          "name": "dataclass",
+          "alias": null,
+          "type": "from_import"
+        }
       ],
-      "imports": [],
       "base_classes": [],
       "mode": "signature_only",
       "tags": [
-        "database",
-        "endpoint",
+        "model",
+        "public"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/user.py::User",
+      "type": "class",
+      "name": "User",
+      "qualified_name": "User",
+      "file": "app/models/user.py",
+      "start_line": 4,
+      "end_line": 8,
+      "signature": "class User:",
+      "docstring": "Represent a user account in the system.",
+      "token_count": 28,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 5.197,
+      "value_density": 0.199885,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "model",
         "public",
-        "route"
+        "schema"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/models/user.py::is_valid_email",
+      "type": "function",
+      "name": "is_valid_email",
+      "qualified_name": "is_valid_email",
+      "file": "app/models/user.py",
+      "start_line": 10,
+      "end_line": 12,
+      "signature": "def is_valid_email(email: str) -> bool:",
+      "docstring": "Check if an email contains a basic '@' character.",
+      "token_count": 35,
+      "signature_token_count": 11,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 4.0463,
+      "value_density": 0.161852,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "email",
+        "model",
+        "public"
       ],
       "behavior_skeleton": {
         "calls": [],
         "resolved_calls": [],
         "flow": "return",
         "effects": [
-          "db_read"
+          "email"
         ],
         "raises": [],
-        "returns": "unknown",
-        "reads": [
-          "router.get"
-        ],
-        "control_flow": [],
-        "assigned": [
-          "stripe_config"
-        ],
-        "writes": [],
-        "literals": [
-          "/config"
-        ]
-      },
-      "excerpt_body": "def get_publishable_key():\n    ...\n    return stripe_config\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::index",
-      "type": "async_function",
-      "name": "index",
-      "qualified_name": "index",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 35,
-      "end_line": 36,
-      "signature": "async def index(request: Request, response_model=HTMLResponse):",
-      "docstring": "",
-      "token_count": 34,
-      "signature_token_count": 13,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.5158,
-      "value_density": 0.159809,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "async",
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
+        "returns": "bool",
+        "reads": [],
         "control_flow": [],
         "assigned": [],
         "writes": [],
-        "literals": [
-          "/"
-        ]
+        "literals": []
       },
-      "excerpt_body": "async def index(request: Request, response_model=HTMLResponse):\n    return TEMPLATES.TemplateResponse(\"pages/index.html\", {\"request\" : request})\n"
+      "excerpt_body": "def is_valid_email(email: str) -> bool:\n    ...\n    return \"@\" in email\n"
     },
     {
-      "id": "src/routers/ui_routes.py::input_areas_forms",
-      "type": "function",
-      "name": "input_areas_forms",
-      "qualified_name": "input_areas_forms",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 290,
-      "end_line": 294,
-      "signature": "def input_areas_forms(request: Request):",
+      "id": "app/services/fraud.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/services/fraud.py",
+      "start_line": 1,
+      "end_line": 23,
+      "signature": "app/services/fraud.py",
       "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
+      "token_count": 172,
+      "signature_token_count": 7,
       "in_degree": 0,
       "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
+      "score": 1.6494,
+      "value_density": 0.009936,
       "is_public": true,
       "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
       ],
-      "imports": [],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
-        "endpoint",
         "public",
-        "route"
+        "service"
       ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/input-areas-forms"
-        ]
-      },
-      "excerpt_body": "def input_areas_forms(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/input-areas-forms.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
+      "behavior_skeleton": {},
+      "excerpt_body": ""
     },
     {
-      "id": "src/routers/ui_routes.py::input_areas_inputs",
-      "type": "function",
-      "name": "input_areas_inputs",
-      "qualified_name": "input_areas_inputs",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 283,
-      "end_line": 287,
-      "signature": "def input_areas_inputs(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
+      "id": "app/services/fraud.py::FraudService",
+      "type": "class",
+      "name": "FraudService",
+      "qualified_name": "FraudService",
+      "file": "app/services/fraud.py",
+      "start_line": 3,
+      "end_line": 23,
+      "signature": "class FraudService:",
+      "docstring": "Service to evaluate transaction risk levels.",
+      "token_count": 162,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.2577,
+      "value_density": 0.014111,
       "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
       "imports": [],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
-        "endpoint",
+        "class",
         "public",
-        "route"
+        "service"
       ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/input-areas-inputs"
-        ]
-      },
-      "excerpt_body": "def input_areas_inputs(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/input-areas-inputs.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
+      "behavior_skeleton": {},
+      "excerpt_body": ""
     },
     {
-      "id": "src/routers/ui_routes.py::navigation_nav_tabs",
-      "type": "function",
-      "name": "navigation_nav_tabs",
-      "qualified_name": "navigation_nav_tabs",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 269,
-      "end_line": 273,
-      "signature": "def navigation_nav_tabs(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/navigation-nav-tabs"
-        ]
-      },
-      "excerpt_body": "def navigation_nav_tabs(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/navigation-nav-tabs.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::navigation_navbars",
-      "type": "function",
-      "name": "navigation_navbars",
-      "qualified_name": "navigation_navbars",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 262,
-      "end_line": 266,
-      "signature": "def navigation_navbars(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/navigation-navbars"
-        ]
-      },
-      "excerpt_body": "def navigation_navbars(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/navigation-navbars.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::navigation_pagination",
-      "type": "function",
-      "name": "navigation_pagination",
-      "qualified_name": "navigation_pagination",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 276,
-      "end_line": 280,
-      "signature": "def navigation_pagination(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/navigation-pagination"
-        ]
-      },
-      "excerpt_body": "def navigation_pagination(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/navigation-pagination.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_404",
-      "type": "function",
-      "name": "page_404",
-      "qualified_name": "page_404",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 241,
-      "end_line": 245,
-      "signature": "def page_404(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-404"
-        ]
-      },
-      "excerpt_body": "def page_404(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-404.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_about_us",
-      "type": "function",
-      "name": "page_about_us",
-      "qualified_name": "page_about_us",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 205,
-      "end_line": 209,
-      "signature": "def page_about_us(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-about-us"
-        ]
-      },
-      "excerpt_body": "def page_about_us(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-about-us.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_author",
-      "type": "function",
-      "name": "page_author",
-      "qualified_name": "page_author",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 220,
-      "end_line": 224,
-      "signature": "def page_author(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 4.2611,
-      "value_density": 0.142037,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "skel",
-      "tags": [
-        "auth",
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [
-          "auth"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-author",
-          "pages/page-author.html"
-        ]
-      },
-      "excerpt_body": "def page_author(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-author.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_contact_us",
-      "type": "function",
-      "name": "page_contact_us",
-      "qualified_name": "page_contact_us",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 213,
-      "end_line": 217,
-      "signature": "def page_contact_us(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-contact-us"
-        ]
-      },
-      "excerpt_body": "def page_contact_us(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-contact-us.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_sections_features",
-      "type": "function",
-      "name": "page_sections_features",
-      "qualified_name": "page_sections_features",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 255,
-      "end_line": 259,
-      "signature": "def page_sections_features(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-sections-features"
-        ]
-      },
-      "excerpt_body": "def page_sections_features(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-sections-features.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_sections_hero_sections",
-      "type": "function",
-      "name": "page_sections_hero_sections",
-      "qualified_name": "page_sections_hero_sections",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 248,
-      "end_line": 252,
-      "signature": "def page_sections_hero_sections(request: Request):",
-      "docstring": "",
-      "token_count": 41,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3443,
-      "value_density": 0.098362,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-sections-hero-sections"
-        ]
-      },
-      "excerpt_body": "def page_sections_hero_sections(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-sections-hero-sections.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_sign_in",
-      "type": "function",
-      "name": "page_sign_in",
-      "qualified_name": "page_sign_in",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 227,
-      "end_line": 231,
-      "signature": "def page_sign_in(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-sign-in"
-        ]
-      },
-      "excerpt_body": "def page_sign_in(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-sign-in.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::page_sign_up",
-      "type": "function",
-      "name": "page_sign_up",
-      "qualified_name": "page_sign_up",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 234,
-      "end_line": 238,
-      "signature": "def page_sign_up(request: Request):",
-      "docstring": "",
-      "token_count": 39,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.3886,
-      "value_density": 0.105894,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/page-sign-up"
-        ]
-      },
-      "excerpt_body": "def page_sign_up(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/page-sign-up.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::presentation",
-      "type": "function",
-      "name": "presentation",
-      "qualified_name": "presentation",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 197,
-      "end_line": 201,
-      "signature": "def presentation(request: Request):",
-      "docstring": "",
-      "token_count": 35,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4882,
-      "value_density": 0.124579,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/presentation"
-        ]
-      },
-      "excerpt_body": "def presentation(request: Request):\n    return TEMPLATES.TemplateResponse(\"pages/presentation.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::product_info",
-      "type": "async_function",
-      "name": "product_info",
-      "qualified_name": "product_info",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 104,
-      "end_line": 122,
-      "signature": "async def product_info(product_slug: str, request: Request, response_model=HTMLResponse):",
-      "docstring": "",
-      "token_count": 138,
+      "id": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "type": "method",
+      "name": "is_fraudulent_attempt",
+      "qualified_name": "FraudService.is_fraudulent_attempt",
+      "file": "app/services/fraud.py",
+      "start_line": 9,
+      "end_line": 23,
+      "signature": "def is_fraudulent_attempt(self, user_id: str, amount: float) -> bool:",
+      "docstring": "Run standard rules to check if this purchase is highly risky.",
+      "token_count": 127,
       "signature_token_count": 17,
-      "in_degree": 0,
-      "out_degree": 10,
-      "score": 4.1544,
-      "value_density": 0.034052,
+      "in_degree": 1,
+      "out_degree": 3,
+      "score": 2.9884,
+      "value_density": 0.026923,
       "is_public": true,
-      "has_docstring": false,
+      "has_docstring": true,
       "has_type_annotations": true,
       "calls": [
-        "app.product_router.url_path_for",
-        "base_url.__str__",
-        "product_url.__str__",
-        "http3.AsyncClient",
-        "http3client.get",
-        "RedirectResponse",
-        "router.url_path_for",
-        "response.json",
-        "TEMPLATES.TemplateResponse",
-        "router.get"
+        "log_info",
+        "log_error",
+        "user_id.startswith"
       ],
       "imports": [],
       "base_classes": [],
-      "mode": "skel",
+      "mode": "minimal",
       "tags": [
-        "async",
-        "endpoint",
-        "logging",
+        "method",
+        "payment",
         "public",
-        "route",
-        "serialization"
+        "service"
       ],
       "behavior_skeleton": {
         "calls": [
-          "app.product_router.url_path_for",
-          "response.json",
-          "base_url.__str__",
-          "product_url.__str__",
-          "http3.AsyncClient",
-          "TEMPLATES.TemplateResponse",
-          "RedirectResponse"
+          "user_id.startswith"
         ],
         "resolved_calls": [],
-        "flow": "url_path_for->__str__->AsyncClient->if->json->return",
+        "flow": "if->return",
         "effects": [
-          "logging",
-          "serialization"
+          "payment"
         ],
         "raises": [],
-        "returns": "unknown",
+        "returns": "bool",
         "reads": [
-          "request.base_url",
-          "router.get",
-          "TEMPLATES.TemplateResponse",
-          "http3client.get",
-          "product_url.__str__",
-          "router.url_path_for"
+          "user_id.startswith"
         ],
         "control_flow": [
           "if",
           "early_return"
         ],
-        "assigned": [
-          "http3client",
-          "response"
-        ],
-        "writes": [],
-        "literals": [
-          "/products/{product_slug}",
-          "404"
-        ]
-      },
-      "excerpt_body": "async def product_info(product_slug: str, request: Request, response_model=HTMLResponse):\n    ...\n    product_url = app.product_router.url_path_for(\"get_product_by_slug\", slug=product_slug)\n    request_url = base_url.__str__() + product_url.__str__()[1:]\n\n...\n    http3client = http3.AsyncClient()\n    ...\n    if (response.status_code==404):\n        redirect = RedirectResponse(url=router.url_path_for('products_index'))\n        return redirect\n\n...\n    product = response.json()\n\n...\n    return TEMPLATES.TemplateResponse(\"ecommerce/template.html\", {\n        \"request\" : request,\n        \"product\": product,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::products_index",
-      "type": "async_function",
-      "name": "products_index",
-      "qualified_name": "products_index",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 39,
-      "end_line": 101,
-      "signature": "async def products_index(request: Request, response_model=HTMLResponse):",
-      "docstring": "",
-      "token_count": 492,
-      "signature_token_count": 13,
-      "in_degree": 0,
-      "out_degree": 16,
-      "score": 4.2738,
-      "value_density": 0.008904,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "app.product_router.url_path_for",
-        "base_url.__str__",
-        "product_url.__str__",
-        "http3.AsyncClient",
-        "http3client.get",
-        "response.json",
-        "products_url.__str__",
-        "enumerate",
-        "request.cookies.get",
-        "stripe.Product.list",
-        "print",
-        "productdict.append",
-        "json.dumps",
-        "json_data.append",
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "skel",
-      "tags": [
-        "async",
-        "endpoint",
-        "public",
-        "route",
-        "serialization"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "app.product_router.url_path_for",
-          "response.json",
-          "base_url.__str__",
-          "product_url.__str__",
-          "products_url.__str__",
-          "http3.AsyncClient",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "url_path_for->__str__->AsyncClient->json->url_path_for->__str__->AsyncClient->json->loop->if->return",
-        "effects": [
-          "serialization"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "request.base_url",
-          "router.get",
-          "request.cookies.get",
-          "TEMPLATES.TemplateResponse",
-          "http3client.get",
-          "request.cookies",
-          "product_url.__str__",
-          "products_url.__str__"
-        ],
-        "control_flow": [
-          "loop",
-          "if"
-        ],
-        "assigned": [
-          "http3client",
-          "response",
-          "json_data"
-        ],
-        "writes": [],
-        "literals": [
-          "/products/"
-        ]
-      },
-      "excerpt_body": "async def products_index(request: Request, response_model=HTMLResponse):\n    ...\n    product_url = app.product_router.url_path_for(\"get_product_by_slug\", slug=featured_product_slug)\n    request_url = base_url.__str__() + product_url.__str__()[1:]\n\n...\n    http3client = http3.AsyncClient()\n    ...\n    featured_product = response.json()\n\n...\n    products_url = app.product_router.url_path_for(\"get_products\")\n    request_url2 = base_url.__str__() + products_url.__str__()[1:]\n\n...\n    http3client = http3.AsyncClient()\n    ...\n    products = response.json()\n    ...\n    return TEMPLATES.TemplateResponse(\"ecommerce/index.html\", {\n        \"request\" : request,\n        \"featured_product\" : featured_product,\n        \"products\": products,\n    })\n"
-    },
-    {
-      "id": "src/routers/ui_routes.py::success",
-      "type": "function",
-      "name": "success",
-      "qualified_name": "success",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 130,
-      "end_line": 134,
-      "signature": "def success(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 0,
-      "score": 2.8865,
-      "value_density": 0.096217,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "payment",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [
-          "payment"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
         "assigned": [],
         "writes": [],
         "literals": [
-          "/success",
-          "ecommerce/payment-success.html"
+          "Running fraud assessment for user ",
+          "Transaction rejected: User "
         ]
       },
-      "excerpt_body": "def success(request: Request):\n    return TEMPLATES.TemplateResponse(\"ecommerce/payment-success.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
+      "excerpt_body": "    def is_fraudulent_attempt(self, user_id: str, amount: float) -> bool:\n        ...\n        if amount > 10000.0:\n            ...\n            return True\n            \n...\n        if user_id.startswith(\"fraud_\"):\n            ...\n            return True\n            \n...\n        return False\n"
     },
     {
-      "id": "src/routers/ui_routes.py::success",
-      "type": "function",
-      "name": "success",
-      "qualified_name": "success",
-      "file": "src/routers/ui_routes.py",
-      "start_line": 190,
-      "end_line": 194,
-      "signature": "def success(request: Request):",
-      "docstring": "",
-      "token_count": 37,
-      "signature_token_count": 8,
-      "in_degree": 0,
-      "out_degree": 2,
-      "score": 3.4363,
-      "value_density": 0.114543,
-      "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
-      "calls": [
-        "TEMPLATES.TemplateResponse",
-        "router.get"
-      ],
-      "imports": [],
-      "base_classes": [],
-      "mode": "signature_only",
-      "tags": [
-        "endpoint",
-        "payment",
-        "public",
-        "route"
-      ],
-      "behavior_skeleton": {
-        "calls": [
-          "TEMPLATES.TemplateResponse"
-        ],
-        "resolved_calls": [],
-        "flow": "return",
-        "effects": [
-          "payment"
-        ],
-        "raises": [],
-        "returns": "call:TEMPLATES.TemplateResponse",
-        "reads": [
-          "router.get",
-          "TEMPLATES.TemplateResponse"
-        ],
-        "control_flow": [],
-        "assigned": [],
-        "writes": [],
-        "literals": [
-          "/success",
-          "ecommerce/payment-success.html"
-        ]
-      },
-      "excerpt_body": "def success(request: Request):\n    return TEMPLATES.TemplateResponse(\"ecommerce/payment-success.html\", {\n        \"request\" : request,\n        \"config\" : settings\n    })\n"
-    },
-    {
-      "id": "src/schemas.py::<module>",
+      "id": "app/services/inventory.py::<module>",
       "type": "module",
       "name": "<module>",
       "qualified_name": "<module>",
-      "file": "src/schemas.py",
+      "file": "app/services/inventory.py",
       "start_line": 1,
-      "end_line": 20,
-      "signature": "src/schemas.py",
-      "docstring": "Copyright (c) 2019 - present AppSeed.us",
-      "token_count": 71,
-      "signature_token_count": 5,
-      "in_degree": 3,
-      "out_degree": 1,
-      "score": 4.092,
-      "value_density": 0.061075,
+      "end_line": 29,
+      "signature": "app/services/inventory.py",
+      "docstring": "",
+      "token_count": 228,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": 1.5643,
+      "value_density": 0.007046,
       "is_public": true,
-      "has_docstring": true,
+      "has_docstring": false,
       "has_type_annotations": false,
       "calls": [],
       "imports": [
         {
-          "module": "pydantic",
-          "name": "BaseModel",
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/inventory.py::InventoryService",
+      "type": "class",
+      "name": "InventoryService",
+      "qualified_name": "InventoryService",
+      "file": "app/services/inventory.py",
+      "start_line": 3,
+      "end_line": 29,
+      "signature": "class InventoryService:",
+      "docstring": "Service to handle stock checks and inventory allocations.",
+      "token_count": 218,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.1339,
+      "value_density": 0.009879,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "class",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "method",
+      "name": "check_stock",
+      "qualified_name": "InventoryService.check_stock",
+      "file": "app/services/inventory.py",
+      "start_line": 14,
+      "end_line": 21,
+      "signature": "def check_stock(self, item_id: str, quantity: int) -> bool:",
+      "docstring": "Check if inventory has sufficient stock for the requested quantity.",
+      "token_count": 95,
+      "signature_token_count": 17,
+      "in_degree": 2,
+      "out_degree": 3,
+      "score": 3.8341,
+      "value_density": 0.048533,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "log_info",
+        "self.stock_db.get",
+        "log_error"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "method",
+        "public",
+        "service",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [],
+        "resolved_calls": [],
+        "flow": "if->return",
+        "effects": [
+          "validation"
+        ],
+        "raises": [],
+        "returns": "bool",
+        "reads": [],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "    def check_stock(self, item_id: str, quantity: int) -> bool:\n        ...\n        if available >= quantity:\n            return True\n        ...\n        return False\n"
+    },
+    {
+      "id": "app/services/payments.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/services/payments.py",
+      "start_line": 1,
+      "end_line": 24,
+      "signature": "app/services/payments.py",
+      "docstring": "",
+      "token_count": 204,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 5,
+      "score": 2.5362,
+      "value_density": 0.012809,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "uuid",
+          "name": "uuid",
+          "alias": null,
+          "type": "import"
+        },
+        {
+          "module": "app.models.payment",
+          "name": "PaymentResult",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_info",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.logging",
+          "name": "log_error",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.utils.money",
+          "name": "format_currency",
           "alias": null,
           "type": "from_import"
         }
@@ -3041,621 +921,713 @@
       "mode": "signature_only",
       "tags": [
         "public",
-        "schema"
+        "service"
       ],
       "behavior_skeleton": {},
       "excerpt_body": ""
     },
     {
-      "id": "src/schemas.py::Product",
+      "id": "app/services/payments.py::PaymentService",
       "type": "class",
-      "name": "Product",
-      "qualified_name": "Product",
-      "file": "src/schemas.py",
-      "start_line": 17,
-      "end_line": 20,
-      "signature": "class Product(ProductBase):",
-      "docstring": "",
-      "token_count": 15,
-      "signature_token_count": 6,
-      "in_degree": 0,
-      "out_degree": 1,
-      "score": 3.4264,
-      "value_density": 0.34264,
+      "name": "PaymentService",
+      "qualified_name": "PaymentService",
+      "file": "app/services/payments.py",
+      "start_line": 6,
+      "end_line": 24,
+      "signature": "class PaymentService:",
+      "docstring": "Service to process charges against payment gateways.",
+      "token_count": 176,
+      "signature_token_count": 3,
+      "in_degree": 2,
+      "out_degree": 0,
+      "score": 2.8013,
+      "value_density": 0.016099,
       "is_public": true,
-      "has_docstring": false,
-      "has_type_annotations": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
       "calls": [],
       "imports": [],
-      "base_classes": [
-        "ProductBase"
-      ],
-      "mode": "body",
+      "base_classes": [],
+      "mode": "minimal",
       "tags": [
         "class",
-        "model",
         "public",
-        "schema"
+        "service"
       ],
       "behavior_skeleton": {},
-      "excerpt_body": "",
-      "body": "class Product(ProductBase):\n    slug: str\n    class Config:\n        orm_mode = True\n"
+      "excerpt_body": ""
     },
     {
-      "id": "src/schemas.py::ProductBase",
-      "type": "class",
-      "name": "ProductBase",
-      "qualified_name": "ProductBase",
-      "file": "src/schemas.py",
-      "start_line": 8,
-      "end_line": 14,
-      "signature": "class ProductBase(BaseModel):",
+      "id": "app/services/payments.py::PaymentService.process_payment",
+      "type": "method",
+      "name": "process_payment",
+      "qualified_name": "PaymentService.process_payment",
+      "file": "app/services/payments.py",
+      "start_line": 12,
+      "end_line": 24,
+      "signature": "def process_payment(self, user_id: str, amount: float) -> PaymentResult:",
+      "docstring": "Process payment through the remote provider gateway.",
+      "token_count": 140,
+      "signature_token_count": 17,
+      "in_degree": 1,
+      "out_degree": 6,
+      "score": 4.5466,
+      "value_density": 0.036666,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "format_currency",
+        "log_info",
+        "log_error",
+        "PaymentResult",
+        "str",
+        "uuid.uuid4"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "method",
+        "payment",
+        "public",
+        "service"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "format_currency",
+          "uuid.uuid4",
+          "PaymentResult"
+        ],
+        "resolved_calls": [
+          "format_currency",
+          "PaymentResult"
+        ],
+        "flow": "format_currency->if->uuid4->return",
+        "effects": [
+          "payment"
+        ],
+        "raises": [],
+        "returns": "PaymentResult",
+        "reads": [],
+        "control_flow": [
+          "if",
+          "early_return"
+        ],
+        "assigned": [],
+        "writes": [],
+        "literals": [
+          " for user ",
+          "Payment successful. Transaction ID: ",
+          "Invalid payment amount"
+        ]
+      },
+      "excerpt_body": "    def process_payment(self, user_id: str, amount: float) -> PaymentResult:\n        ...\n        formatted = format_currency(amount)\n        ...\n        if amount <= 0.0:\n            ...\n            return PaymentResult(success=False, error_message=\"Invalid payment amount\")\n\n...\n        transaction_id = str(uuid.uuid4())\n        ...\n        return PaymentResult(success=True, transaction_id=transaction_id)\n"
+    },
+    {
+      "id": "app/utils/logging.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/logging.py",
+      "start_line": 1,
+      "end_line": 11,
+      "signature": "app/utils/logging.py",
       "docstring": "",
-      "token_count": 24,
-      "signature_token_count": 6,
-      "in_degree": 2,
+      "token_count": 112,
+      "signature_token_count": 7,
+      "in_degree": 0,
       "out_degree": 1,
-      "score": 4.5047,
-      "value_density": 0.237089,
+      "score": 1.1634,
+      "value_density": 0.010975,
       "is_public": true,
       "has_docstring": false,
-      "has_type_annotations": true,
+      "has_type_annotations": false,
       "calls": [],
-      "imports": [],
-      "base_classes": [
-        "BaseModel"
+      "imports": [
+        {
+          "module": "datetime",
+          "name": "datetime",
+          "alias": null,
+          "type": "import"
+        }
       ],
-      "mode": "body",
+      "base_classes": [],
+      "mode": "minimal",
       "tags": [
-        "class",
-        "model",
         "public",
-        "schema"
+        "utility"
       ],
       "behavior_skeleton": {},
-      "excerpt_body": "",
-      "body": "class ProductBase(BaseModel):\n    name: str\n    price: int\n    currency: str\n    info: str\n    short_description: str\n    full_description: str\n"
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/utils/logging.py::log_error",
+      "type": "function",
+      "name": "log_error",
+      "qualified_name": "log_error",
+      "file": "app/utils/logging.py",
+      "start_line": 8,
+      "end_line": 11,
+      "signature": "def log_error(message: str) -> None:",
+      "docstring": "Log an error level message with a timestamp.",
+      "token_count": 55,
+      "signature_token_count": 11,
+      "in_degree": 10,
+      "out_degree": 3,
+      "score": 8.5707,
+      "value_density": 0.19046,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "isoformat",
+        "datetime.datetime.now",
+        "print"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "isoformat",
+          "datetime.datetime.now"
+        ],
+        "resolved_calls": [],
+        "flow": "isoformat->now",
+        "effects": [
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": [
+          "] ERROR: "
+        ]
+      },
+      "excerpt_body": "def log_error(message: str) -> None:\n    ...\n    timestamp = datetime.datetime.now().isoformat()\n    ...\n"
+    },
+    {
+      "id": "app/utils/logging.py::log_info",
+      "type": "function",
+      "name": "log_info",
+      "qualified_name": "log_info",
+      "file": "app/utils/logging.py",
+      "start_line": 3,
+      "end_line": 6,
+      "signature": "def log_info(message: str) -> None:",
+      "docstring": "Log an info level message with a timestamp.",
+      "token_count": 55,
+      "signature_token_count": 11,
+      "in_degree": 13,
+      "out_degree": 3,
+      "score": 10.0612,
+      "value_density": 0.223582,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": true,
+      "calls": [
+        "isoformat",
+        "datetime.datetime.now",
+        "print"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "isoformat",
+          "datetime.datetime.now"
+        ],
+        "resolved_calls": [],
+        "flow": "isoformat->now",
+        "effects": [
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [],
+        "writes": [],
+        "literals": []
+      },
+      "excerpt_body": "def log_info(message: str) -> None:\n    ...\n    timestamp = datetime.datetime.now().isoformat()\n    ...\n"
+    },
+    {
+      "id": "app/utils/money.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/money.py",
+      "start_line": 1,
+      "end_line": 7,
+      "signature": "app/utils/money.py",
+      "docstring": "",
+      "token_count": 81,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 0,
+      "score": 1.0212,
+      "value_density": 0.013616,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "app/utils/validation.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "app/utils/validation.py",
+      "start_line": 1,
+      "end_line": 14,
+      "signature": "app/utils/validation.py",
+      "docstring": "",
+      "token_count": 83,
+      "signature_token_count": 7,
+      "in_degree": 0,
+      "out_degree": 1,
+      "score": 1.467,
+      "value_density": 0.019052,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "utility"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "tests/test_checkout.py::<module>",
+      "type": "module",
+      "name": "<module>",
+      "qualified_name": "<module>",
+      "file": "tests/test_checkout.py",
+      "start_line": 1,
+      "end_line": 24,
+      "signature": "tests/test_checkout.py",
+      "docstring": "",
+      "token_count": 182,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -3.3684,
+      "value_density": -0.018924,
+      "is_public": true,
+      "has_docstring": false,
+      "has_type_annotations": false,
+      "calls": [],
+      "imports": [
+        {
+          "module": "app.models.checkout",
+          "name": "CheckoutRequest",
+          "alias": null,
+          "type": "from_import"
+        },
+        {
+          "module": "app.api.checkout",
+          "name": "checkout_endpoint",
+          "alias": null,
+          "type": "from_import"
+        }
+      ],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "public",
+        "test"
+      ],
+      "behavior_skeleton": {},
+      "excerpt_body": ""
+    },
+    {
+      "id": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "type": "function",
+      "name": "test_out_of_stock_checkout",
+      "qualified_name": "test_out_of_stock_checkout",
+      "file": "tests/test_checkout.py",
+      "start_line": 15,
+      "end_line": 24,
+      "signature": "def test_out_of_stock_checkout():",
+      "docstring": "Test that ordering an out-of-stock item returns stock failure.",
+      "token_count": 88,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -2.2152,
+      "value_density": -0.026371,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "CheckoutRequest",
+        "checkout_endpoint"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "logging",
+        "payment",
+        "public",
+        "test",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "checkout_endpoint",
+          "CheckoutRequest"
+        ],
+        "resolved_calls": [
+          "CheckoutRequest",
+          "checkout_endpoint"
+        ],
+        "flow": "validate",
+        "effects": [
+          "validation",
+          "payment",
+          "logging"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [
+          "response"
+        ],
+        "writes": [],
+        "literals": [
+          "success",
+          "error"
+        ]
+      },
+      "excerpt_body": "def test_out_of_stock_checkout():\n    ...\n    req = CheckoutRequest(\n        user_id=\"bob\",\n        items=[{\"item_id\": \"item_303\", \"quantity\": 1}],\n        amount=5.00\n    )\n    response = checkout_endpoint(req)\n    ...\n"
+    },
+    {
+      "id": "tests/test_checkout.py::test_successful_checkout",
+      "type": "function",
+      "name": "test_successful_checkout",
+      "qualified_name": "test_successful_checkout",
+      "file": "tests/test_checkout.py",
+      "start_line": 4,
+      "end_line": 13,
+      "signature": "def test_successful_checkout():",
+      "docstring": "Test that a standard valid request goes through successfully.",
+      "token_count": 78,
+      "signature_token_count": 5,
+      "in_degree": 0,
+      "out_degree": 2,
+      "score": -2.1392,
+      "value_density": -0.028908,
+      "is_public": true,
+      "has_docstring": true,
+      "has_type_annotations": false,
+      "calls": [
+        "CheckoutRequest",
+        "checkout_endpoint"
+      ],
+      "imports": [],
+      "base_classes": [],
+      "mode": "minimal",
+      "tags": [
+        "payment",
+        "public",
+        "test",
+        "validation"
+      ],
+      "behavior_skeleton": {
+        "calls": [
+          "checkout_endpoint",
+          "CheckoutRequest"
+        ],
+        "resolved_calls": [
+          "CheckoutRequest",
+          "checkout_endpoint"
+        ],
+        "flow": "validate",
+        "effects": [
+          "validation",
+          "payment"
+        ],
+        "raises": [],
+        "returns": "unknown",
+        "reads": [],
+        "control_flow": [],
+        "assigned": [
+          "response"
+        ],
+        "writes": [],
+        "literals": [
+          "success"
+        ]
+      },
+      "excerpt_body": "def test_successful_checkout():\n    ...\n    req = CheckoutRequest(\n        user_id=\"alice\",\n        items=[{\"item_id\": \"item_101\", \"quantity\": 2}],\n        amount=21.98\n    )\n    response = checkout_endpoint(req)\n    ...\n"
     }
   ],
   "edges": [
     {
-      "source": "src/app.py::<module>",
-      "target": "FastAPI",
-      "type": "call",
-      "raw_symbol": "FastAPI",
-      "resolved": false,
-      "classification": "framework"
+      "source": "app/api/catalog.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "StaticFiles",
+      "source": "app/api/catalog.py::list_products",
+      "target": "app/utils/logging.py::log_info",
       "type": "call",
-      "raw_symbol": "StaticFiles",
-      "resolved": false,
-      "classification": "framework"
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "app.include_router",
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "import",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/fraud.py::FraudService",
+      "type": "import",
+      "raw_symbol": "app.services.fraud.FraudService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/inventory.py::InventoryService",
+      "type": "import",
+      "raw_symbol": "app.services.inventory.InventoryService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/services/payments.py::PaymentService",
+      "type": "import",
+      "raw_symbol": "app.services.payments.PaymentService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/fraud.py::FraudService",
       "type": "call",
-      "raw_symbol": "app.include_router",
+      "raw_symbol": "FraudService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "type": "call",
+      "raw_symbol": "fraud_service.is_fraudulent_attempt",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/inventory.py::InventoryService",
+      "type": "call",
+      "raw_symbol": "InventoryService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "call",
+      "raw_symbol": "inventory_service.check_stock",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/payments.py::PaymentService",
+      "type": "call",
+      "raw_symbol": "PaymentService",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/services/payments.py::PaymentService.process_payment",
+      "type": "call",
+      "raw_symbol": "payment_service.process_payment",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/checkout.py::checkout_endpoint",
+      "target": "item.get",
+      "type": "call",
+      "raw_symbol": "item.get",
       "resolved": false,
       "classification": "unknown"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "app.mount",
+      "source": "app/api/users.py::<module>",
+      "target": "app/models/user.py::User",
+      "type": "import",
+      "raw_symbol": "app.models.user.User",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/models/user.py::is_valid_email",
+      "type": "import",
+      "raw_symbol": "app.models.user.is_valid_email",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/api/users.py::register_user",
+      "target": "app/models/user.py::User",
       "type": "call",
-      "raw_symbol": "app.mount",
-      "resolved": false,
-      "classification": "unknown"
+      "raw_symbol": "User",
+      "resolved": true,
+      "classification": "resolved"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "fastapi.FastAPI",
-      "type": "import",
-      "raw_symbol": "fastapi.FastAPI",
-      "resolved": false,
-      "classification": "framework"
+      "source": "app/api/users.py::register_user",
+      "target": "app/models/user.py::is_valid_email",
+      "type": "call",
+      "raw_symbol": "is_valid_email",
+      "resolved": true,
+      "classification": "resolved"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "fastapi.staticfiles.StaticFiles",
-      "type": "import",
-      "raw_symbol": "fastapi.staticfiles.StaticFiles",
-      "resolved": false,
-      "classification": "framework"
+      "source": "app/api/users.py::register_user",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "itertools.product",
+      "source": "app/api/users.py::register_user",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/models/checkout.py::<module>",
+      "target": "dataclasses.dataclass",
       "type": "import",
-      "raw_symbol": "itertools.product",
+      "raw_symbol": "dataclasses.dataclass",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/app.py::<module>",
-      "target": "src/config.py::<module>",
+      "source": "app/models/checkout.py::<module>",
+      "target": "dataclasses.field",
       "type": "import",
-      "raw_symbol": "src.config",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/app.py::<module>",
-      "target": "src/routers/auth.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.routers.auth",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/app.py::<module>",
-      "target": "src/routers/products.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.routers.products",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/app.py::<module>",
-      "target": "src/routers/ui_routes.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.routers.ui_routes",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/config.py::<module>",
-      "target": "pydantic.BaseSettings",
-      "type": "import",
-      "raw_symbol": "pydantic.BaseSettings",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/config.py::<module>",
-      "target": "src/config.py::Settings",
-      "type": "call",
-      "raw_symbol": "Settings",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/config.py::Settings",
-      "target": "BaseSettings",
-      "type": "inheritance",
-      "raw_symbol": "BaseSettings",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/config.py::Settings.__init__",
-      "target": "src/config.py::Settings.__init__",
-      "type": "call",
-      "raw_symbol": "__init__",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/config.py::Settings.__init__",
-      "target": "src/config.py::Settings.check_stripe",
-      "type": "call",
-      "raw_symbol": "self.check_stripe",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/config.py::Settings.__init__",
-      "target": "super",
-      "type": "call",
-      "raw_symbol": "super",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/helpers/utils.py::<module>",
-      "target": "json.json",
-      "type": "import",
-      "raw_symbol": "json.json",
+      "raw_symbol": "dataclasses.field",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/helpers/utils.py::<module>",
-      "target": "os.listdir",
+      "source": "app/models/checkout.py::<module>",
+      "target": "typing.Dict",
       "type": "import",
-      "raw_symbol": "os.listdir",
+      "raw_symbol": "typing.Dict",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/helpers/utils.py::<module>",
-      "target": "os.path",
-      "type": "import",
-      "raw_symbol": "os.path",
-      "resolved": false,
-      "classification": "stdlib"
-    },
-    {
-      "source": "src/helpers/utils.py::<module>",
-      "target": "src/schemas.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.schemas",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/helpers/utils.py::<module>",
-      "target": "venv.create",
-      "type": "import",
-      "raw_symbol": "venv.create",
-      "resolved": false,
-      "classification": "stdlib"
-    },
-    {
-      "source": "src/helpers/utils.py::create_slug",
-      "target": "json_file_name.split",
-      "type": "call",
-      "raw_symbol": "json_file_name.split",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "json.load",
-      "type": "call",
-      "raw_symbol": "json.load",
-      "resolved": false,
-      "classification": "stdlib"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "listdir",
-      "type": "call",
-      "raw_symbol": "listdir",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "open",
-      "type": "call",
-      "raw_symbol": "open",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "path.expanduser",
-      "type": "call",
-      "raw_symbol": "path.expanduser",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "path.join",
-      "type": "call",
-      "raw_symbol": "path.join",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "print",
-      "type": "call",
-      "raw_symbol": "print",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "product_dicts.append",
-      "type": "call",
-      "raw_symbol": "product_dicts.append",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "src/helpers/utils.py::create_slug",
-      "type": "call",
-      "raw_symbol": "create_slug",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "src/schemas.py::ProductBase",
-      "type": "call",
-      "raw_symbol": "schemas.ProductBase",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/helpers/utils.py::get_local_products",
-      "target": "str",
-      "type": "call",
-      "raw_symbol": "str",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "APIRouter",
-      "type": "call",
-      "raw_symbol": "APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "fastapi.APIRouter",
-      "type": "import",
-      "raw_symbol": "fastapi.APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "fastapi.HTTPException",
-      "type": "import",
-      "raw_symbol": "fastapi.HTTPException",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "fastapi.Request",
-      "type": "import",
-      "raw_symbol": "fastapi.Request",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "fastapi.responses.RedirectResponse",
-      "type": "import",
-      "raw_symbol": "fastapi.responses.RedirectResponse",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "fastapi.status",
-      "type": "import",
-      "raw_symbol": "fastapi.status",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "src/app.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.app",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "src/config.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.config",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/auth.py::<module>",
-      "target": "stripe.stripe",
-      "type": "import",
-      "raw_symbol": "stripe.stripe",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "HTTPException",
-      "type": "call",
-      "raw_symbol": "HTTPException",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "RedirectResponse",
-      "type": "call",
-      "raw_symbol": "RedirectResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "app.ui_router.url_path_for",
-      "type": "call",
-      "raw_symbol": "app.ui_router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "print",
-      "type": "call",
-      "raw_symbol": "print",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "redirect.set_cookie",
-      "type": "call",
-      "raw_symbol": "redirect.set_cookie",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "request.query_params.get",
-      "type": "call",
-      "raw_symbol": "request.query_params.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::authorize_stripe",
-      "target": "stripe.OAuth.token",
-      "type": "call",
-      "raw_symbol": "stripe.OAuth.token",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "HTTPException",
-      "type": "call",
-      "raw_symbol": "HTTPException",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "RedirectResponse",
-      "type": "call",
-      "raw_symbol": "RedirectResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "app.ui_router.url_path_for",
-      "type": "call",
-      "raw_symbol": "app.ui_router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "print",
-      "type": "call",
-      "raw_symbol": "print",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "redirect.set_cookie",
-      "type": "call",
-      "raw_symbol": "redirect.set_cookie",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "request.cookies.get",
-      "type": "call",
-      "raw_symbol": "request.cookies.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::deauthorize_stripe",
-      "target": "stripe.OAuth.deauthorize",
-      "type": "call",
-      "raw_symbol": "stripe.OAuth.deauthorize",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/auth.py::stripe_login",
-      "target": "HTTPException",
-      "type": "call",
-      "raw_symbol": "HTTPException",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::stripe_login",
-      "target": "RedirectResponse",
-      "type": "call",
-      "raw_symbol": "RedirectResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/auth.py::stripe_login",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "APIRouter",
-      "type": "call",
-      "raw_symbol": "APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "fastapi.APIRouter",
-      "type": "import",
-      "raw_symbol": "fastapi.APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "fastapi.HTTPException",
-      "type": "import",
-      "raw_symbol": "fastapi.HTTPException",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "fastapi.status",
-      "type": "import",
-      "raw_symbol": "fastapi.status",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "src/helpers/utils.py::get_local_products",
-      "type": "import",
-      "raw_symbol": "src.helpers.utils.get_local_products",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
-      "target": "src/schemas.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.schemas",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/products.py::<module>",
+      "source": "app/models/checkout.py::<module>",
       "target": "typing.List",
       "type": "import",
       "raw_symbol": "typing.List",
@@ -3663,191 +1635,215 @@
       "classification": "stdlib"
     },
     {
-      "source": "src/routers/products.py::get_product_by_slug",
-      "target": "HTTPException",
+      "source": "app/models/checkout.py::CheckoutRequest",
+      "target": "field",
       "type": "call",
-      "raw_symbol": "HTTPException",
+      "raw_symbol": "field",
       "resolved": false,
       "classification": "unknown"
     },
     {
-      "source": "src/routers/products.py::get_product_by_slug",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
+      "source": "app/models/checkout.py::CheckoutRequest.has_items",
+      "target": "len",
+      "type": "call",
+      "raw_symbol": "len",
       "resolved": false,
-      "classification": "unknown"
+      "classification": "builtin"
     },
     {
-      "source": "src/routers/products.py::get_product_by_slug",
-      "target": "src/helpers/utils.py::get_local_products",
-      "type": "call",
-      "raw_symbol": "get_local_products",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/products.py::get_products",
-      "target": "HTTPException",
-      "type": "call",
-      "raw_symbol": "HTTPException",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/products.py::get_products",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/products.py::get_products",
-      "target": "src/helpers/utils.py::get_local_products",
-      "type": "call",
-      "raw_symbol": "get_local_products",
-      "resolved": true,
-      "classification": "resolved"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "APIRouter",
-      "type": "call",
-      "raw_symbol": "APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "Jinja2Templates",
-      "type": "call",
-      "raw_symbol": "Jinja2Templates",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "Path",
-      "type": "call",
-      "raw_symbol": "Path",
+      "source": "app/models/payment.py::<module>",
+      "target": "dataclasses.dataclass",
+      "type": "import",
+      "raw_symbol": "dataclasses.dataclass",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.APIRouter",
+      "source": "app/models/payment.py::<module>",
+      "target": "typing.Optional",
       "type": "import",
-      "raw_symbol": "fastapi.APIRouter",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.HTTPException",
-      "type": "import",
-      "raw_symbol": "fastapi.HTTPException",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.Request",
-      "type": "import",
-      "raw_symbol": "fastapi.Request",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.responses.HTMLResponse",
-      "type": "import",
-      "raw_symbol": "fastapi.responses.HTMLResponse",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.responses.RedirectResponse",
-      "type": "import",
-      "raw_symbol": "fastapi.responses.RedirectResponse",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.status",
-      "type": "import",
-      "raw_symbol": "fastapi.status",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "fastapi.templating.Jinja2Templates",
-      "type": "import",
-      "raw_symbol": "fastapi.templating.Jinja2Templates",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "http3.http3",
-      "type": "import",
-      "raw_symbol": "http3.http3",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "json.json",
-      "type": "import",
-      "raw_symbol": "json.json",
+      "raw_symbol": "typing.Optional",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "pathlib.Path",
+      "source": "app/models/user.py::<module>",
+      "target": "dataclasses.dataclass",
       "type": "import",
-      "raw_symbol": "pathlib.Path",
+      "raw_symbol": "dataclasses.dataclass",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "resolve",
+      "source": "app/services/fraud.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "app/utils/logging.py::log_error",
       "type": "call",
-      "raw_symbol": "resolve",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/fraud.py::FraudService.is_fraudulent_attempt",
+      "target": "user_id.startswith",
+      "type": "call",
+      "raw_symbol": "user_id.startswith",
       "resolved": false,
       "classification": "unknown"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "src/app.py::<module>",
+      "source": "app/services/inventory.py::<module>",
+      "target": "app/utils/logging.py::log_error",
       "type": "import",
-      "raw_symbol": "src.app",
+      "raw_symbol": "app.utils.logging.log_error",
       "resolved": true,
       "classification": "resolved"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "src/config.py::<module>",
+      "source": "app/services/inventory.py::<module>",
+      "target": "app/utils/logging.py::log_info",
       "type": "import",
-      "raw_symbol": "src.config",
+      "raw_symbol": "app.utils.logging.log_info",
       "resolved": true,
       "classification": "resolved"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "src/schemas.py::<module>",
-      "type": "import",
-      "raw_symbol": "src.schemas",
+      "source": "app/services/inventory.py::InventoryService.allocate_stock",
+      "target": "app/services/inventory.py::InventoryService.check_stock",
+      "type": "call",
+      "raw_symbol": "self.check_stock",
       "resolved": true,
       "classification": "resolved"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
+      "source": "app/services/inventory.py::InventoryService.allocate_stock",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/inventory.py::InventoryService.check_stock",
+      "target": "self.stock_db.get",
+      "type": "call",
+      "raw_symbol": "self.stock_db.get",
+      "resolved": false,
+      "classification": "unknown"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/models/payment.py::PaymentResult",
+      "type": "import",
+      "raw_symbol": "app.models.payment.PaymentResult",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/logging.py::log_error",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/logging.py::log_info",
+      "type": "import",
+      "raw_symbol": "app.utils.logging.log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "app/utils/money.py::format_currency",
+      "type": "import",
+      "raw_symbol": "app.utils.money.format_currency",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::<module>",
+      "target": "uuid.uuid",
+      "type": "import",
+      "raw_symbol": "uuid.uuid",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/models/payment.py::PaymentResult",
+      "type": "call",
+      "raw_symbol": "PaymentResult",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/logging.py::log_error",
+      "type": "call",
+      "raw_symbol": "log_error",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/logging.py::log_info",
+      "type": "call",
+      "raw_symbol": "log_info",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "app/utils/money.py::format_currency",
+      "type": "call",
+      "raw_symbol": "format_currency",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "app/services/payments.py::PaymentService.process_payment",
       "target": "str",
       "type": "call",
       "raw_symbol": "str",
@@ -3855,671 +1851,39 @@
       "classification": "builtin"
     },
     {
-      "source": "src/routers/ui_routes.py::<module>",
-      "target": "stripe.stripe",
-      "type": "import",
-      "raw_symbol": "stripe.stripe",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_alerts",
-      "target": "TEMPLATES.TemplateResponse",
+      "source": "app/services/payments.py::PaymentService.process_payment",
+      "target": "uuid.uuid4",
       "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_alerts",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_modals",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_modals",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::attention_catchers_tooltips_popovers",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::cancelled",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::cancelled",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "HTTPException",
-      "type": "call",
-      "raw_symbol": "HTTPException",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "app.product_router.url_path_for",
-      "type": "call",
-      "raw_symbol": "app.product_router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "base_url.__str__",
-      "type": "call",
-      "raw_symbol": "base_url.__str__",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "http3.AsyncClient",
-      "type": "call",
-      "raw_symbol": "http3.AsyncClient",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "http3client.get",
-      "type": "call",
-      "raw_symbol": "http3client.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "product_url.__str__",
-      "type": "call",
-      "raw_symbol": "product_url.__str__",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "response.json",
-      "type": "call",
-      "raw_symbol": "response.json",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::create_checkout_session",
-      "target": "stripe.checkout.Session.create",
-      "type": "call",
-      "raw_symbol": "stripe.checkout.Session.create",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_avatars",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_avatars",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_badges",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_badges",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_breadcrumbs",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_breadcrumbs",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_buttons",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_buttons",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_dropdowns",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_dropdowns",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_progress_bars",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_progress_bars",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_toggles",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_toggles",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_typography",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::elements_typography",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::get_publishable_key",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::index",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::index",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::input_areas_forms",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::input_areas_forms",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::input_areas_inputs",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::input_areas_inputs",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_nav_tabs",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_nav_tabs",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_navbars",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_navbars",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_pagination",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::navigation_pagination",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_404",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_404",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_about_us",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_about_us",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_author",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_author",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_contact_us",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_contact_us",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sections_features",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sections_features",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sections_hero_sections",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sections_hero_sections",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sign_in",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sign_in",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sign_up",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::page_sign_up",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::presentation",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::presentation",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "RedirectResponse",
-      "type": "call",
-      "raw_symbol": "RedirectResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "app.product_router.url_path_for",
-      "type": "call",
-      "raw_symbol": "app.product_router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "base_url.__str__",
-      "type": "call",
-      "raw_symbol": "base_url.__str__",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "http3.AsyncClient",
-      "type": "call",
-      "raw_symbol": "http3.AsyncClient",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "http3client.get",
-      "type": "call",
-      "raw_symbol": "http3client.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "product_url.__str__",
-      "type": "call",
-      "raw_symbol": "product_url.__str__",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "response.json",
-      "type": "call",
-      "raw_symbol": "response.json",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::product_info",
-      "target": "router.url_path_for",
-      "type": "call",
-      "raw_symbol": "router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "app.product_router.url_path_for",
-      "type": "call",
-      "raw_symbol": "app.product_router.url_path_for",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "base_url.__str__",
-      "type": "call",
-      "raw_symbol": "base_url.__str__",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "enumerate",
-      "type": "call",
-      "raw_symbol": "enumerate",
-      "resolved": false,
-      "classification": "builtin"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "http3.AsyncClient",
-      "type": "call",
-      "raw_symbol": "http3.AsyncClient",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "http3client.get",
-      "type": "call",
-      "raw_symbol": "http3client.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "json.dumps",
-      "type": "call",
-      "raw_symbol": "json.dumps",
+      "raw_symbol": "uuid.uuid4",
       "resolved": false,
       "classification": "stdlib"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "json_data.append",
+      "source": "app/utils/logging.py::<module>",
+      "target": "datetime.datetime",
+      "type": "import",
+      "raw_symbol": "datetime.datetime",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::log_error",
+      "target": "datetime.datetime.now",
       "type": "call",
-      "raw_symbol": "json_data.append",
+      "raw_symbol": "datetime.datetime.now",
+      "resolved": false,
+      "classification": "stdlib"
+    },
+    {
+      "source": "app/utils/logging.py::log_error",
+      "target": "isoformat",
+      "type": "call",
+      "raw_symbol": "isoformat",
       "resolved": false,
       "classification": "unknown"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
+      "source": "app/utils/logging.py::log_error",
       "target": "print",
       "type": "call",
       "raw_symbol": "print",
@@ -4527,101 +1891,103 @@
       "classification": "builtin"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "product_url.__str__",
+      "source": "app/utils/logging.py::log_info",
+      "target": "datetime.datetime.now",
       "type": "call",
-      "raw_symbol": "product_url.__str__",
+      "raw_symbol": "datetime.datetime.now",
       "resolved": false,
-      "classification": "unknown"
+      "classification": "stdlib"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "productdict.append",
+      "source": "app/utils/logging.py::log_info",
+      "target": "isoformat",
       "type": "call",
-      "raw_symbol": "productdict.append",
+      "raw_symbol": "isoformat",
       "resolved": false,
       "classification": "unknown"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "products_url.__str__",
+      "source": "app/utils/logging.py::log_info",
+      "target": "print",
       "type": "call",
-      "raw_symbol": "products_url.__str__",
+      "raw_symbol": "print",
       "resolved": false,
-      "classification": "unknown"
+      "classification": "builtin"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "request.cookies.get",
+      "source": "app/utils/money.py::calculate_tax",
+      "target": "round",
       "type": "call",
-      "raw_symbol": "request.cookies.get",
+      "raw_symbol": "round",
       "resolved": false,
-      "classification": "unknown"
+      "classification": "builtin"
     },
     {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "response.json",
-      "type": "call",
-      "raw_symbol": "response.json",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::products_index",
-      "target": "stripe.Product.list",
-      "type": "call",
-      "raw_symbol": "stripe.Product.list",
-      "resolved": false,
-      "classification": "third_party"
-    },
-    {
-      "source": "src/routers/ui_routes.py::success",
-      "target": "TEMPLATES.TemplateResponse",
-      "type": "call",
-      "raw_symbol": "TEMPLATES.TemplateResponse",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/routers/ui_routes.py::success",
-      "target": "router.get",
-      "type": "route",
-      "raw_symbol": "router.get",
-      "resolved": false,
-      "classification": "unknown"
-    },
-    {
-      "source": "src/schemas.py::<module>",
-      "target": "pydantic.BaseModel",
+      "source": "app/utils/validation.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
       "type": "import",
-      "raw_symbol": "pydantic.BaseModel",
-      "resolved": false,
-      "classification": "framework"
-    },
-    {
-      "source": "src/schemas.py::Product",
-      "target": "src/schemas.py::ProductBase",
-      "type": "inheritance",
-      "raw_symbol": "ProductBase",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
       "resolved": true,
       "classification": "resolved"
     },
     {
-      "source": "src/schemas.py::ProductBase",
-      "target": "BaseModel",
-      "type": "inheritance",
-      "raw_symbol": "BaseModel",
-      "resolved": false,
-      "classification": "unknown"
+      "source": "app/utils/validation.py::validate_checkout_request",
+      "target": "app/models/checkout.py::CheckoutRequest.has_items",
+      "type": "call",
+      "raw_symbol": "request.has_items",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::<module>",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "import",
+      "raw_symbol": "app.api.checkout.checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::<module>",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "import",
+      "raw_symbol": "app.models.checkout.CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "call",
+      "raw_symbol": "checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_out_of_stock_checkout",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "call",
+      "raw_symbol": "CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_successful_checkout",
+      "target": "app/api/checkout.py::checkout_endpoint",
+      "type": "call",
+      "raw_symbol": "checkout_endpoint",
+      "resolved": true,
+      "classification": "resolved"
+    },
+    {
+      "source": "tests/test_checkout.py::test_successful_checkout",
+      "target": "app/models/checkout.py::CheckoutRequest",
+      "type": "call",
+      "raw_symbol": "CheckoutRequest",
+      "resolved": true,
+      "classification": "resolved"
     }
   ],
-  "warnings": []
+  "warnings": [
+    "signature baseline exceeded budget; aggressive compaction enabled"
+  ]
 }

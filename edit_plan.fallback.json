@@ -1,0 +1,229 @@
+{
+  "task": "Add request validation to the checkout endpoint before payment processing",
+  "mode": "deterministic fallback",
+  "selected_files": [
+    {
+      "file_alias": "F1",
+      "path": "app/api/checkout.py",
+      "reason": "Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)",
+      "score": 180.4,
+      "selected_nodes": [
+        "N3"
+      ]
+    },
+    {
+      "file_alias": "F8",
+      "path": "app/services/payments.py",
+      "reason": "Contains PaymentService.process_payment (Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type); also contains PaymentService",
+      "score": 110.5,
+      "selected_nodes": [
+        "N26",
+        "N24"
+      ]
+    },
+    {
+      "file_alias": "F12",
+      "path": "tests/test_checkout.py",
+      "reason": "Contains test_out_of_stock_checkout (Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match); also contains test_successful_checkout",
+      "score": 95.5,
+      "selected_nodes": [
+        "N36",
+        "N37"
+      ]
+    },
+    {
+      "file_alias": "F7",
+      "path": "app/services/inventory.py",
+      "reason": "Contains InventoryService.check_stock (Semantic Card relevance 0.14 (Selected due to graph dependency or structural importance in the neighborhood.); Product/Inventory component match; Preferred executable node type)",
+      "score": 27.0,
+      "selected_nodes": [
+        "N22"
+      ]
+    },
+    {
+      "file_alias": "F11",
+      "path": "app/utils/validation.py",
+      "reason": "Companion validation/model context selected due to request-validation task intent.",
+      "score": 10.0,
+      "selected_nodes": []
+    },
+    {
+      "file_alias": "F3",
+      "path": "app/models/checkout.py",
+      "reason": "Companion validation/model context selected due to request-validation task intent.",
+      "score": 10.0,
+      "selected_nodes": []
+    },
+    {
+      "file_alias": "F4",
+      "path": "app/models/payment.py",
+      "reason": "Companion validation/model context selected due to request-validation task intent.",
+      "score": 10.0,
+      "selected_nodes": []
+    }
+  ],
+  "selected_nodes": [
+    {
+      "node_id": "N3",
+      "file_alias": "F1",
+      "path": "app/api/checkout.py",
+      "qualified_name": "app.api.checkout::checkout_endpoint",
+      "simple_name": "checkout_endpoint",
+      "type": "fn",
+      "tags": [],
+      "reason": "Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match",
+      "score": 180.4
+    },
+    {
+      "node_id": "N26",
+      "file_alias": "F8",
+      "path": "app/services/payments.py",
+      "qualified_name": "app.services.payments::PaymentService.process_payment",
+      "simple_name": "PaymentService.process_payment",
+      "type": "method",
+      "tags": [],
+      "reason": "Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type",
+      "score": 110.5
+    },
+    {
+      "node_id": "N36",
+      "file_alias": "F12",
+      "path": "tests/test_checkout.py",
+      "qualified_name": "tests.test_checkout::test_out_of_stock_checkout",
+      "simple_name": "test_out_of_stock_checkout",
+      "type": "fn",
+      "tags": [],
+      "reason": "Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match",
+      "score": 95.5
+    },
+    {
+      "node_id": "N24",
+      "file_alias": "F8",
+      "path": "app/services/payments.py",
+      "qualified_name": "app.services.payments::PaymentService",
+      "simple_name": "PaymentService",
+      "type": "class",
+      "tags": [],
+      "reason": "Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Preferred class definition node type",
+      "score": 93.5
+    },
+    {
+      "node_id": "N37",
+      "file_alias": "F12",
+      "path": "tests/test_checkout.py",
+      "qualified_name": "tests.test_checkout::test_successful_checkout",
+      "simple_name": "test_successful_checkout",
+      "type": "fn",
+      "tags": [],
+      "reason": "Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match",
+      "score": 85.5
+    },
+    {
+      "node_id": "N22",
+      "file_alias": "F7",
+      "path": "app/services/inventory.py",
+      "qualified_name": "app.services.inventory::InventoryService.check_stock",
+      "simple_name": "InventoryService.check_stock",
+      "type": "method",
+      "tags": [],
+      "reason": "Semantic Card relevance 0.14 (Selected due to graph dependency or structural importance in the neighborhood.); Product/Inventory component match; Preferred executable node type",
+      "score": 27.0
+    }
+  ],
+  "selected_edges": [
+    {
+      "source": "N3",
+      "target": "N15",
+      "relation": "class_ref",
+      "symbol": "FraudService",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N17",
+      "relation": "method_call",
+      "symbol": "FraudService.is_fraudulent_attempt",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N19",
+      "relation": "class_ref",
+      "symbol": "InventoryService",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N22",
+      "relation": "method_call",
+      "symbol": "InventoryService.check_stock",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N24",
+      "relation": "class_ref",
+      "symbol": "PaymentService",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N26",
+      "relation": "method_call",
+      "symbol": "PaymentService.process_payment",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N28",
+      "relation": "call",
+      "symbol": "log_error",
+      "resolved": true
+    },
+    {
+      "source": "N3",
+      "target": "N29",
+      "relation": "call",
+      "symbol": "log_info",
+      "resolved": true
+    },
+    {
+      "source": "N36",
+      "target": "N3",
+      "relation": "test_call",
+      "symbol": "checkout_endpoint",
+      "resolved": true
+    },
+    {
+      "source": "N37",
+      "target": "N3",
+      "relation": "test_call",
+      "symbol": "checkout_endpoint",
+      "resolved": true
+    }
+  ],
+  "dependency_paths": [
+    [
+      "checkout_endpoint",
+      "InventoryService.check_stock"
+    ],
+    [
+      "checkout_endpoint",
+      "PaymentService"
+    ],
+    [
+      "checkout_endpoint",
+      "PaymentService.process_payment"
+    ],
+    [
+      "test_out_of_stock_checkout",
+      "checkout_endpoint"
+    ],
+    [
+      "test_out_of_stock_checkout",
+      "checkout_endpoint",
+      "InventoryService.check_stock"
+    ]
+  ],
+  "warnings": []
+}

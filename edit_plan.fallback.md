@@ -1,55 +1,60 @@
 # Edit Plan & Task Routing Report (Deterministic Fallback)
 
 ### Selected Files & Nodes
-- **F6 src/routers/ui_routes.py**: Contains create_checkout_session (Node matches task keywords: checkout, validation, payment.); also contains cancelled; also contains success
-- **F4 src/routers/auth.py**: Contains authorize_stripe (Node matches task keywords: payment.); also contains deauthorize_stripe; also contains stripe_login
-- **F2 src/config.py**: Contains Settings.check_stripe (Node matches task keywords: validation, payment.)
+- **F1 app/api/checkout.py**: Contains checkout_endpoint (Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match)
+- **F8 app/services/payments.py**: Contains PaymentService.process_payment (Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type); also contains PaymentService
+- **F12 tests/test_checkout.py**: Contains test_out_of_stock_checkout (Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match); also contains test_successful_checkout
+- **F7 app/services/inventory.py**: Contains InventoryService.check_stock (Semantic Card relevance 0.14 (Selected due to graph dependency or structural importance in the neighborhood.); Product/Inventory component match; Preferred executable node type)
+- **F11 app/utils/validation.py**: Companion validation/model context selected due to request-validation task intent.
+- **F3 app/models/checkout.py**: Companion validation/model context selected due to request-validation task intent.
+- **F4 app/models/payment.py**: Companion validation/model context selected due to request-validation task intent.
 
 **Nodes Selected:**
-- **N21 src.routers.ui_routes::create_checkout_session** (edit_relevance: 1.0): Node matches task keywords: checkout, validation, payment.
-- **N10 src.routers.auth::authorize_stripe** (edit_relevance: 0.57): Node matches task keywords: payment.
-- **N11 src.routers.auth::deauthorize_stripe** (edit_relevance: 0.57): Node matches task keywords: payment.
-- **N12 src.routers.auth::stripe_login** (edit_relevance: 0.52): Node matches task keywords: payment.
-- **N5 src.config::Settings.check_stripe** (edit_relevance: 0.41): Node matches task keywords: validation, payment.
-- **N20 src.routers.ui_routes::cancelled** (edit_relevance: 0.26): Node matches task keywords: payment.
-- **N49 src.routers.ui_routes::success** (edit_relevance: 0.26): Node matches task keywords: payment.
+- **N3 app.api.checkout::checkout_endpoint** (score: 180.40): Semantic Card relevance 1.0 (Node matches task keywords: checkout.); Keyword matches: request, checkout, endpoint; Checkout component match; Route/Endpoint checkout handler boost; Validation/Schema component match
+- **N26 app.services.payments::PaymentService.process_payment** (score: 110.50): Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Payment execution method; Preferred executable node type
+- **N36 tests.test_checkout::test_out_of_stock_checkout** (score: 95.50): Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match; Product/Inventory component match
+- **N24 app.services.payments::PaymentService** (score: 93.50): Semantic Card relevance 0.75 (Node matches task keywords: payment.); Keyword matches: payment; Payment/Stripe component match; Preferred class definition node type
+- **N37 tests.test_checkout::test_successful_checkout** (score: 85.50): Semantic Card relevance 0.75 (Node matches task keywords: checkout.); Keyword matches: checkout; Checkout component match
+- **N22 app.services.inventory::InventoryService.check_stock** (score: 27.00): Semantic Card relevance 0.14 (Selected due to graph dependency or structural importance in the neighborhood.); Product/Inventory component match; Preferred executable node type
 
-### Selected Dependency Path
-`authorize_stripe`
+### Selected Dependency Path(s)
+- `checkout_endpoint -> InventoryService.check_stock`
+- `checkout_endpoint -> PaymentService`
+- `checkout_endpoint -> PaymentService.process_payment`
+- `test_out_of_stock_checkout -> checkout_endpoint`
+- `test_out_of_stock_checkout -> checkout_endpoint -> InventoryService.check_stock`
 
 ### Proposed Edit Plan
 Based on the task: **"Add request validation to the checkout endpoint before payment processing"**, here is the structured step-by-step edit plan:
 
 1. **Request Validation Definition**:
-   - Locate/extend `src/config.py` to define or import input validation schemas.
-   - For example, if adding request validation before checkout, create or extend a schema `CheckoutRequest` inheriting from `BaseModel`.
+   - Locate/extend schema or validation helper in the validation files (e.g., definition of schemas, Pydantic models).
+   - Define a strong schema (like `CheckoutRequest` or similar) to validate incoming parameters (items, user ID, amounts) before processing.
 
 2. **Integration into Endpoint**:
-   - Inspect the checkout endpoint `Settings.check_stripe` in file `src/config.py`.
-   - Inject the validation step before invoking the Stripe session creator or payment processor.
-   - Ensure you catch parsing or validation exceptions and raise proper `HTTPException(status_code=400, detail=...)`.
+   - Inspect the checkout endpoint node in the router file (like `checkout_endpoint` in `app/api/checkout.py`).
+   - Validate the incoming request parameters against the schema right at the entry point of the endpoint.
+   - If validation fails, return an HTTP 400 or appropriate error code immediately.
 
-3. **Dependency and State Verification**:
-   - Ensure the dependency path flow `authorize_stripe` executes successfully and validates parameters before payment processing starts.
+3. **Stripe & Payment Safety**:
+   - Execute payment processing only after all validations have completely succeeded.
+   - Protect Stripe session creations or transaction executions behind validation checkpoints to avoid orphaned payment authorizations.
 
 ### Snippets Needed / Full Source Requests
-### N5 src.config::Settings.check_stripe
-*(Signature-only in manifest: `def check_stripe(self):`)*
+### N3 app.api.checkout::checkout_endpoint (score: 180.40)
+*(Signature-only in manifest: `def checkout_endpoint(request: CheckoutRequest) -> dict:`)*
 
-### N10 src.routers.auth::authorize_stripe
-*(Signature-only in manifest: `def authorize_stripe(request: Request):`)*
+### N26 app.services.payments::PaymentService.process_payment (score: 110.50)
+*(Signature-only in manifest: `method PaymentService.process_payment`)*
 
-### N11 src.routers.auth::deauthorize_stripe
-*(Signature-only in manifest: `def deauthorize_stripe(request: Request):`)*
+### N36 tests.test_checkout::test_out_of_stock_checkout (score: 95.50)
+*(Signature-only in manifest: `fn test_out_of_stock_checkout`)*
 
-### N12 src.routers.auth::stripe_login
-*(Signature-only in manifest: `def stripe_login(request: Request):`)*
+### N24 app.services.payments::PaymentService (score: 93.50)
+*(Signature-only in manifest: `class PaymentService`)*
 
-### N20 src.routers.ui_routes::cancelled
-*(Signature-only in manifest: `def cancelled(request: Request):`)*
+### N37 tests.test_checkout::test_successful_checkout (score: 85.50)
+*(Signature-only in manifest: `fn test_successful_checkout`)*
 
-### N21 src.routers.ui_routes::create_checkout_session
-*(Signature-only in manifest: `async def create_checkout_session(path, request: Request):`)*
-
-### N49 src.routers.ui_routes::success
-*(Signature-only in manifest: `def success(request: Request):`)*
+### N22 app.services.inventory::InventoryService.check_stock (score: 27.00)
+*(Signature-only in manifest: `method InventoryService.check_stock`)*
