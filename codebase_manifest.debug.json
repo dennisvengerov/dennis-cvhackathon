@@ -1,11 +1,11 @@
 {
   "metadata": {
     "repo_path": "demo_repo",
-    "target_ratio": 0.55,
+    "target_ratio": 0.15,
     "original_tokens": 1896,
-    "compressed_tokens": 1041,
-    "compression_ratio": 0.5491,
-    "token_savings": 0.4509,
+    "compressed_tokens": 1005,
+    "compression_ratio": 0.5301,
+    "token_savings": 0.4699,
     "node_count": 28,
     "edge_count": 73,
     "resolved_edge_count": 50,
@@ -14,8 +14,8 @@
     "full_body_nodes": 0,
     "excerpt_nodes": 0,
     "skeleton_nodes": 3,
-    "signature_only_nodes": 6,
-    "minimal_nodes": 19,
+    "signature_only_nodes": 0,
+    "minimal_nodes": 25,
     "parse_error_count": 0,
     "skipped_file_count": 0
   },
@@ -159,7 +159,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -312,7 +312,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public"
       ],
@@ -439,7 +439,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "model",
         "public"
@@ -482,7 +482,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "model",
         "public"
@@ -519,7 +519,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "model",
         "public"
@@ -918,7 +918,7 @@
         }
       ],
       "base_classes": [],
-      "mode": "signature_only",
+      "mode": "minimal",
       "tags": [
         "public",
         "service"
