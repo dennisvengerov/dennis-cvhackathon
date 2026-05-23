@@ -313,6 +313,83 @@ def main():
             "test_out_of_stock_checkout &rarr; checkout_endpoint"
         ]
 
+    # === Managed Agent Trace (judge-facing primary path proof) ===
+    managed_agent_trace = {}
+    if os.path.exists("managed_agent_trace.json"):
+        try:
+            with open("managed_agent_trace.json", "r", encoding="utf-8") as managed_agent_trace_file:
+                managed_agent_trace = json.load(managed_agent_trace_file)
+        except Exception:
+            managed_agent_trace = {}
+
+    managed_agent_attempted = bool(managed_agent_trace.get("managed_agent_attempted"))
+    managed_agent_succeeded = bool(managed_agent_trace.get("managed_agent_succeeded"))
+    managed_agent_status_label = "ENABLED" if managed_agent_succeeded else "FALLBACK"
+    managed_agent_badge_class = "badge-success" if managed_agent_succeeded else "badge-warning"
+    managed_agent_agent_name = managed_agent_trace.get("agent", "antigravity-preview-05-2026")
+    managed_agent_environment_label = managed_agent_trace.get("environment", "remote")
+    managed_agent_environment_id = managed_agent_trace.get("environment_id") or "—"
+    managed_agent_interaction_id = managed_agent_trace.get("interaction_id") or "—"
+    managed_agent_fallback_required = str(managed_agent_trace.get("fallback_required", True)).lower()
+    managed_agent_error_text = managed_agent_trace.get("error") or ""
+    managed_agent_output_text = managed_agent_trace.get("output_text") or ""
+    managed_agent_output_excerpt = (
+        managed_agent_output_text[:900] + ("…" if len(managed_agent_output_text) > 900 else "")
+    )
+    # HTML-escape the excerpt and error so they render safely.
+    managed_agent_output_excerpt_html = (
+        managed_agent_output_excerpt
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+    managed_agent_error_html = (
+        managed_agent_error_text
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+    managed_agent_card_html = f"""
+        <div class="card" style="border-left: 6px solid {'#137333' if managed_agent_succeeded else '#f29900'};">
+            <h2>🛰️ Managed Agent Runtime &mdash; Google Antigravity Remote Sandbox</h2>
+            <div class="mode-bar">
+                <div class="mode-row">
+                    <span class="mode-label">Status:</span>
+                    <span class="mode-val badge {managed_agent_badge_class}">{managed_agent_status_label}</span>
+                </div>
+                <div class="mode-row">
+                    <span class="mode-label">Agent:</span>
+                    <span class="mode-val"><code>{managed_agent_agent_name}</code></span>
+                </div>
+                <div class="mode-row">
+                    <span class="mode-label">Environment:</span>
+                    <span class="mode-val"><code>{managed_agent_environment_label}</code></span>
+                </div>
+                <div class="mode-row">
+                    <span class="mode-label">Environment ID:</span>
+                    <span class="mode-val"><code>{managed_agent_environment_id}</code></span>
+                </div>
+                <div class="mode-row">
+                    <span class="mode-label">Interaction ID:</span>
+                    <span class="mode-val"><code>{managed_agent_interaction_id}</code></span>
+                </div>
+                <div class="mode-row">
+                    <span class="mode-label">Fallback Required:</span>
+                    <span class="mode-val"><code>{managed_agent_fallback_required}</code></span>
+                </div>
+            </div>
+            {"<p style='font-size:0.85rem; color:#c5221f; margin-top:10px;'><strong>Managed Agent error:</strong> <code>" + managed_agent_error_html + "</code></p>" if managed_agent_error_html else ""}
+            <p style="font-size:0.85rem; color:var(--text-light); margin-top:10px;">
+                Primary path: Google Managed Agents / Antigravity Interactions API. If credentials/API access are unavailable, the local pipeline runs as a clean, explicitly-labeled fallback. This card is sourced from <code>managed_agent_trace.json</code> so judges can verify whether remote Managed Agents actually executed.
+            </p>
+            <details style="margin-top:10px;">
+                <summary style="cursor:pointer; font-weight:600;">Managed Agent output excerpt</summary>
+                <pre class="codeblock" style="white-space:pre-wrap;">{managed_agent_output_excerpt_html or '(no output_text returned)'}</pre>
+            </details>
+        </div>
+    """
+
     # Generate HTML content
     html_template = f"""<!DOCTYPE html>
 <html lang="en">
@@ -673,6 +750,8 @@ def main():
         <div class="pitch-banner">
             “Stop dumping the entire repository into context. We run a deterministic compiler front-end pass that compresses the repo into a task-relevant semantic substrate, enabling ultra-cheap and high-fidelity agent execution.”
         </div>
+
+        {managed_agent_card_html}
 
         <div class="grid-2">
             <!-- Demo Run Modes -->

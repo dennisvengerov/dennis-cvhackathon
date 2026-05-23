@@ -4,6 +4,51 @@
 
 ---
 
+## 🏆 Managed Agents Prize Track (Primary Path)
+
+Context Compiler is built first-and-foremost for the **Google Managed Agents /
+Antigravity** runtime. The primary execution path of every judge demo is a
+live call to the Interactions API:
+
+- **Agent:** `antigravity-preview-05-2026`
+- **Environment:** `remote`
+- **Skill:** `.agents/skills/context_compiler/SKILL.md`
+- **Agent contract:** [`AGENTS.md`](AGENTS.md)
+
+The Managed Agent receives the Context Compiler skill and is instructed to run
+the compile → route → patch → validate pipeline inside the remote sandbox
+(`quantizer.py` → `semantic_cards.py` → `agent_harness.py` → `patch_agent.py`
+→ `validator_agent.py`). It **attempts live Managed Agent execution whenever
+credentials and API access are available**.
+
+The local pipeline is retained **only for demo reliability** and is explicitly
+labeled as such in both the terminal output and the dashboard. Every run emits
+[`managed_agent_trace.json`](managed_agent_trace.json), and the
+[`demo.html`](demo.html) dashboard surfaces that trace as a prominent
+**Managed Agent Runtime** card so judges can verify whether remote Managed
+Agents actually executed or whether the run fell back to local.
+
+Try it:
+
+```bash
+python3 main.py --smoke-test
+python3 main.py --repo ./demo_repo --target-ratio 0.15 \
+    --task "Add request validation to the checkout endpoint before payment processing" \
+    --judge-demo
+# Skip the live API attempt if you want offline-only:
+# python3 main.py --judge-demo --no-managed-agent
+```
+
+You can also exercise the Managed Agent runner directly:
+
+```bash
+python3 managed_agent_runner.py --repo ./demo_repo \
+    --task "Add request validation to the checkout endpoint before payment processing"
+cat managed_agent_trace.json
+```
+
+---
+
 ## 🚀 One-Sentence Pitch
 Context Compiler is a hybrid deterministic/semantic compiler pass that transforms raw codebases into high-density, task-specific substrates for coding agents, enabling ultra-cheap Gemini orchestration, high-speed routing, and serverless sandboxed verification.
 

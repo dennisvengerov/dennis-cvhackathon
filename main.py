@@ -19,6 +19,13 @@ import platform
 from typing import Optional
 from dotenv import load_dotenv
 
+from managed_agent_runner import (
+    run_managed_agent_demo,
+    print_managed_agent_summary,
+    MANAGED_AGENT_NAME,
+    MANAGED_AGENT_ENVIRONMENT,
+)
+
 # Load environment variables
 load_dotenv()
 
@@ -96,6 +103,23 @@ def run_smoke_test():
         print("      - Note: Faking remote execution is strictly prohibited. Fallback is clean and honest.")
         
     print()
+
+    # Managed Agent live probe — this is the primary judge-facing path.
+    print("--- MANAGED AGENT RUNTIME (PRIMARY PATH) ---")
+    smoke_trace = run_managed_agent_demo(
+        repo_path=os.path.abspath("./demo_repo"),
+        task="Smoke-test the Managed Agent remote sandbox path",
+        target_ratio=0.15,
+        output_trace_path="managed_agent_trace.json",
+    )
+    print_managed_agent_summary(smoke_trace)
+    if smoke_trace.get("managed_agent_succeeded"):
+        print("MANAGED AGENT REMOTE SANDBOX: ENABLED")
+    else:
+        print("MANAGED AGENT REMOTE SANDBOX: UNAVAILABLE - LOCAL FALLBACK USED")
+        print("Managed Agent unavailable; local fallback used.")
+    print()
+
     print("========================================================================")
     print("Smoke Test Passed. Context Compiler is ready to run.")
     print("========================================================================")
@@ -210,6 +234,16 @@ def main():
         action="store_true",
         help="Copy ./demo_repo to a temporary location, run full apply+validate, generate final_diff.txt & demo.html."
     )
+    parser.add_argument(
+        "--managed-agent",
+        action="store_true",
+        help="Force a Managed Agent remote sandbox attempt before the local pipeline."
+    )
+    parser.add_argument(
+        "--no-managed-agent",
+        action="store_true",
+        help="Skip the Managed Agent remote sandbox attempt in --judge-demo."
+    )
     
     args = parser.parse_args()
     
@@ -228,7 +262,32 @@ def main():
         print("========================================================================")
         print("JUDGE-FACING LIVE APPLY DEMO (COPIED REPO)")
         print("========================================================================")
-        
+
+        # === PRIMARY PATH: Google Managed Agents remote sandbox ===
+        # Always emit managed_agent_trace.json so the dashboard can show proof.
+        judge_demo_trace = None
+        if args.no_managed_agent:
+            print("\n[Managed Agent] Skipped by --no-managed-agent flag.")
+        else:
+            print("\n========================================================================")
+            print("MANAGED AGENT REMOTE SANDBOX (PRIMARY PATH)")
+            print(f"Agent: {MANAGED_AGENT_NAME}")
+            print(f"Environment: {MANAGED_AGENT_ENVIRONMENT}")
+            print("========================================================================")
+            judge_demo_trace = run_managed_agent_demo(
+                repo_path=os.path.abspath(args.repo),
+                task=args.task,
+                target_ratio=args.target_ratio,
+                output_trace_path="managed_agent_trace.json",
+            )
+            print_managed_agent_summary(judge_demo_trace)
+            if judge_demo_trace.get("managed_agent_succeeded"):
+                print("\nMANAGED AGENT REMOTE SANDBOX: ENABLED")
+            else:
+                print("\nMANAGED AGENT REMOTE SANDBOX: UNAVAILABLE - LOCAL FALLBACK USED")
+                print("Managed Agent unavailable; local fallback used.")
+            print("Continuing with local pipeline so the demo artifacts remain reliable...\n")
+
         orig_repo = args.repo
         temp_repo = "/tmp/context_compiler_live_demo_repo"
         
